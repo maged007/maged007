@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automark – انشر إعلانك تلقائيًا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background: #EDEDE8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ─── Phone Shell ─── */
+    .phone-shell {
+      width: 390px;
+      min-height: 844px;
+      background: #FAFAF7;
+      border-radius: 50px;
+      overflow: hidden;
+      position: relative;
+      box-shadow:
+        0 0 0 10px #1C1C1E,
+        0 0 0 12px #3A3A3C,
+        0 40px 100px rgba(0, 0, 0, 0.25),
+        0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 37px;
+      background: #1C1C1E;
+      border-radius: 20px;
+      z-index: 100;
+    }
+
+    /* ─── Hero Content ─── */
+    .hero {
+      background: linear-gradient(168deg, #FFFFFF 0%, #FFF9F5 45%, #FFF4EC 100%);
+      min-height: 844px;
+      display: flex;
+      flex-direction: column;
+      padding: 70px 24px 36px;
+      gap: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .blob-1 {
+      width: 220px; height: 220px;
+      background: rgba(255, 122, 53, 0.08);
+      top: -60px; right: -60px;
+    }
+    .blob-2 {
+      width: 160px; height: 160px;
+      background: rgba(255, 122, 53, 0.06);
+      bottom: 180px; left: -50px;
+    }
+
+    /* ─── Nav ─── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      animation: fadeDown 0.55s ease both;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: 800;
+      color: #111111;
+      letter-spacing: -0.6px;
+    }
+    .logo em {
+      font-style: normal;
+      color: #FF6B1A;
+    }
+
+    .menu-icon {
+      width: 38px; height: 38px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 5px;
+      padding: 0 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      cursor: pointer;
+    }
+    .menu-icon span {
+      display: block;
+      height: 2px;
+      background: #111;
+      border-radius: 2px;
+      transition: width 0.2s;
+    }
+    .menu-icon span:nth-child(1) { width: 16px; }
+    .menu-icon span:nth-child(2) { width: 11px; }
+    .menu-icon span:nth-child(3) { width: 14px; }
+
+    /* ─── Badge + Headline ─── */
+    .headline-block {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #FFF0E5;
+      border: 1px solid #FFD4B8;
+      border-radius: 50px;
+      padding: 6px 14px;
+      width: fit-content;
+    }
+    .pill-badge-dot {
+      width: 7px; height: 7px;
+      background: #FF6B1A;
+      border-radius: 50%;
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    .pill-badge-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #FF6B1A;
+      letter-spacing: 0.1px;
+    }
+
+    h1 {
+      font-size: 27px;
+      font-weight: 800;
+      color: #0D0D0D;
+      line-height: 1.45;
+      letter-spacing: -0.5px;
+    }
+    h1 .accent { color: #FF6B1A; }
+
+    .desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: #6E6E6E;
+      line-height: 1.75;
+    }
+
+    /* ─── Visual Section ─── */
+    .visual-wrap {
+      position: relative;
+      width: 100%;
+      height: 295px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeUp 0.65s ease 0.18s both;
+    }
+
+    /* Phone in phone */
+    .inner-phone {
+      width: 152px;
+      height: 270px;
+      background: #FFFFFF;
+      border-radius: 26px;
+      box-shadow:
+        0 0 0 5px #E8E8E4,
+        0 20px 55px rgba(0,0,0,0.13);
+      overflow: hidden;
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inner-screen {
+      flex: 1;
+      background: #F7F7F5;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 9px 10px;
+      gap: 7px;
+    }
+
+    /* App top bar */
+    .app-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 7px;
+      border-bottom: 1px solid #EFEFEF;
+    }
+    .app-avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF6B1A 0%, #E84E00 100%);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: white;
+      font-weight: 700;
+    }
+    .app-bar-info { flex: 1; }
+    .app-bar-name {
+      font-size: 7.5px;
+      font-weight: 700;
+      color: #111;
+    }
+    .app-bar-sub {
+      font-size: 6.5px;
+      color: #AAAAAA;
+    }
+    .insta-logo-sm {
+      width: 16px; height: 16px;
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+    }
+
+    /* Car graphic */
+    .car-card {
+      background: linear-gradient(135deg, #F0EFF0 0%, #E8E7E8 100%);
+      border-radius: 10px;
+      height: 85px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .car-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.04) 100%);
+      border-radius: 10px;
+    }
+
+    .car-svg-wrap svg {
+      width: 118px;
+      height: auto;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+    }
+
+    /* Post meta */
+    .post-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .post-car-name {
+      font-size: 7.5px;
+      font-weight: 700;
+      color: #111;
+    }
+    .post-price {
+      font-size: 8.5px;
+      font-weight: 800;
+      color: #FF6B1A;
+    }
+    .post-engage {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 1px;
+    }
+    .eng-item {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 6.5px;
+      color: #AAAAAA;
+    }
+    .eng-icon { font-size: 7px; }
+
+    /* Published to IG */
+    .ig-published {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(90deg, rgba(131,58,180,0.1), rgba(253,29,29,0.08), rgba(252,176,69,0.08));
+      border-radius: 7px;
+      padding: 5px 7px;
+      margin-top: 1px;
+    }
+    .ig-pub-icon {
+      width: 13px; height: 13px;
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7px;
+      flex-shrink: 0;
+    }
+    .ig-pub-text {
+      font-size: 6.5px;
+      font-weight: 600;
+      color: #833ab4;
+    }
+
+    /* ─── Floating Cards ─── */
+    .fcard {
+      position: absolute;
+      background: #FFFFFF;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.05);
+      z-index: 5;
+    }
+
+    /* Success card */
+    .fcard-success {
+      top: 14px;
+      right: 14px;
+      padding: 10px 13px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      animation: floatY 3.2s ease-in-out infinite;
+    }
+    .success-circle {
+      width: 30px; height: 30px;
+      background: linear-gradient(135deg, #22C55E, #16A34A);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      animation: pulseGreen 2.5s ease-in-out infinite;
+    }
+    .success-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #0D0D0D;
+    }
+    .success-sub {
+      font-size: 9px;
+      color: #22C55E;
+      font-weight: 500;
+    }
+    .success-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      background: #22C55E;
+      border-radius: 50%;
+      animation: pulseDot 1.5s ease-in-out infinite;
+    }
+
+    /* Stats card */
+    .fcard-stats {
+      bottom: 14px;
+      left: 12px;
+      padding: 10px 14px;
+      animation: floatY 3.2s ease-in-out infinite 1.6s;
+    }
+    .stats-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .stat-col { text-align: center; }
+    .stat-num {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0D0D0D;
+      letter-spacing: -0.5px;
+    }
+    .stat-lbl {
+      font-size: 8px;
+      color: #AAAAAA;
+      font-weight: 400;
+    }
+    .stat-sep {
+      width: 1px;
+      height: 28px;
+      background: #F0F0F0;
+    }
+
+    /* Social floating icons */
+    .float-icon {
+      position: absolute;
+      width: 38px; height: 38px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.09);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      z-index: 3;
+    }
+    .fi-insta {
+      top: 55px; left: 24px;
+      animation: floatY 4s ease-in-out infinite 0.4s;
+    }
+    .fi-snap {
+      bottom: 50px; right: 20px;
+      animation: floatY 4s ease-in-out infinite 1.2s;
+    }
+
+    /* ─── Buttons ─── */
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      animation: fadeUp 0.7s ease 0.28s both;
+    }
+
+    .btn {
+      width: 100%;
+      border-radius: 17px;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: none;
+      outline: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      letter-spacing: 0.1px;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-android {
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #FF7A35 0%, #E84E00 100%);
+      color: #FFFFFF;
+      box-shadow: 0 10px 28px rgba(232, 78, 0, 0.28);
+    }
+    .btn-android:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(232, 78, 0, 0.38);
+    }
+
+    .btn-ios {
+      padding: 16px 24px;
+      background: #F3F3F0;
+      color: #111111;
+      border: 1.5px solid #E5E5E0;
+    }
+    .btn-ios:hover {
+      transform: translateY(-2px);
+      background: #EBEBE6;
+    }
+
+    .btn-text-link {
+      background: transparent;
+      color: #FF6B1A;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 10px;
+    }
+    .btn-text-link:hover { opacity: 0.65; }
+
+    .btn-icon {
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    /* ─── Trust Row ─── */
+    .trust-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      animation: fadeUp 0.75s ease 0.38s both;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #AAAAAA;
+      font-weight: 400;
+    }
+    .trust-check {
+      width: 15px; height: 15px;
+      background: #EDFBF3;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: #22C55E;
+    }
+    .trust-sep { font-size: 10px; color: #DDDDDD; }
+
+    /* ─── Animations ─── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-9px); }
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1;   transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(0.75); }
+    }
+    @keyframes pulseGreen {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+      60%       { box-shadow: 0 0 0 7px rgba(34,197,94,0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-shell">
+    <div class="dynamic-island"></div>
+
+    <section class="hero">
+      <!-- Decorative blobs -->
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+
+      <!-- ── Nav ── -->
+      <nav class="nav">
+        <div class="menu-icon" aria-label="القائمة">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="logo">Auto<em>mark</em></div>
+      </nav>
+
+      <!-- ── Headline ── -->
+      <div class="headline-block">
+        <div class="pill-badge">
+          <div class="pill-badge-dot"></div>
+          <span class="pill-badge-text">نشر تلقائي على إنستجرام</span>
+        </div>
+
+        <h1>
+          انشر إعلان سيارتك<br>
+          على <span class="accent">إنستجرام</span><br>
+          تلقائيًا
+        </h1>
+
+        <p class="desc">
+          أضف إعلانك مرة واحدة داخل أوتومارك وسيتم نشره مباشرة على إنستجرام لزيادة الوصول والمشاهدات بسهولة.
+        </p>
+      </div>
+
+      <!-- ── Visual ── -->
+      <div class="visual-wrap">
+
+        <!-- Floating social icons -->
+        <div class="float-icon fi-insta" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <defs>
+              <linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f09433"/>
+                <stop offset="25%" stop-color="#e6683c"/>
+                <stop offset="50%" stop-color="#dc2743"/>
+                <stop offset="75%" stop-color="#cc2366"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig)"/>
+            <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
+          </svg>
+        </div>
+
+        <div class="float-icon fi-snap" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8.5 2 6 4.5 6 7.5V9c0 .5-.3.8-.7 1L4 10.5c.2.8.8 1.4 1.5 1.6-.4.3-.8.7-1 1.2.5.1 1 0 1.4-.2-.2.5-.1 1.1.2 1.5.4-.2.8-.5 1.1-.9 0 .4.1.8.4 1.1.5-.3.9-.7 1.1-1.2.3.3.7.5 1.1.6-.2-.5-.3-1-.3-1.6V12c0-.8.6-1.5 1.5-1.5S16 11.2 16 12v.9c0 .6-.1 1.1-.3 1.6.4-.1.8-.3 1.1-.6.2.5.6.9 1.1 1.2.3-.3.4-.7.4-1.1.3.4.7.7 1.1.9.3-.4.4-1 .2-1.5.4.2.9.3 1.4.2-.2-.5-.6-.9-1-1.2.7-.2 1.3-.8 1.5-1.6L20.7 10c-.4-.2-.7-.5-.7-1V7.5C20 4.5 17.5 2 14 2h-2z" fill="#FFFC00"/>
+          </svg>
+        </div>
+
+        <!-- Success floating card -->
+        <div class="fcard fcard-success">
+          <div class="success-circle">✓</div>
+          <div>
+            <div class="success-label">تم النشر بنجاح</div>
+            <div class="success-indicator">
+              <div class="live-dot"></div>
+              <div class="success-sub">الآن على إنستجرام</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inner phone mockup -->
+        <div class="inner-phone">
+          <div class="inner-screen">
+
+            <!-- App bar -->
+            <div class="app-bar">
+              <div class="app-avatar">A</div>
+              <div class="app-bar-info">
+                <div class="app-bar-name">automark.sa</div>
+                <div class="app-bar-sub">إعلان سيارة</div>
+              </div>
+              <div class="insta-logo-sm">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+                  <rect x="2" y="2" width="20" height="20" rx="6" fill="white" fill-opacity="0.9"/>
+                  <circle cx="12" cy="12" r="4.5" stroke="url(#ig)" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Car image -->
+            <div class="car-card">
+              <div class="car-svg-wrap">
+                <svg viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Body -->
+                  <rect x="10" y="32" width="140" height="28" rx="6" fill="#CCCCCC"/>
+                  <!-- Roof -->
+                  <path d="M38 32 Q42 14 68 14 L100 14 Q120 14 128 32 Z" fill="#DDDDDD"/>
+                  <!-- Windows -->
+                  <path d="M52 30 Q54 18 68 18 L88 18 Q96 18 100 30 Z" fill="#B8D4E8" fill-opacity="0.75"/>
+                  <!-- Window divider -->
+                  <line x1="80" y1="18" x2="80" y2="30" stroke="#AAAAAA" stroke-width="1.5"/>
+                  <!-- Front wheel -->
+                  <circle cx="42" cy="60" r="12" fill="#888888"/>
+                  <circle cx="42" cy="60" r="7.5" fill="#C0C0C0"/>
+                  <circle cx="42" cy="60" r="3" fill="#888888"/>
+                  <!-- Rear wheel -->
+                  <circle cx="118" cy="60" r="12" fill="#888888"/>
+                  <circle cx="118" cy="60" r="7.5" fill="#C0C0C0"/>
+                  <circle cx="118" cy="60" r="3" fill="#888888"/>
+                  <!-- Headlight -->
+                  <rect x="145" y="38" width="8" height="12" rx="3" fill="#FF7A35" fill-opacity="0.85"/>
+                  <!-- Tail light -->
+                  <rect x="8" y="38" width="8" height="12" rx="3" fill="#EF4444" fill-opacity="0.75"/>
+                  <!-- Door line -->
+                  <line x1="80" y1="32" x2="80" y2="58" stroke="#BBBBBB" stroke-width="1" stroke-dasharray="2,2"/>
+                  <!-- Side mirror -->
+                  <rect x="130" y="34" width="8" height="5" rx="2" fill="#C8C8C8"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Post meta -->
+            <div class="post-meta">
+              <div class="post-car-name">تويوتا كامري 2024</div>
+              <div class="post-price">١٢٠,٠٠٠ ريال</div>
+              <div class="post-engage">
+                <div class="eng-item">
+                  <span class="eng-icon">👁</span>
+                  <span>١.٢ك</span>
+                </div>
+                <div class="eng-item">
+                  <span class="eng-icon">❤️</span>
+                  <span>٨٤</span>
+                </div>
+                <div class="eng-item">
+                  <span class="eng-icon">💬</span>
+                  <span>١٢</span>
+                </div>
+              </div>
+              <div class="ig-published">
+                <div class="ig-pub-icon">📤</div>
+                <div class="ig-pub-text">نُشر على إنستجرام تلقائيًا</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Stats floating card -->
+        <div class="fcard fcard-stats">
+          <div class="stats-row">
+            <div class="stat-col">
+              <div class="stat-num">٢.٤ك</div>
+              <div class="stat-lbl">مشاهدة</div>
+            </div>
+            <div class="stat-sep"></div>
+            <div class="stat-col">
+              <div class="stat-num">١٣٦</div>
+              <div class="stat-lbl">تفاعل</div>
+            </div>
+            <div class="stat-sep"></div>
+            <div class="stat-col">
+              <div class="stat-num">٩</div>
+              <div class="stat-lbl">تواصلوا</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /visual-wrap -->
+
+      <!-- ── Buttons ── -->
+      <div class="btn-group">
+        <button class="btn btn-android">
+          <span class="btn-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M17.5 10.5C17.5 14.09 14.64 17 11 17C7.36 17 4.5 14.09 4.5 10.5C4.5 6.91 7.36 4 11 4C12.38 4 13.66 4.44 14.72 5.18L16.12 3.78C14.7 2.66 12.93 2 11 2C6.25 2 2.5 5.81 2.5 10.5C2.5 15.19 6.25 19 11 19C15.75 19 19.5 15.19 19.5 10.5H17.5Z" fill="white"/>
+              <path d="M22 10.5H20C20 8.01 18.99 5.77 17.34 4.16L18.75 2.75C20.75 4.72 22 7.47 22 10.5Z" fill="white"/>
+              <circle cx="8" cy="10.5" r="1" fill="white"/>
+              <circle cx="14" cy="10.5" r="1" fill="white"/>
+            </svg>
+          </span>
+          تحميل للأندرويد
+        </button>
+
+        <button class="btn btn-ios">
+          <span class="btn-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 22C7.78 22.05 6.8 20.68 5.96 19.47C4.25 17 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z" fill="#111111"/>
+            </svg>
+          </span>
+          تحميل للآيفون
+        </button>
+
+        <button class="btn btn-text-link">
+          اشتراكات المعارض &larr;
+        </button>
+      </div>
+
+      <!-- ── Trust Row ── -->
+      <div class="trust-row">
+        <div class="trust-item">
+          <div class="trust-check">✓</div>
+          مجاني تمامًا
+        </div>
+        <span class="trust-sep">•</span>
+        <div class="trust-item">
+          <div class="trust-check">✓</div>
+          نشر فوري
+        </div>
+        <span class="trust-sep">•</span>
+        <div class="trust-item">
+          <div class="trust-check">✓</div>
+          آمن وموثوق
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+</body>
+</html>
