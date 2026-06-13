@@ -19,6 +19,17 @@ from PIL import Image, ImageDraw, ImageFont
 
 from .layouts import CORNER_RADIUS
 
+from PIL import features as _pil_features
+
+# When PIL is built with libraqm (HarfBuzz + FriBidi), it shapes Arabic
+# correctly from raw Unicode using the font's own GSUB tables — this is the
+# preferred path and lets us use Cairo for Arabic. Pillow's binary wheels
+# bundle raqm on macOS/Windows/Linux, so this is the common case.
+_RAQM = _pil_features.check("raqm")
+
+# Fallback only used when raqm is unavailable: arabic_reshaper converts base
+# letters into deprecated presentation forms, which require a font that ships
+# them (NotoSansArabic) — Cairo does not.
 try:
     import arabic_reshaper
     from bidi.algorithm import get_display
@@ -53,8 +64,10 @@ SALE_KEYWORDS = {
 class TextOverlayEngine:
 
     def __init__(self) -> None:
-        self._font_ar    = self._load_font(RENDER_FONT_SIZE, arabic=True)
-        self._font_latin = self._load_font(RENDER_FONT_SIZE, arabic=False)
+        # Cairo handles both scripts (Arabic via raqm). The Noto font is only
+        # used for Arabic when raqm is unavailable (presentation-form fallback).
+        self._font_cairo = self._load_font(RENDER_FONT_SIZE, arabic=False)
+        self._font_noto  = self._load_font(RENDER_FONT_SIZE, arabic=True)
 
     # ── Public ─────────────────────────────────────────────────
 
@@ -93,75 +106,84 @@ class TextOverlayEngine:
             result += " …"
         return result
 
-    def render_in_zone(
+    @property
+    def line_height(self) -> int:
+        return int(RENDER_FONT_SIZE * LINE_SPACING)
+
+    def layout_lines(self, caption: str, zone_w: int, max_lines: int | None = None) -> list[str]:
+        """
+        Summarise + wrap the caption into display lines for the given zone width.
+        If max_lines is set, surplus lines are dropped and the last is ellipsised.
+        """
+        caption = self.summarize(caption)
+        if not caption.strip():
+            return []
+        max_w = zone_w - 2 * TEXT_PAD_X
+        lines = self._wrap(caption, max_w)
+        if max_lines is not None and len(lines) > max_lines:
+            lines = lines[:max_lines]
+            lines[-1] = self._ellipsise(lines[-1], max_w, self._font_for(lines[-1]))
+        return lines
+
+    def measure_zone_height(self, caption: str, zone_w: int) -> int:
+        """
+        Height (px) the text container needs to fit the caption snugly,
+        including top/bottom padding. Returns 0 for empty captions.
+        """
+        lines = self.layout_lines(caption, zone_w)
+        if not lines:
+            return 0
+        return len(lines) * self.line_height + 2 * TEXT_PAD_Y
+
+    def draw_lines(
         self,
         canvas: Image.Image,
-        caption: str,
+        lines: list[str],
         zone_x: int,
         zone_y: int,
         zone_w: int,
         zone_h: int,
     ) -> None:
-        """
-        Draw centred white text inside the given zone rectangle on the canvas.
-        Mutates canvas in-place (the zone background must already be drawn).
-        """
-        caption = self.summarize(caption)
-        if not caption.strip():
+        """Draw pre-wrapped lines, centred both axes, in white on the canvas."""
+        if not lines:
             return
-
-        is_rtl = self._contains_arabic(caption)
-        font    = self._font_for(caption)
-        max_w   = zone_w - 2 * TEXT_PAD_X
-        max_h   = zone_h - 2 * TEXT_PAD_Y
-        lh      = int(RENDER_FONT_SIZE * LINE_SPACING)
-
-        lines = self._wrap(caption, max_w)
-
-        # Trim lines that don't fit, ellipsise last kept line
-        max_lines = max(1, max_h // lh)
-        if len(lines) > max_lines:
-            lines = lines[:max_lines]
-            lines[-1] = self._ellipsise(lines[-1], max_w, font)
-
+        lh = self.line_height
         total_h = len(lines) * lh
-        # Vertical centre
         ty = zone_y + (zone_h - total_h) // 2
 
         overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
-        draw    = ImageDraw.Draw(overlay)
-
+        draw = ImageDraw.Draw(overlay)
         for line in lines:
             display = self._prepare_display(line)
-            font_l  = self._font_for(line)
-            line_w  = draw.textlength(display, font=font_l)
-
-            # Horizontal centre (RTL lines are also centred, not right-flushed)
-            tx = zone_x + (zone_w - line_w) // 2
-
-            # Soft shadow
-            draw.text((tx + 2, ty + 2), display, font=font_l, fill=(0, 0, 0, 180))
-            draw.text((tx, ty),         display, font=font_l, fill=TEXT_COLOR)
+            font_l = self._font_for(line)
+            dk = self._dir_kwargs(line)
+            line_w = draw.textlength(display, font=font_l, **dk)
+            tx = zone_x + (zone_w - line_w) // 2     # horizontal centre
+            draw.text((tx + 2, ty + 2), display, font=font_l, fill=(0, 0, 0, 180), **dk)
+            draw.text((tx, ty), display, font=font_l, fill=TEXT_COLOR, **dk)
             ty += lh
-
         canvas.paste(overlay, (0, 0), mask=overlay.split()[3])
 
     # ── Private ────────────────────────────────────────────────
 
     def _load_font(self, size: int, arabic: bool) -> ImageFont.FreeTypeFont:
+        # Cairo covers BOTH Arabic and Latin, so it is the primary choice for
+        # either script. Fallbacks kept for environments without the bundled font.
+        candidates = [
+            os.path.join(FONTS_DIR, "Cairo-Bold.ttf"),
+            os.path.join(FONTS_DIR, "Cairo-SemiBold.ttf"),
+        ]
         if arabic:
-            candidates = [
+            candidates += [
                 os.path.join(FONTS_DIR, "NotoSansArabic-Bold.ttf"),
-                os.path.join(FONTS_DIR, "NotoSansArabic-Regular.ttf"),
                 "/Library/Fonts/Arial Unicode.ttf",
                 "/System/Library/Fonts/Supplemental/Arial.ttf",
             ]
         else:
-            candidates = [
+            candidates += [
                 os.path.join(FONTS_DIR, "DejaVuSans-Bold.ttf"),
                 "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
                 "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-                "/System/Library/Fonts/Helvetica.ttc",
             ]
         for path in candidates:
             if os.path.exists(path):
@@ -172,13 +194,26 @@ class TextOverlayEngine:
         return ImageFont.load_default(size=size)
 
     def _font_for(self, text: str) -> ImageFont.FreeTypeFont:
-        return self._font_ar if self._contains_arabic(text) else self._font_latin
+        # Cairo for everything, except Arabic without raqm (needs Noto's
+        # presentation-form glyphs produced by the reshaper fallback).
+        if self._contains_arabic(text) and not _RAQM:
+            return self._font_noto
+        return self._font_cairo
+
+    def _direction(self, text: str) -> str:
+        return "rtl" if self._contains_arabic(text) else "ltr"
+
+    def _dir_kwargs(self, text: str) -> dict:
+        # `direction` is only valid when PIL has raqm; otherwise omit it.
+        return {"direction": self._direction(text)} if _RAQM else {}
 
     def _contains_arabic(self, text: str) -> bool:
         return any("؀" <= ch <= "ۿ" for ch in text)
 
     def _prepare_display(self, text: str) -> str:
-        if _ARABIC_SUPPORT and self._contains_arabic(text):
+        # With raqm, HarfBuzz shapes raw Unicode correctly — leave it untouched.
+        # Without raqm, fall back to the reshaper + bidi presentation forms.
+        if not _RAQM and _ARABIC_SUPPORT and self._contains_arabic(text):
             return get_display(arabic_reshaper.reshape(text))
         return text
 
@@ -190,7 +225,8 @@ class TextOverlayEngine:
         for word in words:
             candidate = f"{current} {word}".strip()
             display   = self._prepare_display(candidate)
-            if measure.textlength(display, font=self._font_for(candidate)) <= max_width or not current:
+            w = measure.textlength(display, font=self._font_for(candidate), **self._dir_kwargs(candidate))
+            if w <= max_width or not current:
                 current = candidate
             else:
                 lines.append(current)
@@ -204,7 +240,8 @@ class TextOverlayEngine:
         words = line.split()
         while words:
             candidate = " ".join(words) + " …"
-            if measure.textlength(self._prepare_display(candidate), font=self._font_for(candidate)) <= max_width:
+            w = measure.textlength(self._prepare_display(candidate), font=self._font_for(candidate), **self._dir_kwargs(candidate))
+            if w <= max_width:
                 return candidate
             words.pop()
         return "…"

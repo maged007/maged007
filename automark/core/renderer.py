@@ -1,51 +1,62 @@
 """
 Renderer: Composites scored images onto the 1080×1620 canvas.
 
-Canvas split:
-  • Top 2/3  (1080 px tall) — image collage, layout slots scaled to fit
-  • Bottom 1/3 (540 px tall) — solid black text zone with centred caption
-  • AutoMark logo — bottom-left corner of the image zone
+Layout:
+  • Bottom — black text container, height auto-fits the caption (snug).
+  • Top    — gapless image mosaic filling all remaining space (no gutters,
+             no outer margins, flush edges).
+  • Logo   — bottom-left corner of the image zone.
+
+The image zone height is dynamic: the text box takes exactly the space the
+(≤60-word) caption needs, and the images get everything that is left.
 """
 
 from __future__ import annotations
 
 import os
 
-import numpy as np
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw
 
-from .layouts import (
-    CANVAS_WIDTH, CANVAS_HEIGHT,
-    CORNER_RADIUS, SHADOW_BLUR, SHADOW_OFFSET_Y, SHADOW_OPACITY,
-)
+from .layouts import CANVAS_WIDTH, CANVAS_HEIGHT, OUTER_MARGIN, GUTTER
 from .smart_crop_engine import SmartCropEngine
-from .text_overlay import TextOverlayEngine
+from .text_overlay import TextOverlayEngine, TEXT_PAD_Y
 
-# ── Zone geometry ──────────────────────────────────────────────
-IMAGE_ZONE_H = int(CANVAS_HEIGHT * 2 / 3)   # 1080 px  (top 2/3)
-TEXT_ZONE_Y  = IMAGE_ZONE_H                  # 1080
-TEXT_ZONE_H  = CANVAS_HEIGHT - IMAGE_ZONE_H  # 540 px   (bottom 1/3)
+# Keep the image zone dominant even with a long caption.
+MIN_IMAGE_ZONE_RATIO = 0.55                       # images ≥ 55% of canvas
+MAX_TEXT_ZONE_H = int(CANVAS_HEIGHT * (1 - MIN_IMAGE_ZONE_RATIO))
 
-# Y-scale: compress all slot coords so they fill the image zone
-_Y_SCALE = IMAGE_ZONE_H / CANVAS_HEIGHT      # ≈ 0.6667
-
-# Logo placement (bottom-left of image zone)
-LOGO_MAX_W   = 150
-LOGO_MAX_H   = 100
-LOGO_MARGIN  = 18
-LOGO_PATH    = os.path.join(
-    os.path.dirname(__file__), "..", "static", "logo.png"
-)
+# Logo placement (bottom-left of the image zone)
+LOGO_MAX_W  = 230
+LOGO_MAX_H  = 90
+LOGO_MARGIN = 22
+LOGO_PATH   = os.path.join(os.path.dirname(__file__), "..", "static", "logo.png")
 
 
-def _scale_slot(slot: dict) -> dict:
-    """Compress a slot's Y coords so it fits in the top IMAGE_ZONE_H pixels."""
+def _close_gaps(slot: dict) -> dict:
+    """
+    Expand a slot's edges to remove the 16px outer margins and 8px gutters,
+    so the slots tile the full 1080×1620 canvas with no gaps.
+    """
+    half = GUTTER // 2
+    x1, y1 = slot["x"], slot["y"]
+    x2, y2 = slot["x"] + slot["w"], slot["y"] + slot["h"]
+
+    nx1 = 0 if x1 <= OUTER_MARGIN else x1 - half
+    ny1 = 0 if y1 <= OUTER_MARGIN else y1 - half
+    nx2 = CANVAS_WIDTH  if x2 >= CANVAS_WIDTH  - OUTER_MARGIN else x2 + half
+    ny2 = CANVAS_HEIGHT if y2 >= CANVAS_HEIGHT - OUTER_MARGIN else y2 + half
+
+    return {"slot": slot["slot"], "x": nx1, "y": ny1, "w": nx2 - nx1, "h": ny2 - ny1}
+
+
+def _scale_y(slot: dict, factor: float) -> dict:
+    """Scale a slot's vertical extent so the mosaic fits the image zone."""
     return {
         "slot": slot["slot"],
-        "x":    slot["x"],
-        "y":    max(0, int(round(slot["y"] * _Y_SCALE))),
-        "w":    slot["w"],
-        "h":    max(1, int(round(slot["h"] * _Y_SCALE))),
+        "x": slot["x"],
+        "y": int(round(slot["y"] * factor)),
+        "w": slot["w"],
+        "h": max(1, int(round(slot["h"] * factor))),
     }
 
 
@@ -53,7 +64,7 @@ class Renderer:
 
     def __init__(self) -> None:
         self._cropper = SmartCropEngine()
-        self._text    = TextOverlayEngine()
+        self._text = TextOverlayEngine()
 
     def render(
         self,
@@ -62,93 +73,62 @@ class Renderer:
         output_path: str | None = None,
         caption: str | None = None,
     ) -> Image.Image:
+        caption = (caption or "").strip()
 
-        canvas       = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (255, 255, 255, 255))
-        shadow_layer = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
+        # ── 1. Decide the text-zone height from the caption (dynamic) ──
+        text_zone_h = 0
+        text_lines: list[str] = []
+        if caption:
+            text_zone_h = self._text.measure_zone_height(caption, CANVAS_WIDTH)
+            text_zone_h = min(text_zone_h, MAX_TEXT_ZONE_H)
+            # Re-wrap with the line cap implied by the (possibly clamped) height
+            max_lines = max(1, (text_zone_h - 2 * TEXT_PAD_Y) // self._text.line_height)
+            text_lines = self._text.layout_lines(caption, CANVAS_WIDTH, max_lines=max_lines)
 
-        # ── 1. Render images in scaled slots (top 2/3) ──────────
-        scaled_slots = [_scale_slot(s) for s in layout["slots"]]
+        image_zone_h = CANVAS_HEIGHT - text_zone_h
+        text_zone_y = image_zone_h
 
-        for i, slot in enumerate(scaled_slots):
+        canvas = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (255, 255, 255, 255))
+
+        # ── 2. Gapless image mosaic in the image zone ──────────────────
+        y_factor = image_zone_h / CANVAS_HEIGHT
+        slots = [_scale_y(_close_gaps(s), y_factor) for s in layout["slots"]]
+
+        for i, slot in enumerate(slots):
             if i >= len(scored_images):
                 break
-
             pil_img = Image.open(scored_images[i].analysis.path).convert("RGB")
-            cropped  = self._cropper.crop(pil_img, slot["w"], slot["h"])
-            mask     = self._rounded_rect_mask(slot["w"], slot["h"], CORNER_RADIUS)
+            cropped = self._cropper.crop(pil_img, slot["w"], slot["h"])
+            canvas.paste(cropped.convert("RGBA"), (slot["x"], slot["y"]))
 
-            self._draw_shadow(shadow_layer, slot, mask)
-            cropped_rgba = cropped.convert("RGBA")
-            cropped_rgba.putalpha(mask)
+        # ── 3. Logo — bottom-left of image zone ────────────────────────
+        self._draw_logo(canvas, image_zone_h)
 
-            canvas = Image.alpha_composite(canvas, shadow_layer)
-            shadow_layer = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
-            canvas.paste(cropped_rgba, (slot["x"], slot["y"]), mask=mask)
-
-        # ── 2. Logo — bottom-left of image zone ─────────────────
-        self._draw_logo(canvas)
-
-        # ── 3. Black text zone (bottom 1/3) ─────────────────────
-        self._draw_text_zone(canvas, caption or "")
+        # ── 4. Black text container + centred caption ──────────────────
+        if text_zone_h > 0:
+            draw = ImageDraw.Draw(canvas)
+            draw.rectangle(
+                [(0, text_zone_y), (CANVAS_WIDTH - 1, CANVAS_HEIGHT - 1)],
+                fill=(0, 0, 0, 255),
+            )
+            self._text.draw_lines(
+                canvas, text_lines,
+                zone_x=0, zone_y=text_zone_y,
+                zone_w=CANVAS_WIDTH, zone_h=text_zone_h,
+            )
 
         return canvas.convert("RGB")
 
-    # ── Private helpers ─────────────────────────────────────────
+    # ── Helpers ────────────────────────────────────────────────────────
 
-    def _rounded_rect_mask(self, w: int, h: int, radius: int) -> Image.Image:
-        mask = Image.new("L", (w, h), 0)
-        draw = ImageDraw.Draw(mask)
-        draw.rounded_rectangle([(0, 0), (w - 1, h - 1)], radius=radius, fill=255)
-        return mask
-
-    def _draw_shadow(self, shadow_layer: Image.Image, slot: dict, mask: Image.Image) -> None:
-        shadow_img  = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
-        shadow_mask = Image.new("L", (slot["w"], slot["h"]), 0)
-        draw = ImageDraw.Draw(shadow_mask)
-        draw.rounded_rectangle(
-            [(0, 0), (slot["w"] - 1, slot["h"] - 1)],
-            radius=CORNER_RADIUS,
-            fill=SHADOW_OPACITY,
-        )
-        shadow_img.paste(
-            Image.new("RGBA", (slot["w"], slot["h"]), (0, 0, 0, SHADOW_OPACITY)),
-            (slot["x"], slot["y"] + SHADOW_OFFSET_Y),
-            mask=shadow_mask,
-        )
-        blurred = shadow_img.filter(ImageFilter.GaussianBlur(radius=SHADOW_BLUR))
-        shadow_layer.paste(blurred, (0, 0), mask=blurred.split()[3])
-
-    def _draw_logo(self, canvas: Image.Image) -> None:
-        """Paste the AutoMark logo into the bottom-left of the image zone."""
+    def _draw_logo(self, canvas: Image.Image, image_zone_h: int) -> None:
         if not os.path.exists(LOGO_PATH):
             return
         try:
             logo = Image.open(LOGO_PATH).convert("RGBA")
             logo.thumbnail((LOGO_MAX_W, LOGO_MAX_H), Image.LANCZOS)
             x = LOGO_MARGIN
-            y = IMAGE_ZONE_H - LOGO_MARGIN - logo.height
+            y = image_zone_h - LOGO_MARGIN - logo.height
             canvas.paste(logo, (x, y), mask=logo.split()[3])
         except Exception:
-            pass  # logo is optional — never crash if file is bad
-
-    def _draw_text_zone(self, canvas: Image.Image, caption: str) -> None:
-        """Fill the bottom 1/3 with a black box and centred white caption."""
-        draw = ImageDraw.Draw(canvas)
-
-        # Solid black background
-        draw.rectangle(
-            [(0, TEXT_ZONE_Y), (CANVAS_WIDTH - 1, CANVAS_HEIGHT - 1)],
-            fill=(0, 0, 0, 255),
-        )
-
-        if not caption.strip():
-            return
-
-        self._text.render_in_zone(
-            canvas,
-            caption,
-            zone_x=0,
-            zone_y=TEXT_ZONE_Y,
-            zone_w=CANVAS_WIDTH,
-            zone_h=TEXT_ZONE_H,
-        )
+            pass  # logo is optional — never crash on a bad file

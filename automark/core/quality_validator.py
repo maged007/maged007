@@ -51,7 +51,7 @@ class QualityValidator:
         white_ratio = white_mask.mean()
         if white_ratio > 0.95:
             warnings.append("Canvas is almost entirely white — images may not have rendered")
-        if white_ratio < 0.01:
-            warnings.append("Very little white background visible — outer margins may be missing")
+        # Note: the gapless mosaic intentionally leaves no white margins, so a
+        # low white ratio is expected and is no longer flagged.
 
         return ValidationResult(passed=len(issues) == 0, issues=issues, warnings=warnings)
