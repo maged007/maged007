@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoMark — Automotive Story Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <!-- ── Header ───────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none">
+          <rect width="32" height="32" rx="8" fill="#E8272A"/>
+          <path d="M6 21l4-10 4 7 3-5 4 8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="12" r="3" fill="#fff"/>
+        </svg>
+        <span class="brand-name">AutoMark</span>
+        <span class="brand-tag">Story Generator</span>
+      </div>
+      <div class="header-meta">
+        <span class="badge">1080 × 1620</span>
+        <span class="badge">Instagram Story</span>
+        <span class="badge badge-pro">PRO</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="container">
+
+      <!-- Left panel: upload + image list -->
+      <section class="panel panel-left">
+        <div class="panel-header">
+          <h2>Upload Images</h2>
+          <span class="counter" id="counter">0 / 6</span>
+        </div>
+
+        <!-- Drop zone -->
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="file-input" multiple accept="image/*" hidden />
+          <div class="dropzone-inner">
+            <svg class="drop-icon" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+              <path d="M24 32V20M18 26l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 36h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <p class="drop-text">Drop vehicle photos here</p>
+            <p class="drop-sub">or <button class="link-btn" id="browse-btn">browse files</button></p>
+            <p class="drop-hint">JPG, PNG, WebP · 1–6 images · Max 50 MB</p>
+          </div>
+        </div>
+
+        <!-- Image cards list -->
+        <div class="image-list" id="image-list"></div>
+
+        <!-- Action bar -->
+        <div class="action-bar">
+          <button class="btn btn-ghost" id="clear-btn" disabled>Clear all</button>
+          <button class="btn btn-primary" id="generate-btn" disabled>
+            <svg viewBox="0 0 20 20" fill="none" class="btn-icon">
+              <path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Generate Story
+          </button>
+        </div>
+      </section>
+
+      <!-- Right panel: result -->
+      <section class="panel panel-right">
+        <div class="panel-header">
+          <h2>Story Preview</h2>
+          <span id="layout-badge" class="badge hidden"></span>
+        </div>
+
+        <!-- Empty state -->
+        <div class="result-empty" id="result-empty">
+          <svg viewBox="0 0 80 120" fill="none" class="story-placeholder-icon">
+            <rect x="4" y="4" width="72" height="112" rx="8" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <rect x="14" y="14" width="52" height="36" rx="4" fill="currentColor" opacity=".08"/>
+            <rect x="14" y="58" width="24" height="28" rx="4" fill="currentColor" opacity=".08"/>
+            <rect x="42" y="58" width="24" height="28" rx="4" fill="currentColor" opacity=".08"/>
+            <rect x="14" y="94" width="52" height="18" rx="4" fill="currentColor" opacity=".08"/>
+          </svg>
+          <p>Your story collage will<br>appear here</p>
+        </div>
+
+        <!-- Loading -->
+        <div class="result-loading hidden" id="result-loading">
+          <div class="spinner-ring"></div>
+          <p id="loading-text">Analysing images…</p>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="result-output hidden" id="result-output">
+          <div class="story-frame">
+            <img id="result-img" src="" alt="Generated story" class="result-image" />
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-primary" id="download-btn">
+              <svg viewBox="0 0 20 20" fill="none" class="btn-icon">
+                <path d="M10 3v10M6 9l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 16h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Download PNG
+            </button>
+            <button class="btn btn-ghost" id="regenerate-btn">Regenerate</button>
+          </div>
+          <!-- Score board -->
+          <div class="score-board" id="score-board"></div>
+          <!-- Warnings -->
+          <div class="warnings-box hidden" id="warnings-box"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ── Toast ─────────────────────────────────────────────────── -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
