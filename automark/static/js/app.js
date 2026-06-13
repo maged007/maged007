@@ -10,7 +10,7 @@ const state = {
   variation:   0,    // incremented on every regenerate click
 };
 
-const MAX_IMAGES        = 4;
+const MAX_IMAGES        = 8;
 const MAX_CAPTION_WORDS = 70;
 
 // ── DOM refs ─────────────────────────────────────────────────────────────
@@ -196,7 +196,8 @@ function buildCard(img, idx) {
 
   const card = document.createElement("div");
   card.className = `image-card${isHero ? " pinned-hero" : ""}`;
-  card.dataset.idx = idx;
+  card.dataset.idx    = idx;
+  card.dataset.fileId = img.fileId;
 
   if (!img.loading) {
     card.setAttribute("draggable", "true");
@@ -469,6 +470,15 @@ async function showResult(data) {
   layoutBadge.textContent = data.layout_id.replace(/_/g, " ").toUpperCase();
   layoutBadge.classList.remove("hidden");
 
+  // Mark which image cards were selected vs. not used
+  const selectedIds = new Set(data.selected_file_ids || []);
+  document.querySelectorAll(".image-card[data-file-id]").forEach(card => {
+    const fid = card.dataset.fileId;
+    const used = selectedIds.has(fid);
+    card.classList.toggle("selected",     used);
+    card.classList.toggle("not-selected", !used);
+  });
+
   scoreBoard.innerHTML = "";
   data.scores.forEach(s => {
     const row = document.createElement("div");
@@ -518,6 +528,10 @@ function resetResult() {
   resultEmpty.classList.remove("hidden");
   layoutBadge.classList.add("hidden");
   state.outputFile = null;
+  // Clear selection highlights
+  document.querySelectorAll(".image-card").forEach(c =>
+    c.classList.remove("selected", "not-selected")
+  );
 }
 
 function setProgress(pct) { progressBar.style.width = `${pct}%`; }

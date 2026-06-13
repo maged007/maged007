@@ -24,6 +24,7 @@ from core import (
     VehicleAnalyzer,
     ImageScoringEngine,
     LayoutSelector,
+    SmartSelectionEngine,
     Renderer,
     QualityValidator,
     ExportEngine,
@@ -48,12 +49,13 @@ app.config["MAX_CONTENT_LENGTH"] = MAX_CONTENT_LENGTH
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "automark-dev-secret")
 
 # Pipeline singletons
-_analyzer = VehicleAnalyzer()
-_scorer = ImageScoringEngine()
-_selector = LayoutSelector()
-_renderer = Renderer()
-_validator = QualityValidator()
-_exporter = ExportEngine()
+_analyzer        = VehicleAnalyzer()
+_scorer          = ImageScoringEngine()
+_smart_selector  = SmartSelectionEngine()
+_selector        = LayoutSelector()
+_renderer        = Renderer()
+_validator       = QualityValidator()
+_exporter        = ExportEngine()
 
 
 def allowed_file(filename: str) -> bool:
@@ -133,8 +135,8 @@ def generate():
 
     if not session_id or not images_meta:
         return jsonify({"error": "Missing session_id or images"}), 400
-    if not 1 <= len(images_meta) <= 4:
-        return jsonify({"error": "Must provide 1–4 images"}), 400
+    if not 1 <= len(images_meta) <= 8:
+        return jsonify({"error": "Must provide 1–8 images"}), 400
 
     session_dir = UPLOAD_DIR / session_id
     if not session_dir.exists():
@@ -170,18 +172,22 @@ def generate():
                 for i, s in enumerate(scored):
                     s.rank = i
 
+        # Smart selection: pick best complementary subset (up to 4) from the full pool
+        target_n = min(len(scored), 4)
+        selected = _smart_selector.select(scored, target_n)
+
         # Variation: shuffle secondary images for different arrangements on regenerate
-        if variation > 0 and len(scored) > 1:
+        if variation > 0 and len(selected) > 1:
             import random
             rng = random.Random(variation)
-            rest = scored[1:]
+            rest = selected[1:]
             rng.shuffle(rest)
-            scored = [scored[0]] + rest
-            for i, s in enumerate(scored):
+            selected = [selected[0]] + rest
+            for i, s in enumerate(selected):
                 s.rank = i
 
-        layout = _selector.select(scored)
-        canvas = _renderer.render(layout, scored, caption=caption)
+        layout = _selector.select(selected)
+        canvas = _renderer.render(layout, selected, caption=caption)
         validation = _validator.validate(canvas)
 
         final_caption = caption  # no longer auto-summarised
@@ -192,9 +198,9 @@ def generate():
         output_filename = f"{session_id}.png"
         output_path = _exporter.save(canvas, str(OUTPUT_DIR), output_filename)
 
-        # Build scoring info for the response
+        # Build scoring info for the response (selected images only)
         scores_info = []
-        for s in scored:
+        for s in selected:
             scores_info.append({
                 "file_id": Path(s.analysis.path).name,
                 "type": s.analysis.image_type,
@@ -206,12 +212,15 @@ def generate():
                 "is_hero": s.rank == 0,
             })
 
+        selected_file_ids = [Path(s.analysis.path).name for s in selected]
+
         return jsonify({
             "session_id": session_id,
             "output_file": output_filename,
             "layout_id": layout["id"],
             "warnings": validation.warnings,
             "scores": scores_info,
+            "selected_file_ids": selected_file_ids,
             "caption": {
                 "original_words": len(caption.split()) if caption else 0,
                 "final_words": len(final_caption.split()) if final_caption else 0,

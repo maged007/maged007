@@ -223,7 +223,23 @@ body {
 .image-card.dragging  { opacity: .35; }
 .image-card.drag-over { border-color: var(--accent); background: var(--accent-dim); }
 
-.image-card.pinned-hero { border-color: rgba(245,158,11,.5); }
+.image-card.pinned-hero  { border-color: rgba(245,158,11,.5); }
+
+/* Smart selection feedback: after Generate, selected cards get a green tint */
+.image-card.selected     { border-color: rgba(34,197,94,.4); }
+
+/* Images not chosen by the smart selector are dimmed */
+.image-card.not-selected {
+  opacity: .42;
+  border-color: var(--border);
+}
+
+.image-card.not-selected .card-name::after {
+  content: " · not used";
+  color: var(--text-3);
+  font-size: .66rem;
+  font-weight: 400;
+}
 
 /* ── Drag handle ─────────────────────────────────────────────── */
 .drag-handle {
