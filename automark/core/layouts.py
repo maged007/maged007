@@ -125,14 +125,13 @@ LAYOUTS: dict[str, dict] = {
 # Hero slot is always slot 1 in every layout (largest, highest-scoring image goes here)
 HERO_SLOT = 1
 
-# Maps image count to available layout IDs
+# Maps image count to available layout IDs.
+# Only story-optimised (portrait-hero, top-to-bottom) layouts included.
 LAYOUTS_BY_COUNT: dict[int, list[str]] = {
     1: ["layout_1"],
-    2: ["layout_2a", "layout_2b"],
-    3: ["layout_3a", "layout_3b"],
-    4: ["layout_4a", "layout_4b"],
-    5: ["layout_5a", "layout_5b"],
-    6: ["layout_6a", "layout_6b"],
+    2: ["layout_2a"],
+    3: ["layout_3a"],
+    4: ["layout_4a"],
 }
 
 

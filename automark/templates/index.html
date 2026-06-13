@@ -6,11 +6,11 @@
   <title>AutoMark — Automotive Story Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Alexandria:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/style.css" />
 </head>
 <body>
-  <!-- ── Header ───────────────────────────────────────────────── -->
+  <!-- ── Header ─────────────────────────────────────────────── -->
   <header class="header">
     <div class="header-inner">
       <div class="brand">
@@ -30,7 +30,7 @@
     </div>
   </header>
 
-  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <!-- ── Main ───────────────────────────────────────────────── -->
   <main class="main">
     <div class="container">
 
@@ -38,7 +38,7 @@
       <section class="panel panel-left">
         <div class="panel-header">
           <h2>Upload Images</h2>
-          <span class="counter" id="counter">0 / 6</span>
+          <span class="counter" id="counter">0 / 4</span>
         </div>
 
         <!-- Drop zone -->
@@ -52,22 +52,27 @@
             </svg>
             <p class="drop-text">Drop vehicle photos here</p>
             <p class="drop-sub">or <button class="link-btn" id="browse-btn">browse files</button></p>
-            <p class="drop-hint">JPG, PNG, WebP · 1–6 images · Max 50 MB</p>
+            <p class="drop-hint">JPG · PNG · WebP &nbsp;·&nbsp; 1–4 images &nbsp;·&nbsp; Max 50 MB</p>
           </div>
         </div>
 
-        <!-- Image cards list -->
+        <!-- Image cards — drag to reorder, ★ to pin hero -->
         <div class="image-list" id="image-list"></div>
+        <p class="list-hint hidden" id="list-hint">Drag to reorder &nbsp;·&nbsp; ★ to pin hero image</p>
 
         <!-- Sale caption -->
         <div class="caption-block">
           <div class="caption-head">
             <label for="caption-input">Sale caption <span class="optional">(optional)</span></label>
-            <span class="word-count" id="word-count">0 words</span>
+            <span class="word-count" id="word-count">0 / 70</span>
           </div>
           <textarea id="caption-input" class="caption-input" rows="3"
-            placeholder="e.g. Kia Cerato 2021, price 750k EGP negotiable, only 40,000 km, excellent condition…&#10;مثال: كيا سيراتو 2021، السعر 750 الف قابل للتفاوض، العداد 40 الف كيلو، الحالة ممتازة"></textarea>
-          <p class="caption-hint" id="caption-hint">Shown over the main image. Captions over 60 words are auto-shortened to the sale details.</p>
+            placeholder="e.g. Kia Cerato 2021, 750,000 EGP, 40k km, excellent condition…&#10;مثال: كيا سيراتو 2021، السعر 750 الف، العداد 40 الف كيلو، حالة ممتازة"></textarea>
+          <div class="caption-alert hidden" id="caption-alert">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/></svg>
+            مش مسموح اضافة اكتر من ٧٠ كلمة &nbsp;·&nbsp; Caption cannot exceed 70 words
+          </div>
+          <p class="caption-hint">Maximum 70 words · Displayed at the bottom of the story</p>
         </div>
 
         <!-- Action bar -->
@@ -123,7 +128,13 @@
               </svg>
               Download PNG
             </button>
-            <button class="btn btn-ghost" id="regenerate-btn">Regenerate</button>
+            <button class="btn btn-ghost" id="regenerate-btn">
+              <svg viewBox="0 0 20 20" fill="none" class="btn-icon">
+                <path d="M4 10a6 6 0 1 0 1.2-3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M4 5v3h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Regenerate
+            </button>
           </div>
           <!-- Score board -->
           <div class="score-board" id="score-board"></div>
@@ -134,7 +145,7 @@
     </div>
   </main>
 
-  <!-- ── Toast ─────────────────────────────────────────────────── -->
+  <!-- ── Toast ──────────────────────────────────────────────── -->
   <div class="toast-container" id="toast-container"></div>
 
   <script src="/static/js/app.js"></script>

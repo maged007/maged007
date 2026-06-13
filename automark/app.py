@@ -133,8 +133,8 @@ def generate():
 
     if not session_id or not images_meta:
         return jsonify({"error": "Missing session_id or images"}), 400
-    if not 1 <= len(images_meta) <= 6:
-        return jsonify({"error": "Must provide 1–6 images"}), 400
+    if not 1 <= len(images_meta) <= 4:
+        return jsonify({"error": "Must provide 1–4 images"}), 400
 
     session_dir = UPLOAD_DIR / session_id
     if not session_dir.exists():
@@ -152,14 +152,39 @@ def generate():
         except Exception as e:
             return jsonify({"error": f"Analysis failed for {meta['file_id']}: {e}"}), 500
 
+    variation   = int(data.get("variation", 0))
+    hero_file_id = data.get("hero_file_id")
+
     try:
         scored = _scorer.score(analyses)
+
+        # Hero override: user can pin which image goes in the hero slot
+        if hero_file_id:
+            hero_idx = next(
+                (i for i, s in enumerate(scored) if Path(s.analysis.path).name == hero_file_id),
+                None,
+            )
+            if hero_idx is not None and hero_idx > 0:
+                hero = scored.pop(hero_idx)
+                scored.insert(0, hero)
+                for i, s in enumerate(scored):
+                    s.rank = i
+
+        # Variation: shuffle secondary images for different arrangements on regenerate
+        if variation > 0 and len(scored) > 1:
+            import random
+            rng = random.Random(variation)
+            rest = scored[1:]
+            rng.shuffle(rest)
+            scored = [scored[0]] + rest
+            for i, s in enumerate(scored):
+                s.rank = i
+
         layout = _selector.select(scored)
         canvas = _renderer.render(layout, scored, caption=caption)
         validation = _validator.validate(canvas)
 
-        # Surface how the caption was handled (raw vs summarised word counts).
-        final_caption = _renderer._text.summarize(caption) if caption else ""
+        final_caption = caption  # no longer auto-summarised
 
         if not validation.passed:
             return jsonify({"error": "Validation failed", "issues": validation.issues}), 500

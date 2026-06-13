@@ -39,10 +39,10 @@ except Exception:
 
 
 # ── Config ──────────────────────────────────────────────────────
-MAX_WORDS       = 60
+MAX_WORDS       = 70
 BASE_FONT_SIZE  = 12
 FONT_SCALE      = 3.5
-RENDER_FONT_SIZE = int(BASE_FONT_SIZE * FONT_SCALE)   # 42 px
+RENDER_FONT_SIZE = 34                                  # px — Alexandria at 34px
 LINE_SPACING    = 1.35
 TEXT_COLOR      = (255, 255, 255, 255)
 TEXT_PAD_X      = 60    # horizontal padding inside the zone
@@ -167,9 +167,10 @@ class TextOverlayEngine:
     # ── Private ────────────────────────────────────────────────
 
     def _load_font(self, size: int, arabic: bool) -> ImageFont.FreeTypeFont:
-        # Cairo covers BOTH Arabic and Latin, so it is the primary choice for
-        # either script. Fallbacks kept for environments without the bundled font.
+        # Alexandria covers both Arabic and Latin and is the primary choice.
+        # Cairo is kept as fallback; Noto only when raqm is unavailable.
         candidates = [
+            os.path.join(FONTS_DIR, "Alexandria-Bold.ttf"),
             os.path.join(FONTS_DIR, "Cairo-Bold.ttf"),
             os.path.join(FONTS_DIR, "Cairo-SemiBold.ttf"),
         ]

@@ -17,8 +17,8 @@ class LayoutSelector:
     def select(self, scored_images: list[ScoredImage]) -> dict:
         """Return the best-fit layout dict from LAYOUTS."""
         n = len(scored_images)
-        if n < 1 or n > 6:
-            raise ValueError(f"Image count must be 1–6, got {n}")
+        if n < 1 or n > 4:
+            raise ValueError(f"Image count must be 1–4, got {n}")
 
         candidates = LAYOUTS_BY_COUNT[n]
         if len(candidates) == 1:

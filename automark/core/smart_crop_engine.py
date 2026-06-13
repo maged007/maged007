@@ -73,16 +73,43 @@ class SmartCropEngine:
         return cx, cy
 
     def _saliency_map(self, bgr: np.ndarray) -> np.ndarray:
-        """Gradient-magnitude saliency (no heavy ML required)."""
+        """
+        Combined saliency: gradient magnitude + colour saturation,
+        weighted by a spatial Gaussian prior that favours the centre-lower
+        area where vehicles typically appear.  Sky rows are suppressed for
+        landscape images to prevent the horizon from pulling focus.
+        """
+        h, w = bgr.shape[:2]
         gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-        # Multi-scale gradient for robustness
+
+        # Gradient magnitude
         gx = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
         gy = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
-        mag = np.sqrt(gx ** 2 + gy ** 2)
-        mag = cv2.normalize(mag, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
-        # Smooth to merge nearby structures
-        mag = cv2.GaussianBlur(mag, (51, 51), 0)
-        return mag
+        grad = np.sqrt(gx ** 2 + gy ** 2)
+
+        # Saturation (vivid colour = vehicle body rather than neutral bg)
+        hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
+        sat = hsv[:, :, 1].astype(np.float64)
+
+        sal = grad * 0.70 + sat * 0.30
+        sal = cv2.normalize(sal, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
+        sal = cv2.GaussianBlur(sal, (51, 51), 0)
+
+        # Suppress sky band in landscape images (top 22%)
+        if w > h * 1.15:
+            sky_rows = int(h * 0.22)
+            sal[:sky_rows, :] = 0
+
+        # Spatial Gaussian prior — peak at (cx=50%, cy=58%)
+        yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+        cx_p, cy_p = w * 0.50, h * 0.58
+        sx, sy = w * 0.55, h * 0.55
+        prior = np.exp(-((xx - cx_p) ** 2 / (2 * sx ** 2) + (yy - cy_p) ** 2 / (2 * sy ** 2)))
+        prior = (prior * 255).astype(np.uint8)
+
+        sal = cv2.multiply(sal, prior, scale=1.0 / 255.0)
+        sal = cv2.normalize(sal, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
+        return sal
 
     def _saliency_centroid(
         self, sal: np.ndarray, src_w: int, src_h: int
