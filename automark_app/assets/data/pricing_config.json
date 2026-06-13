@@ -1,0 +1,33 @@
+{
+  "_comment": "كل النسب قابلة للتعديل. السعر يُحسب من سعر الجديد ثم استهلاك معاير لكل موديل.",
+  "currentYear": 2025,
+  "firstYearDrop": 0.82,
+  "defaultYearlyRetention": 0.86,
+  "expectedKmPerYear": 18000,
+  "defaultKmPenaltyPerKm": 0.4,
+  "rangeSpread": 0.07,
+  "minRatio": 0.12,
+  "maxRatio": 0.97,
+  "conditionFactors": {
+    "excellent": 1.05,
+    "very_good": 1.0,
+    "good": 0.93,
+    "fair": 0.85,
+    "needs_work": 0.72
+  },
+  "regionFactors": {
+    "gcc": 1.0,
+    "japanese": 0.97,
+    "european": 0.95,
+    "american": 0.92,
+    "canadian": 0.9,
+    "unknown": 0.85
+  },
+  "brandRetention": {
+    "toyota": 0.91,
+    "lexus": 0.9,
+    "nissan": 0.88,
+    "mitsubishi": 0.87,
+    "hyundai": 0.83
+  }
+}
