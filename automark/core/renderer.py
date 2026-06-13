@@ -17,18 +17,21 @@ from PIL import Image, ImageDraw, ImageFilter
 
 from .layouts import CANVAS_WIDTH, CANVAS_HEIGHT, CORNER_RADIUS, SHADOW_BLUR, SHADOW_OFFSET_Y, SHADOW_OPACITY
 from .smart_crop_engine import SmartCropEngine
+from .text_overlay import TextOverlayEngine
 
 
 class Renderer:
 
     def __init__(self) -> None:
         self._cropper = SmartCropEngine()
+        self._text = TextOverlayEngine()
 
     def render(
         self,
         layout: dict,
         scored_images: list,   # list[ScoredImage], ordered hero-first
         output_path: str | None = None,
+        caption: str | None = None,
     ) -> Image.Image:
         canvas = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (255, 255, 255, 255))
         shadow_layer = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
@@ -61,6 +64,11 @@ class Renderer:
             shadow_layer = Image.new("RGBA", (CANVAS_WIDTH, CANVAS_HEIGHT), (0, 0, 0, 0))
 
             canvas.paste(cropped_rgba, (slot["x"], slot["y"]), mask=mask)
+
+        # Draw the sale caption over the hero image (slot 1) if provided.
+        if caption:
+            hero_slot = slots[0]
+            canvas = self._text.render(canvas, caption, hero_slot)
 
         return canvas.convert("RGB")
 

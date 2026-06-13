@@ -41,6 +41,10 @@ const scoreBoard   = document.getElementById("score-board");
 const warningsBox  = document.getElementById("warnings-box");
 const layoutBadge  = document.getElementById("layout-badge");
 const toastCont    = document.getElementById("toast-container");
+const captionInput = document.getElementById("caption-input");
+const wordCount    = document.getElementById("word-count");
+
+const MAX_CAPTION_WORDS = 60;
 
 // ── Init session ────────────────────────────────────────────────
 state.sessionId = crypto.randomUUID();
@@ -75,6 +79,20 @@ fileInput.addEventListener("change", () => {
   handleFiles([...fileInput.files]);
   fileInput.value = "";
 });
+
+// ── Caption word counter ────────────────────────────────────────
+captionInput.addEventListener("input", updateWordCount);
+
+function countWords(str) {
+  const t = str.trim();
+  return t ? t.split(/\s+/).length : 0;
+}
+
+function updateWordCount() {
+  const n = countWords(captionInput.value);
+  wordCount.textContent = `${n} word${n === 1 ? "" : "s"}`;
+  wordCount.classList.toggle("over", n > MAX_CAPTION_WORDS);
+}
 
 // ── Buttons ─────────────────────────────────────────────────────
 clearBtn.addEventListener("click", clearAll);
@@ -281,6 +299,8 @@ function removeImage(idx) {
 
 function clearAll() {
   state.images = [];
+  captionInput.value = "";
+  updateWordCount();
   renderImageList();
   updateControls();
   resetResult();
@@ -308,6 +328,7 @@ async function generate() {
   const payload = {
     session_id: state.sessionId,
     images: ready.map(img => ({ file_id: img.fileId, type: img.type })),
+    caption: captionInput.value.trim(),
   };
 
   try {
@@ -378,10 +399,14 @@ async function showResult(data) {
     scoreBoard.appendChild(row);
   });
 
-  // Warnings
-  if (data.warnings && data.warnings.length > 0) {
+  // Warnings + caption-summarization notice
+  const notices = [...(data.warnings || [])];
+  if (data.caption && data.caption.summarized) {
+    notices.push(`Caption shortened from ${data.caption.original_words} to ${data.caption.final_words} words, keeping the sale details.`);
+  }
+  if (notices.length > 0) {
     warningsBox.classList.remove("hidden");
-    warningsBox.innerHTML = `<strong>Warnings:</strong><ul>${data.warnings.map(w => `<li>${w}</li>`).join("")}</ul>`;
+    warningsBox.innerHTML = `<strong>Notes:</strong><ul>${notices.map(w => `<li>${w}</li>`).join("")}</ul>`;
   } else {
     warningsBox.classList.add("hidden");
   }

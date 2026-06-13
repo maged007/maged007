@@ -44,6 +44,7 @@ def main() -> int:
     parser.add_argument("images", nargs="+", help="Image paths (1–6), optionally prefixed with type:path")
     parser.add_argument("-o", "--output", default="./outputs", help="Output directory (default: ./outputs)")
     parser.add_argument("--filename", default=None, help="Output filename (default: auto-generated)")
+    parser.add_argument("-c", "--caption", default=None, help="Sale caption to overlay on the hero image (auto-summarised if > 60 words)")
     parser.add_argument("--open", action="store_true", help="Open the result after generation")
     parser.add_argument("--verbose", action="store_true", help="Print scoring details")
     args = parser.parse_args()
@@ -93,7 +94,13 @@ def main() -> int:
 
     # Render
     print("Rendering…")
-    canvas = renderer.render(layout, scored)
+    if args.caption:
+        from core import TextOverlayEngine
+        summary = TextOverlayEngine().summarize(args.caption)
+        n_in, n_out = len(args.caption.split()), len(summary.split())
+        if n_out < n_in:
+            print(f"Caption summarised: {n_in} → {n_out} words")
+    canvas = renderer.render(layout, scored, caption=args.caption)
 
     # Validate
     result = validator.validate(canvas)

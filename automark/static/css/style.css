@@ -332,6 +332,70 @@ body {
   border-radius: 6px;
 }
 
+/* ── Caption block ───────────────────────────────────────────── */
+.caption-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.caption-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.caption-head label {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.caption-head .optional {
+  font-weight: 400;
+  color: var(--text-3);
+}
+
+.word-count {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.word-count.over {
+  color: var(--yellow);
+  border-color: rgba(245,158,11,.4);
+}
+
+.caption-input {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .85rem;
+  line-height: 1.5;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 70px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.caption-input:focus { border-color: var(--accent); }
+.caption-input::placeholder { color: var(--text-3); }
+
+.caption-hint {
+  font-size: .72rem;
+  color: var(--text-3);
+  line-height: 1.4;
+}
+
 /* ── Action bar ──────────────────────────────────────────────── */
 .action-bar {
   display: flex;

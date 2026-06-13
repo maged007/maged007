@@ -129,6 +129,7 @@ def generate():
     data = request.get_json(force=True)
     session_id = data.get("session_id")
     images_meta = data.get("images", [])
+    caption = (data.get("caption") or "").strip()
 
     if not session_id or not images_meta:
         return jsonify({"error": "Missing session_id or images"}), 400
@@ -154,8 +155,11 @@ def generate():
     try:
         scored = _scorer.score(analyses)
         layout = _selector.select(scored)
-        canvas = _renderer.render(layout, scored)
+        canvas = _renderer.render(layout, scored, caption=caption)
         validation = _validator.validate(canvas)
+
+        # Surface how the caption was handled (raw vs summarised word counts).
+        final_caption = _renderer._text.summarize(caption) if caption else ""
 
         if not validation.passed:
             return jsonify({"error": "Validation failed", "issues": validation.issues}), 500
@@ -183,6 +187,12 @@ def generate():
             "layout_id": layout["id"],
             "warnings": validation.warnings,
             "scores": scores_info,
+            "caption": {
+                "original_words": len(caption.split()) if caption else 0,
+                "final_words": len(final_caption.split()) if final_caption else 0,
+                "summarized": bool(caption) and final_caption != caption,
+                "text": final_caption,
+            },
         })
 
     except Exception as e:

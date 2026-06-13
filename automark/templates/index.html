@@ -59,6 +59,17 @@
         <!-- Image cards list -->
         <div class="image-list" id="image-list"></div>
 
+        <!-- Sale caption -->
+        <div class="caption-block">
+          <div class="caption-head">
+            <label for="caption-input">Sale caption <span class="optional">(optional)</span></label>
+            <span class="word-count" id="word-count">0 words</span>
+          </div>
+          <textarea id="caption-input" class="caption-input" rows="3"
+            placeholder="e.g. Kia Cerato 2021, price 750k EGP negotiable, only 40,000 km, excellent condition…&#10;مثال: كيا سيراتو 2021، السعر 750 الف قابل للتفاوض، العداد 40 الف كيلو، الحالة ممتازة"></textarea>
+          <p class="caption-hint" id="caption-hint">Shown over the main image. Captions over 60 words are auto-shortened to the sale details.</p>
+        </div>
+
         <!-- Action bar -->
         <div class="action-bar">
           <button class="btn btn-ghost" id="clear-btn" disabled>Clear all</button>
