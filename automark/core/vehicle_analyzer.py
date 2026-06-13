@@ -50,8 +50,10 @@ IMAGE_TYPES: dict[str, tuple[str, int]] = {
 
 class VehicleAnalyzer:
     def __init__(self) -> None:
-        cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-        self._face_cascade = cv2.CascadeClassifier(cascade_path)
+        # Note: OpenCV's Haar cascade face detector is intentionally NOT used.
+        # It is the most common source of native segfaults on macOS/Apple
+        # Silicon and its result was not used by the type-inference heuristics.
+        pass
 
     def analyze(self, image_path: str, user_type: str = "auto") -> ImageAnalysis:
         pil_img = self._open_corrected(image_path)
@@ -70,7 +72,7 @@ class VehicleAnalyzer:
         brightness = self._brightness(bgr)
         contrast = self._contrast(bgr)
         edge_density = self._edge_density(bgr)
-        has_faces = self._has_faces(bgr)
+        has_faces = False  # face detection disabled (see __init__)
         saturation = self._saturation(bgr)
         sky_ratio = self._sky_ratio(bgr)
         dark_ratio = self._dark_ratio(bgr)
@@ -133,11 +135,6 @@ class VehicleAnalyzer:
         gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
         edges = cv2.Canny(gray, 50, 150)
         return float(np.count_nonzero(edges)) / edges.size
-
-    def _has_faces(self, bgr: np.ndarray) -> bool:
-        gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
-        faces = self._face_cascade.detectMultiScale(gray, 1.1, 4)
-        return len(faces) > 0
 
     def _saturation(self, bgr: np.ndarray) -> float:
         hsv = cv2.cvtColor(bgr, cv2.COLOR_BGR2HSV)
