@@ -76,7 +76,7 @@
             "fair": 78.1,
             "weak": 71.9
           },
-          "floor": 14500,
+          "floor": 5000,
           "range_spread_pct": 8,
           "calibration": {
             "mdape_pct": 12.3,
