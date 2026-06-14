@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../data/pricing_service.dart';
 import '../logic/price_calculator.dart';
-import '../models/price_result.dart';
 import '../theme/app_theme.dart';
 
 /// شاشة عرض نتيجة التقدير: السعر المركزي + النطاق + ملخص المدخلات.
 class ResultScreen extends StatelessWidget {
   final PriceInput input;
-  final PriceResult result;
+  final EstimateOutcome outcome;
 
-  const ResultScreen({super.key, required this.input, required this.result});
+  const ResultScreen({super.key, required this.input, required this.outcome});
 
   String _money(double v) {
     final f = NumberFormat('#,##0', 'en');
@@ -19,6 +19,7 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final result = outcome.result;
     return Scaffold(
       appBar: AppBar(title: const Text('السعر التقديري')),
       body: SingleChildScrollView(
@@ -57,7 +58,9 @@ class ResultScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
+            _sourceBadge(),
+            const SizedBox(height: 12),
             const Text(
               'ملخص السيارة',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -83,6 +86,46 @@ class ResultScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _sourceBadge() {
+    final fromServer = outcome.fromServer;
+    final confAr = switch (outcome.confidence) {
+      'high' => 'عالية',
+      'medium' => 'متوسطة',
+      'low' => 'منخفضة',
+      _ => null,
+    };
+    String text;
+    if (fromServer) {
+      final parts = <String>[];
+      if (outcome.samples != null) parts.add('${outcome.samples} سيارة');
+      if (confAr != null) parts.add('ثقة $confAr');
+      final detail = parts.isEmpty ? '' : ' (${parts.join('، ')})';
+      text = 'مبني على بيانات السوق الحية$detail';
+    } else {
+      text = 'تقدير محلي (السيرفر غير متصل — بيانات مخزّنة)';
+    }
+    final color = fromServer ? AppTheme.primary : Colors.orange.shade800;
+    final icon = fromServer ? Icons.cloud_done_outlined : Icons.offline_bolt_outlined;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(text, style: TextStyle(color: color, fontSize: 13)),
+          ),
+        ],
       ),
     );
   }

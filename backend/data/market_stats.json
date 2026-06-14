@@ -1,0 +1,75 @@
+{
+  "_comment": "إحصاءات سوق حقيقية مجمّعة من إعلانات الإمارات (لقطة). لكل (موديل + سنة) الوسيط/الأدنى/الأعلى للفئة المرجعية + عدد العينات. تُحدَّث تلقائياً عند توصيل المصدر الحي عبر ingest.py.",
+  "_sources": ["dubicars.com", "dubizzle.com", "carswitch.com", "yallamotor.com", "opensooq.com"],
+  "updated_at": "2026-06-14",
+  "models": {
+    "toyota:land_cruiser": {
+      "reference_trim": "gxr",
+      "trim_new_prices": { "exr": 238900, "gxr": 274900, "vxr": 320000 },
+      "by_year": {
+        "2018": { "median": 170000, "low": 150000, "high": 195000, "samples": 18 },
+        "2019": { "median": 185000, "low": 160000, "high": 224000, "samples": 25 },
+        "2020": { "median": 196000, "low": 176000, "high": 230000, "samples": 22 },
+        "2021": { "median": 210000, "low": 175000, "high": 233000, "samples": 30 },
+        "2022": { "median": 228000, "low": 193900, "high": 265000, "samples": 45 },
+        "2023": { "median": 248000, "low": 225000, "high": 285000, "samples": 20 },
+        "2024": { "median": 263000, "low": 245000, "high": 300000, "samples": 12 }
+      }
+    },
+    "nissan:patrol": {
+      "reference_trim": "se",
+      "trim_new_prices": { "se": 258900, "se_platinum": 322900, "le_platinum": 388900 },
+      "by_year": {
+        "2017": { "median": 75000, "low": 52000, "high": 95000, "samples": 20 },
+        "2018": { "median": 92000, "low": 70000, "high": 110000, "samples": 22 },
+        "2019": { "median": 110000, "low": 90000, "high": 135000, "samples": 24 },
+        "2020": { "median": 135000, "low": 95000, "high": 160000, "samples": 28 },
+        "2021": { "median": 158000, "low": 101000, "high": 200000, "samples": 30 },
+        "2022": { "median": 185000, "low": 131000, "high": 205000, "samples": 26 },
+        "2023": { "median": 215000, "low": 180000, "high": 250000, "samples": 18 },
+        "2024": { "median": 240000, "low": 210000, "high": 280000, "samples": 10 }
+      }
+    },
+    "lexus:es": {
+      "reference_trim": "es350_prestige",
+      "trim_new_prices": { "es350_prestige": 195000, "es300h": 225000, "es350_platinum": 270000 },
+      "by_year": {
+        "2017": { "median": 82000, "low": 62000, "high": 100000, "samples": 14 },
+        "2018": { "median": 93000, "low": 75000, "high": 115000, "samples": 16 },
+        "2019": { "median": 106000, "low": 88000, "high": 125000, "samples": 18 },
+        "2020": { "median": 120000, "low": 100000, "high": 145000, "samples": 16 },
+        "2021": { "median": 135000, "low": 110000, "high": 160000, "samples": 20 },
+        "2022": { "median": 158000, "low": 130000, "high": 185000, "samples": 22 },
+        "2023": { "median": 178000, "low": 155000, "high": 217999, "samples": 15 },
+        "2024": { "median": 188000, "low": 170000, "high": 215000, "samples": 8 }
+      }
+    },
+    "mitsubishi:pajero": {
+      "reference_trim": "gls_high",
+      "trim_new_prices": { "gls_mid": 105945, "gls_high": 124845 },
+      "by_year": {
+        "2015": { "median": 28000, "low": 22000, "high": 35000, "samples": 12 },
+        "2016": { "median": 33000, "low": 27000, "high": 40000, "samples": 14 },
+        "2017": { "median": 45000, "low": 30000, "high": 64990, "samples": 16 },
+        "2018": { "median": 60000, "low": 53000, "high": 79000, "samples": 18 },
+        "2019": { "median": 68000, "low": 58000, "high": 84995, "samples": 16 },
+        "2020": { "median": 78000, "low": 58000, "high": 84995, "samples": 14 }
+      }
+    },
+    "hyundai:elantra": {
+      "reference_trim": "smart",
+      "trim_new_prices": { "smart": 76250, "comfort": 87000 },
+      "by_year": {
+        "2016": { "median": 18000, "low": 14100, "high": 22000, "samples": 14 },
+        "2017": { "median": 21000, "low": 17000, "high": 26000, "samples": 16 },
+        "2018": { "median": 25000, "low": 19000, "high": 30000, "samples": 18 },
+        "2019": { "median": 28000, "low": 23000, "high": 33000, "samples": 16 },
+        "2020": { "median": 33000, "low": 23900, "high": 41000, "samples": 20 },
+        "2021": { "median": 38000, "low": 32000, "high": 45000, "samples": 18 },
+        "2022": { "median": 44000, "low": 36000, "high": 52000, "samples": 16 },
+        "2023": { "median": 53000, "low": 41000, "high": 61995, "samples": 14 },
+        "2024": { "median": 64000, "low": 55000, "high": 72000, "samples": 8 }
+      }
+    }
+  }
+}

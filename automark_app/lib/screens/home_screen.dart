@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../config.dart';
 import '../data/catalog_repository.dart';
+import '../data/pricing_service.dart';
 import '../logic/price_calculator.dart';
 import '../models/car_models.dart';
 import '../widgets/labeled_dropdown.dart';
@@ -28,12 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
   RegionSpec _region = RegionSpec.gcc;
 
   late final List<int> _years;
+  late final PricingService _pricingService;
+  bool _loading = false;
 
   @override
   void initState() {
     super.initState();
     final current = widget.repository.config.currentYear;
     _years = [for (int y = current; y >= 2015; y--) y];
+    _pricingService = PricingService(
+      apiBaseUrl: AppConfig.apiBaseUrl,
+      localConfig: widget.repository.config,
+    );
   }
 
   @override
@@ -57,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _calculate() {
+  Future<void> _calculate() async {
     if (!_formKey.currentState!.validate()) return;
     if (_brand == null ||
         _model == null ||
@@ -79,12 +87,14 @@ class _HomeScreenState extends State<HomeScreen> {
       region: _region,
     );
 
-    final calculator = PriceCalculator(widget.repository.config);
-    final result = calculator.estimate(input);
+    setState(() => _loading = true);
+    final outcome = await _pricingService.estimate(input);
+    if (!mounted) return;
+    setState(() => _loading = false);
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => ResultScreen(input: input, result: result),
+        builder: (_) => ResultScreen(input: input, outcome: outcome),
       ),
     );
   }
@@ -166,8 +176,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 8),
               FilledButton(
-                onPressed: _calculate,
-                child: const Text('احسب السعر'),
+                onPressed: _loading ? null : _calculate,
+                child: _loading
+                    ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Text('احسب السعر'),
               ),
             ],
           ),
