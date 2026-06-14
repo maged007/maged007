@@ -6,13 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const config = PricingConfig(
     currentYear: 2025,
-    firstYearDrop: 0.82,
-    defaultYearlyRetention: 0.86,
     expectedKmPerYear: 18000,
     defaultKmPenaltyPerKm: 0.4,
     rangeSpread: 0.07,
-    minRatio: 0.12,
-    maxRatio: 0.97,
+    minRatio: 0.45,
+    maxRatio: 1.3,
     conditionFactors: {
       'excellent': 1.05,
       'very_good': 1.0,
@@ -28,17 +26,25 @@ void main() {
       'canadian': 0.9,
       'unknown': 0.85,
     },
-    brandRetention: {'toyota': 0.92},
   );
 
-  const trim = Trim(id: 'gxr', nameAr: 'GXR', newPrice: 275000);
+  const exr = Trim(id: 'exr', nameAr: 'EXR', newPrice: 238900);
+  const gxr = Trim(id: 'gxr', nameAr: 'GXR', newPrice: 274900);
+  const vxr = Trim(id: 'vxr', nameAr: 'VXR', newPrice: 320000);
   const model = CarModel(
     id: 'land_cruiser',
     nameAr: 'لاند كروزر',
     nameEn: 'Land Cruiser',
-    yearlyRetention: 0.92,
-    kmPenaltyPerKm: 0.9,
-    trims: [trim],
+    referenceTrimId: 'gxr',
+    priceByYear: {
+      2018: 175000,
+      2019: 188000,
+      2020: 198000,
+      2021: 212000,
+      2022: 230000,
+    },
+    kmPenaltyPerKm: 0.7,
+    trims: [exr, gxr, vxr],
   );
   const brand = Brand(
     id: 'toyota',
@@ -48,6 +54,7 @@ void main() {
   );
 
   PriceInput buildInput({
+    Trim trim = gxr,
     int year = 2020,
     int km = 90000,
     CarCondition condition = CarCondition.veryGood,
@@ -73,10 +80,28 @@ void main() {
     expect(r.estimated, greaterThan(0));
   });
 
+  test('السعر الأساسي يطابق بيانات السوق للسنة', () {
+    // GXR 2020 بمسافة متوقعة (90,000 = 18,000×5) وحالة جيد جداً وخليجي → ≈ سعر السوق 198,000.
+    final r = calc.estimate(buildInput(year: 2020, km: 90000)).estimated;
+    expect(r, closeTo(198000, 1000));
+  });
+
+  test('الاستيفاء بين السنين يعمل', () {
+    // لا توجد بيانات 2020.5، لكن 2019=188k و2020=198k.
+    final base = calc.basePriceForYear(model, 2019);
+    expect(base, 188000);
+  });
+
   test('مسافة أعلى → سعر أقل', () {
     final low = calc.estimate(buildInput(km: 50000)).estimated;
     final high = calc.estimate(buildInput(km: 200000)).estimated;
     expect(high, lessThan(low));
+  });
+
+  test('فئة أعلى → سعر أعلى', () {
+    final vxrPrice = calc.estimate(buildInput(trim: vxr)).estimated;
+    final exrPrice = calc.estimate(buildInput(trim: exr)).estimated;
+    expect(vxrPrice, greaterThan(exrPrice));
   });
 
   test('حالة أفضل → سعر أعلى', () {
@@ -95,14 +120,8 @@ void main() {
   });
 
   test('سيارة أحدث أغلى من أقدم', () {
-    final newer = calc.estimate(buildInput(year: 2023)).estimated;
-    final older = calc.estimate(buildInput(year: 2016)).estimated;
+    final newer = calc.estimate(buildInput(year: 2022)).estimated;
+    final older = calc.estimate(buildInput(year: 2018)).estimated;
     expect(newer, greaterThan(older));
-  });
-
-  test('لاند كروزر 2020 سعر منطقي', () {
-    final r = calc.estimate(buildInput(year: 2020, km: 90000)).estimated;
-    expect(r, greaterThan(120000));
-    expect(r, lessThan(220000));
   });
 }

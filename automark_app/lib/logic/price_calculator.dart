@@ -25,18 +25,39 @@ class PriceInput {
   });
 }
 
-/// حاسبة السعر: تبدأ من سعر الجديد ثم تطبّق منحنى استهلاك معاير + تعديلات.
+/// حاسبة السعر بالاعتماد على أسعار السوق الحقيقية لكل سنة (priceByYear)،
+/// مع استيفاء خطي بين السنين، ثم تعديل حسب الفئة والمسافة والحالة والمواصفات.
 /// كل الثوابت تأتي من [PricingConfig] (المحمّل من JSON) أو من بيانات الموديل.
 class PriceCalculator {
   final PricingConfig config;
 
   const PriceCalculator(this.config);
 
-  /// نسبة الاحتفاظ السنوية بالأولوية: قيمة الموديل ← قيمة البراند ← الافتراضي العام.
-  double retentionFor(Brand brand, CarModel model) {
-    return model.yearlyRetention ??
-        config.brandRetention[brand.id] ??
-        config.defaultYearlyRetention;
+  /// السعر الأساسي للفئة المرجعية في سنة معيّنة، باستيفاء خطي بين النقاط الحقيقية.
+  /// خارج المدى المتاح نثبّت على أقرب طرف.
+  double basePriceForYear(CarModel model, int year) {
+    final prices = model.priceByYear;
+    if (prices.isEmpty) return 0;
+
+    final years = prices.keys.toList()..sort();
+    final minYear = years.first;
+    final maxYear = years.last;
+
+    if (prices.containsKey(year)) return prices[year]!;
+    if (year <= minYear) return prices[minYear]!;
+    if (year >= maxYear) return prices[maxYear]!;
+
+    // أقرب سنة أقل وأقرب سنة أعلى لها بيانات.
+    int lower = minYear;
+    int upper = maxYear;
+    for (final y in years) {
+      if (y <= year && y > lower) lower = y;
+      if (y >= year && y < upper) upper = y;
+    }
+    final pLower = prices[lower]!;
+    final pUpper = prices[upper]!;
+    final t = (year - lower) / (upper - lower);
+    return pLower + (pUpper - pLower) * t;
   }
 
   double kmPenaltyFor(CarModel model) {
@@ -44,32 +65,31 @@ class PriceCalculator {
   }
 
   PriceResult estimate(PriceInput input) {
-    final newPrice = input.trim.newPrice;
+    final model = input.model;
     final age = config.currentYear - input.modelYear;
 
-    // منحنى الاستهلاك: نزولة أكبر في السنة الأولى ثم احتفاظ سنوي.
-    double priceForAge;
-    if (age <= 0) {
-      priceForAge = newPrice;
-    } else {
-      final retention = retentionFor(input.brand, input.model);
-      priceForAge = newPrice * config.firstYearDrop * pow(retention, age - 1);
-    }
+    // 1) السعر الأساسي الحقيقي للفئة المرجعية في سنة السيارة.
+    final base = basePriceForYear(model, input.modelYear);
 
-    // تعديل المسافة: فرق الكيلومترات عن المتوقع لسنة السيارة.
+    // 2) تعديل الفئة: نسبة سعر الفئة المختارة إلى الفئة المرجعية (من أسعار الجديد).
+    final refNew = model.referenceTrim.newPrice;
+    final trimMultiplier = refNew > 0 ? input.trim.newPrice / refNew : 1.0;
+    final priceForCar = base * trimMultiplier;
+
+    // 3) تعديل المسافة: الفرق عن الكيلومترات المتوقعة لعمر السيارة.
     final expectedKm = config.expectedKmPerYear * max(age, 0);
     final kmDiff = input.km - expectedKm;
-    final priceAfterKm = priceForAge - (kmDiff * kmPenaltyFor(input.model));
+    final priceAfterKm = priceForCar - (kmDiff * kmPenaltyFor(model));
 
-    // معاملات الحالة والمواصفات الإقليمية.
+    // 4) معاملات الحالة والمواصفات الإقليمية.
     final conditionFactor = config.conditionFactors[input.condition.key] ?? 1.0;
     final regionFactor = config.regionFactors[input.region.key] ?? 1.0;
 
     double estimated = priceAfterKm * conditionFactor * regionFactor;
 
-    // حدود منطقية حتى لا يخرج السعر عن المعقول.
-    final minPrice = newPrice * config.minRatio;
-    final maxPrice = newPrice * config.maxRatio;
+    // 5) حدود منطقية نسبةً إلى سعر الفئة لتجنّب القيم الشاذة.
+    final minPrice = priceForCar * config.minRatio;
+    final maxPrice = priceForCar * config.maxRatio;
     estimated = estimated.clamp(minPrice, maxPrice);
 
     final low = estimated * (1 - config.rangeSpread);

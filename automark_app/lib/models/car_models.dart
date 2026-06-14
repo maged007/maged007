@@ -21,8 +21,11 @@ class CarModel {
   final String nameAr;
   final String nameEn;
 
-  /// نسبة الاحتفاظ السنوية المعايرة من السوق (اختيارية؛ لو null نستخدم نسبة البراند ثم الافتراضي).
-  final double? yearlyRetention;
+  /// معرّف الفئة المرجعية التي تخص أسعار priceByYear.
+  final String referenceTrimId;
+
+  /// أسعار السوق الحقيقية للفئة المرجعية لكل سنة { سنة: سعر }.
+  final Map<int, double> priceByYear;
 
   /// عقوبة الدرهم لكل كيلومتر زائد عن المتوقع (اختيارية).
   final double? kmPenaltyPerKm;
@@ -33,17 +36,29 @@ class CarModel {
     required this.id,
     required this.nameAr,
     required this.nameEn,
-    required this.yearlyRetention,
+    required this.referenceTrimId,
+    required this.priceByYear,
     required this.kmPenaltyPerKm,
     required this.trims,
   });
 
+  /// الفئة المرجعية التي تُنسب إليها أسعار priceByYear.
+  Trim get referenceTrim =>
+      trims.firstWhere((t) => t.id == referenceTrimId, orElse: () => trims.first);
+
   factory CarModel.fromJson(Map<String, dynamic> json) {
+    final rawPrices = (json['priceByYear'] as Map<String, dynamic>);
+    final prices = <int, double>{
+      for (final e in rawPrices.entries)
+        int.parse(e.key): (e.value as num).toDouble(),
+    };
+
     return CarModel(
       id: json['id'] as String,
       nameAr: json['nameAr'] as String,
       nameEn: json['nameEn'] as String? ?? json['nameAr'] as String,
-      yearlyRetention: (json['yearlyRetention'] as num?)?.toDouble(),
+      referenceTrimId: json['referenceTrimId'] as String,
+      priceByYear: prices,
       kmPenaltyPerKm: (json['kmPenaltyPerKm'] as num?)?.toDouble(),
       trims: (json['trims'] as List<dynamic>)
           .map((e) => Trim.fromJson(e as Map<String, dynamic>))

@@ -2,8 +2,6 @@
 /// كل القيم قابلة للتعديل من الملف بدون لمس الكود.
 class PricingConfig {
   final int currentYear;
-  final double firstYearDrop;
-  final double defaultYearlyRetention;
   final double expectedKmPerYear;
   final double defaultKmPenaltyPerKm;
   final double rangeSpread;
@@ -11,12 +9,9 @@ class PricingConfig {
   final double maxRatio;
   final Map<String, double> conditionFactors;
   final Map<String, double> regionFactors;
-  final Map<String, double> brandRetention;
 
   const PricingConfig({
     required this.currentYear,
-    required this.firstYearDrop,
-    required this.defaultYearlyRetention,
     required this.expectedKmPerYear,
     required this.defaultKmPenaltyPerKm,
     required this.rangeSpread,
@@ -24,7 +19,6 @@ class PricingConfig {
     required this.maxRatio,
     required this.conditionFactors,
     required this.regionFactors,
-    required this.brandRetention,
   });
 
   factory PricingConfig.fromJson(Map<String, dynamic> json) {
@@ -35,8 +29,6 @@ class PricingConfig {
 
     return PricingConfig(
       currentYear: (json['currentYear'] as num).toInt(),
-      firstYearDrop: (json['firstYearDrop'] as num).toDouble(),
-      defaultYearlyRetention: (json['defaultYearlyRetention'] as num).toDouble(),
       expectedKmPerYear: (json['expectedKmPerYear'] as num).toDouble(),
       defaultKmPenaltyPerKm: (json['defaultKmPenaltyPerKm'] as num).toDouble(),
       rangeSpread: (json['rangeSpread'] as num).toDouble(),
@@ -44,7 +36,6 @@ class PricingConfig {
       maxRatio: (json['maxRatio'] as num).toDouble(),
       conditionFactors: toDoubleMap(json['conditionFactors']),
       regionFactors: toDoubleMap(json['regionFactors']),
-      brandRetention: toDoubleMap(json['brandRetention']),
     );
   }
 }

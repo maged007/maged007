@@ -1,8 +1,6 @@
 {
-  "_comment": "بيانات حقيقية (لقطة من السوق الإماراتي). newPrice بالدرهم. yearlyRetention معاير من عينات مستعمل حقيقية في samples.",
-  "_sources": [
-    "zigwheels.ae", "drivearabia.com", "dubicars.com", "yallamotor.com", "dubizzle.com"
-  ],
+  "_comment": "أسعار حقيقية (لقطة من السوق الإماراتي). priceByYear = متوسط سعر السوق للفئة المرجعية لكل سنة. الفئات الأخرى تُحسب بنسبة من سعرها الجديد. كل الأرقام قابلة للتعديل.",
+  "_sources": ["dubicars.com", "dubizzle.com", "yallamotor.com", "carswitch.com", "opensooq.com", "zigwheels.ae", "drivearabia.com"],
   "brands": [
     {
       "id": "toyota",
@@ -13,12 +11,13 @@
           "id": "land_cruiser",
           "nameAr": "لاند كروزر",
           "nameEn": "Land Cruiser",
-          "yearlyRetention": 0.92,
-          "kmPenaltyPerKm": 0.9,
-          "samples": [
-            { "year": 2020, "km": 90000, "price": 165000 },
-            { "year": 2020, "km": 130000, "price": 130000 }
-          ],
+          "referenceTrimId": "gxr",
+          "kmPenaltyPerKm": 0.7,
+          "priceByYear": {
+            "2015": 140000, "2016": 150000, "2017": 162000, "2018": 175000,
+            "2019": 188000, "2020": 198000, "2021": 212000, "2022": 230000,
+            "2023": 248000, "2024": 263000, "2025": 275000
+          },
           "trims": [
             { "id": "exr", "nameAr": "EXR 4.0", "newPrice": 238900 },
             { "id": "gxr", "nameAr": "GXR 4.0", "newPrice": 274900 },
@@ -36,12 +35,13 @@
           "id": "patrol",
           "nameAr": "باترول",
           "nameEn": "Patrol",
-          "yearlyRetention": 0.89,
-          "kmPenaltyPerKm": 0.8,
-          "samples": [
-            { "year": 2020, "km": 30000, "price": 250000 },
-            { "year": 2020, "km": 120000, "price": 150000 }
-          ],
+          "referenceTrimId": "se",
+          "kmPenaltyPerKm": 0.6,
+          "priceByYear": {
+            "2015": 60000, "2016": 68000, "2017": 78000, "2018": 95000,
+            "2019": 115000, "2020": 135000, "2021": 158000, "2022": 185000,
+            "2023": 215000, "2024": 240000, "2025": 258900
+          },
           "trims": [
             { "id": "se", "nameAr": "SE", "newPrice": 258900 },
             { "id": "se_platinum", "nameAr": "SE Platinum City", "newPrice": 322900 },
@@ -59,11 +59,13 @@
           "id": "es",
           "nameAr": "ES",
           "nameEn": "ES",
-          "yearlyRetention": 0.9,
-          "kmPenaltyPerKm": 0.55,
-          "samples": [
-            { "year": 2021, "km": 60000, "price": 130000 }
-          ],
+          "referenceTrimId": "es350_prestige",
+          "kmPenaltyPerKm": 0.5,
+          "priceByYear": {
+            "2015": 62000, "2016": 72000, "2017": 82000, "2018": 93000,
+            "2019": 106000, "2020": 120000, "2021": 135000, "2022": 155000,
+            "2023": 175000, "2024": 188000, "2025": 195000
+          },
           "trims": [
             { "id": "es350_prestige", "nameAr": "ES 350 Prestige", "newPrice": 195000 },
             { "id": "es300h", "nameAr": "ES 300h", "newPrice": 225000 },
@@ -81,12 +83,13 @@
           "id": "pajero",
           "nameAr": "باجيرو",
           "nameEn": "Pajero",
-          "yearlyRetention": 0.88,
-          "kmPenaltyPerKm": 0.3,
-          "samples": [
-            { "year": 2018, "km": 55000, "price": 79000 },
-            { "year": 2019, "km": 71000, "price": 58000 }
-          ],
+          "referenceTrimId": "gls_high",
+          "kmPenaltyPerKm": 0.25,
+          "priceByYear": {
+            "2015": 28000, "2016": 33000, "2017": 45000, "2018": 60000,
+            "2019": 68000, "2020": 78000, "2021": 92000, "2022": 100000,
+            "2023": 108000, "2024": 116000, "2025": 124845
+          },
           "trims": [
             { "id": "gls_mid", "nameAr": "GLS Med Line 3.0", "newPrice": 105945 },
             { "id": "gls_high", "nameAr": "GLS High Line 3.8", "newPrice": 124845 }
@@ -103,12 +106,13 @@
           "id": "elantra",
           "nameAr": "إلنترا",
           "nameEn": "Elantra",
-          "yearlyRetention": 0.82,
+          "referenceTrimId": "smart",
           "kmPenaltyPerKm": 0.2,
-          "samples": [
-            { "year": 2020, "km": 90000, "price": 30000 },
-            { "year": 2021, "km": 70000, "price": 36500 }
-          ],
+          "priceByYear": {
+            "2015": 16000, "2016": 19000, "2017": 22000, "2018": 26000,
+            "2019": 29000, "2020": 33000, "2021": 38000, "2022": 44000,
+            "2023": 53000, "2024": 64000, "2025": 76250
+          },
           "trims": [
             { "id": "smart", "nameAr": "Smart 1.6", "newPrice": 76250 },
             { "id": "comfort", "nameAr": "Comfort 1.6", "newPrice": 87000 }
