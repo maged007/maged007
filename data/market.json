@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "currency": "AED",
+    "market": "UAE",
+    "rates_unit": "percent",
+    "base_year": 2026,
+    "model_version": "2.0.0",
+    "method": "anchored on real dealer (new) prices per trim, depreciation + km + condition + spec calibrated from real Automark listing data via log-linear regression",
+    "notes": "كل المعدلات نِسب مئوية. السعر الأساسي (قبل معامل الحالة) = سعر السيارة في حالة 'ممتازة'؛ الحالات الأقل تخصم منه. أحدث سنة = نقطة وسط بين سعر الوكيل وأسعار الإعلانات. شرائح الحالة مشتقة من تشتت أسعار الداتا الفعلي.",
+    "dealer_price_sources": [
+      "https://www.drivearabia.com/carprices/uae/nissan/nissan-altima/",
+      "https://uae.yallamotor.com/new-cars/nissan/altima",
+      "https://ar.nissan-dubai.com/vehicles/new/altima.html"
+    ],
+    "data_source": "Automark export — data/raw/export_nissan_altima.md"
+  },
+
+  "condition_factors_pct": {
+    "_doc": "شرائح الحالة الافتراضية العامة (الأعلى=الأساس). كل موديل ممكن يتجاوزها بقيم من داتته.",
+    "excellent": 100,
+    "very_good": 92,
+    "good": 85,
+    "fair": 78,
+    "weak": 72
+  },
+
+  "brands": {
+    "nissan": {
+      "default_retention_pct": {
+        "_doc": "معدّل الاحتفاظ القياسي للبراند (إعادة البيع). يُستخدم لأي موديل ليس له retention خاص — وسيلة عزل كل براند على حدة مستقبلاً.",
+        "year1": 88.9,
+        "annual": 86.2
+      },
+      "models": {
+        "altima": {
+          "name_ar": "نيسان التيما",
+          "name_en": "Nissan Altima",
+          "body": "سيدان متوسط",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "S": 110500,
+            "SR": 126500,
+            "SV": 129500,
+            "SL": 143500,
+            "Platinum": 147000
+          },
+          "trim_labels_ar": {
+            "S": "S (الأساسية)",
+            "SR": "SR (سبورت)",
+            "SV": "SV",
+            "SL": "SL (فل)",
+            "Platinum": "Platinum / Turbo (الأعلى)"
+          },
+          "default_trim": "SV",
+          "retention_pct": { "year1": 88.9, "annual": 86.2 },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 80.2,
+            "canadian": 80.2,
+            "european": 90.1,
+            "japanese": 88,
+            "other": 82.2
+          },
+          "condition_factors_pct": {
+            "excellent": 100,
+            "very_good": 92.1,
+            "good": 84.8,
+            "fair": 78.1,
+            "weak": 71.9
+          },
+          "floor": 14500,
+          "range_spread_pct": 8,
+          "calibration": {
+            "mdape_pct": 12.3,
+            "n": 272,
+            "source": "Automark export (288 listings)",
+            "sigma_log": 0.1651
+          },
+          "_anchors_doc": "وسيط GCC الحقيقي لكل سنة من الداتا (نقاط ممثِّلة، تُقارَن بشريحة 'جيدة').",
+          "anchors": [
+            { "year": 2023, "km": 8000,   "price": 75000, "spec": "gcc", "trim": "SV" },
+            { "year": 2021, "km": 46000,  "price": 65000, "spec": "gcc", "trim": "unknown" },
+            { "year": 2020, "km": 142000, "price": 45000, "spec": "gcc", "trim": "S" },
+            { "year": 2018, "km": 258000, "price": 34000, "spec": "gcc", "trim": "SL" },
+            { "year": 2016, "km": 164000, "price": 25500, "spec": "gcc", "trim": "unknown" }
+          ]
+        }
+      }
+    }
+  }
+}

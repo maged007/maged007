@@ -3,149 +3,82 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Automark – مقدّر سعر السيارات المستعملة</title>
+<title>Automark – مقدّر سعر التيما المستعملة</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
-
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-
 :root{
-  --orange:#FF6B1A;
-  --orange-light:#FFF0E5;
-  --orange-border:#FFD4B8;
-  --text:#0D0D0D;
-  --text-muted:#6E6E6E;
-  --text-faint:#AAAAAA;
-  --bg:#F5F5F0;
-  --white:#FFFFFF;
-  --surface:#F3F3F0;
-  --border:#E5E5E0;
-  --green:#22C55E;
-  --radius:16px;
-  --radius-lg:22px;
-  --shadow:0 8px 32px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
+  --orange:#FF6B1A;--orange-light:#FFF0E5;--text:#0D0D0D;--text-muted:#6E6E6E;
+  --text-faint:#AAAAAA;--bg:#F5F5F0;--white:#FFFFFF;--surface:#F3F3F0;--border:#E5E5E0;
+  --green:#22C55E;--radius-lg:22px;--shadow:0 8px 32px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
 }
-
-body{
-  font-family:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;
-  background:var(--bg);
-  min-height:100vh;
-  color:var(--text);
-  padding:24px 14px 60px;
-  display:flex;
-  justify-content:center;
-}
-
+body{font-family:'IBM Plex Sans Arabic',Tahoma,Arial,sans-serif;background:var(--bg);
+  min-height:100vh;color:var(--text);padding:24px 14px 60px;display:flex;justify-content:center}
 .app{width:100%;max-width:460px}
-
-/* ── Header ── */
 .brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.brand .logo{
-  width:38px;height:38px;border-radius:11px;
-  background:var(--orange);color:#fff;display:grid;place-items:center;
-  font-weight:800;font-size:20px;box-shadow:0 4px 12px rgba(255,107,26,.35)
-}
+.brand .logo{width:38px;height:38px;border-radius:11px;background:var(--orange);color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:20px;box-shadow:0 4px 12px rgba(255,107,26,.35)}
 .brand h1{font-size:21px;font-weight:800;letter-spacing:-.3px}
 .subtitle{color:var(--text-muted);font-size:14px;margin:4px 0 22px;font-weight:400}
-
-/* ── Card ── */
-.card{
-  background:var(--white);border:1px solid var(--border);
-  border-radius:var(--radius-lg);padding:20px 18px;box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
-
-.field{margin-bottom:15px}
-.field:last-child{margin-bottom:0}
-label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:7px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:20px 18px;box-shadow:var(--shadow);margin-bottom:18px}
+.field{margin-bottom:15px}.field:last-child{margin-bottom:0}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:7px}
 .hint{font-weight:400;color:var(--text-faint);font-size:11px}
-
-select,input{
-  width:100%;font-family:inherit;font-size:15px;font-weight:500;color:var(--text);
-  background:var(--surface);border:1.5px solid var(--border);border-radius:13px;
-  padding:13px 14px;outline:none;transition:.15s;-webkit-appearance:none;appearance:none;
-}
-select{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236E6E6E' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:left 16px center;padding-left:38px;
-}
+select,input{width:100%;font-family:inherit;font-size:15px;font-weight:500;color:var(--text);
+  background:var(--surface);border:1.5px solid var(--border);border-radius:13px;padding:13px 14px;
+  outline:none;transition:.15s;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236E6E6E' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:left 16px center;padding-left:38px}
 select:focus,input:focus{border-color:var(--orange);background:var(--orange-light)}
-
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-.btn{
-  width:100%;margin-top:4px;background:var(--orange);color:#fff;border:none;
-  border-radius:14px;padding:15px;font-family:inherit;font-size:16px;font-weight:700;
-  cursor:pointer;transition:.15s;box-shadow:0 6px 18px rgba(255,107,26,.32)
-}
-.btn:hover{filter:brightness(1.05)}
-.btn:active{transform:translateY(1px)}
-
-/* ── Result ── */
-.result{display:none}
-.result.show{display:block;animation:fade .35s ease}
+.btn{width:100%;margin-top:4px;background:var(--orange);color:#fff;border:none;border-radius:14px;
+  padding:15px;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:.15s;
+  box-shadow:0 6px 18px rgba(255,107,26,.32)}
+.btn:hover{filter:brightness(1.05)}.btn:active{transform:translateY(1px)}
+.result{display:none}.result.show{display:block;animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
 .result-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .result-car{font-size:15px;font-weight:700}
 .result-age{font-size:12px;color:var(--text-muted);background:var(--surface);padding:4px 10px;border-radius:20px}
-
-.price{font-size:38px;font-weight:800;color:var(--orange);letter-spacing:-1px;line-height:1.1;margin:8px 0 2px}
+.dealer{font-size:12.5px;color:var(--text-muted);margin-bottom:8px}
+.dealer b{color:var(--text);font-weight:700}
+.price{font-size:38px;font-weight:800;color:var(--orange);letter-spacing:-1px;line-height:1.1;margin:6px 0 2px}
 .price small{font-size:18px;font-weight:600;color:var(--text-muted)}
 .range-label{font-size:13px;color:var(--text-muted);margin-bottom:10px}
 .range-label b{color:var(--text);font-weight:700}
-
 .bar{height:8px;background:linear-gradient(90deg,#FFD4B8,var(--orange),#FFD4B8);border-radius:8px;position:relative;margin:14px 0 22px}
-.bar .dot{position:absolute;top:50%;width:16px;height:16px;background:#fff;border:3px solid var(--orange);border-radius:50%;transform:translate(50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.2)}
-
+.bar .dot{position:absolute;top:50%;width:16px;height:16px;background:#fff;border:3px solid var(--orange);
+  border-radius:50%;transform:translate(50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.2)}
 .breakdown{border-top:1px solid var(--border);padding-top:14px}
 .brow{display:flex;justify-content:space-between;font-size:13px;padding:6px 0}
-.brow span{color:var(--text-muted)}
-.brow b{font-weight:600}
-.up{color:var(--green)}
-.down{color:#EF4444}
-
+.brow span{color:var(--text-muted)}.brow b{font-weight:600}
+.up{color:var(--green)}.down{color:#EF4444}
 .disclaimer{font-size:11.5px;color:var(--text-faint);line-height:1.7;text-align:center;margin-top:8px}
 .disclaimer b{color:var(--text-muted)}
 </style>
 </head>
 <body>
 <div class="app">
+  <div class="brand"><div class="logo">A</div><h1>Automark</h1></div>
+  <p class="subtitle">مقدّر سعر نيسان التيما المستعملة — السوق الإماراتي 🇦🇪</p>
 
-  <div class="brand">
-    <div class="logo">A</div>
-    <h1>Automark</h1>
-  </div>
-  <p class="subtitle">مقدّر سعر السيارات المستعملة — السوق الإماراتي 🇦🇪</p>
-
-  <!-- ── Form ── -->
   <div class="card">
     <div class="field">
       <label>الموديل</label>
       <select id="model"></select>
     </div>
-
     <div class="row">
-      <div class="field">
-        <label>سنة الصنع</label>
-        <select id="year"></select>
-      </div>
-      <div class="field">
-        <label>الكيلومترات <span class="hint">(كم)</span></label>
-        <input id="km" type="number" inputmode="numeric" value="80000" min="0" step="1000"/>
-      </div>
+      <div class="field"><label>سنة الصنع</label><select id="year"></select></div>
+      <div class="field"><label>الكيلومترات <span class="hint">(كم)</span></label>
+        <input id="km" type="number" inputmode="numeric" value="80000" min="0" step="1000"/></div>
     </div>
-
     <div class="row">
-      <div class="field">
-        <label>الفئة</label>
-        <select id="trim"></select>
-      </div>
-      <div class="field">
-        <label>المواصفات</label>
+      <div class="field"><label>الفئة</label><select id="trim"></select></div>
+      <div class="field"><label>المواصفات</label>
         <select id="spec">
           <option value="gcc">خليجي (GCC)</option>
-          <option value="american">أمريكي</option>
+          <option value="american">أمريكي / وارد</option>
           <option value="canadian">كندي</option>
           <option value="european">أوروبي</option>
           <option value="japanese">ياباني</option>
@@ -153,56 +86,25 @@ select:focus,input:focus{border-color:var(--orange);background:var(--orange-ligh
         </select>
       </div>
     </div>
-
-    <div class="row">
-      <div class="field">
-        <label>الحالة</label>
-        <select id="condition">
-          <option value="excellent">ممتازة</option>
-          <option value="good" selected>جيدة</option>
-          <option value="fair">مقبولة</option>
-          <option value="poor">تحتاج صيانة</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>الحوادث</label>
-        <select id="accidents">
-          <option value="none" selected>بدون حوادث</option>
-          <option value="minor">بسيطة / دهان</option>
-          <option value="major">حوادث كبيرة</option>
-        </select>
-      </div>
+    <div class="field">
+      <label>الحالة <span class="hint">(الأساس على "ممتازة" وينزل السعر كل ما تقل)</span></label>
+      <select id="condition">
+        <option value="excellent">ممتازة</option>
+        <option value="very_good">جيدة جداً</option>
+        <option value="good" selected>جيدة</option>
+        <option value="fair">مقبولة</option>
+        <option value="weak">ضعيفة</option>
+      </select>
     </div>
-
-    <div class="row">
-      <div class="field">
-        <label>تاريخ الصيانة</label>
-        <select id="service">
-          <option value="full">كامل بالوكالة</option>
-          <option value="partial" selected>جزئي</option>
-          <option value="none">غير معروف</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>عدد المُلّاك</label>
-        <select id="owners">
-          <option value="1">مالك واحد</option>
-          <option value="2" selected>اثنان</option>
-          <option value="3">ثلاثة</option>
-          <option value="4">أربعة أو أكثر</option>
-        </select>
-      </div>
-    </div>
-
     <button class="btn" id="calc">احسب السعر التقديري</button>
   </div>
 
-  <!-- ── Result ── -->
   <div class="card result" id="result">
     <div class="result-head">
       <div class="result-car" id="rCar"></div>
       <div class="result-age" id="rAge"></div>
     </div>
+    <div class="dealer">سعر الوكيل (جديد): <b id="rDealer"></b></div>
     <div class="price"><span id="rPrice"></span> <small>درهم</small></div>
     <div class="range-label">المدى المتوقع في السوق: <b id="rRange"></b></div>
     <div class="bar"><div class="dot" id="rDot"></div></div>
@@ -210,436 +112,239 @@ select:focus,input:focus{border-color:var(--orange);background:var(--orange-ligh
   </div>
 
   <p class="disclaimer">
-    <b>الأرقام معايرة على إعلانات حقيقية من السوق الإماراتي</b><br/>
-    (دوبيزل، دوبي كارز، درايف عربية، كارسويتش). التقدير استرشادي وقد يختلف حسب حالة السيارة الفعلية والتفاوض.
+    <b>الأرقام معايرة على داتا حقيقية من أوتومارك + سعر الوكيل لموديل 2026</b><br/>
+    التقدير استرشادي وقد يختلف حسب حالة السيارة الفعلية والتفاوض.
   </p>
-
 </div>
 
 <script>
-/* ============================================================
-   بيانات السوق — مصدر واحد مشترك مع محرّك Python.
-   تُحقن آلياً عبر: python3 scripts/build_web.py
-   ============================================================ */
+/* بيانات السوق — مصدر واحد مشترك مع محرّك Python (يُحقن عبر scripts/build_web.py) */
 /* __MARKET_DATA_START__ */
 const MARKET = {
   "meta": {
-    "brand": "Nissan",
     "currency": "AED",
     "market": "UAE",
-    "calibrated_on": "2026-06",
-    "model_version": "1.0.0",
-    "method": "depreciation-curve calibrated on real UAE listing data (dubizzle, dubicars, drivearabia, carswitch, yallamotor, opensooq)",
-    "notes": "Numbers are calibrated against real used-listing anchors for the UAE market. Each model has a representative new price (MSRP) for its popular trim, a first-year retention and a per-year retention after that, plus a realistic price floor and the expected yearly mileage in the UAE. All adjustment factors (spec, condition, accidents, mileage) are multiplicative on top of the age-based base value.",
-    "sources": [
-      "https://www.drivearabia.com/carprices/uae/nissan/",
-      "https://www.dubicars.com/uae/used/nissan",
-      "https://uae.dubizzle.com/motors/used-cars/nissan/",
-      "https://carswitch.com/uae/used-cars/nissan/",
-      "https://uae.yallamotor.com/used-cars/nissan/",
-      "https://ae.opensooq.com/en/cars/cars-for-sale/nissan"
-    ]
+    "rates_unit": "percent",
+    "base_year": 2026,
+    "model_version": "2.0.0",
+    "method": "anchored on real dealer (new) prices per trim, depreciation + km + condition + spec calibrated from real Automark listing data via log-linear regression",
+    "notes": "كل المعدلات نِسب مئوية. السعر الأساسي (قبل معامل الحالة) = سعر السيارة في حالة 'ممتازة'؛ الحالات الأقل تخصم منه. أحدث سنة = نقطة وسط بين سعر الوكيل وأسعار الإعلانات. شرائح الحالة مشتقة من تشتت أسعار الداتا الفعلي.",
+    "dealer_price_sources": [
+      "https://www.drivearabia.com/carprices/uae/nissan/nissan-altima/",
+      "https://uae.yallamotor.com/new-cars/nissan/altima",
+      "https://ar.nissan-dubai.com/vehicles/new/altima.html"
+    ],
+    "data_source": "Automark export — data/raw/export_nissan_altima.md"
   },
-  "factors": {
-    "spec": {
-      "_doc": "Regional spec is a major price driver in the UAE. GCC spec is the baseline. American/Canadian/imported sell for clearly less.",
-      "gcc": 1.0,
-      "american": 0.85,
-      "canadian": 0.85,
-      "european": 0.9,
-      "japanese": 0.92,
-      "other": 0.88
-    },
-    "condition": {
-      "excellent": 1.06,
-      "good": 1.0,
-      "fair": 0.9,
-      "poor": 0.78
-    },
-    "accidents": {
-      "none": 1.0,
-      "minor": 0.94,
-      "major": 0.82
-    },
-    "service_history": {
-      "full": 1.03,
-      "partial": 1.0,
-      "none": 0.97
-    },
-    "owners": {
-      "_doc": "Multiplier per number of previous owners.",
-      "1": 1.02,
-      "2": 1.0,
-      "3": 0.97,
-      "4+": 0.93
-    },
-    "mileage": {
-      "_doc": "For every 10,000 km away from the expected mileage for the car's age, adjust value by pct_per_10k. High mileage is penalised more than low mileage is rewarded (asymmetric caps).",
-      "pct_per_10k_km": 0.025,
-      "max_down": 0.3,
-      "max_up": 0.12
-    },
-    "range_spread": 0.09
+  "condition_factors_pct": {
+    "_doc": "شرائح الحالة الافتراضية العامة (الأعلى=الأساس). كل موديل ممكن يتجاوزها بقيم من داتته.",
+    "excellent": 100,
+    "very_good": 92,
+    "good": 85,
+    "fair": 78,
+    "weak": 72
   },
-  "models": {
-    "patrol": {
-      "name_ar": "نيسان باترول",
-      "name_en": "Nissan Patrol",
-      "body": "SUV كامل الحجم",
-      "fuel": "بنزين",
-      "msrp": 245000,
-      "year1_retention": 0.87,
-      "annual_retention": 0.935,
-      "floor": 45000,
-      "expected_km_per_year": 17000,
-      "default_trim": "SE",
-      "trims": {
-        "XE": 0.82,
-        "SE": 1.0,
-        "SE Titanium": 1.1,
-        "LE": 1.18,
-        "LE Platinum": 1.28,
-        "Nismo": 1.45
+  "brands": {
+    "nissan": {
+      "default_retention_pct": {
+        "_doc": "معدّل الاحتفاظ القياسي للبراند (إعادة البيع). يُستخدم لأي موديل ليس له retention خاص — وسيلة عزل كل براند على حدة مستقبلاً.",
+        "year1": 88.9,
+        "annual": 86.2
       },
-      "anchors": [
-        {
-          "year": 2020,
-          "km": 115000,
-          "price": 169000
-        },
-        {
-          "year": 2019,
-          "km": 87000,
-          "price": 148000
-        },
-        {
-          "year": 2018,
-          "km": 96000,
-          "price": 139000
-        },
-        {
-          "year": 2015,
-          "km": 196000,
-          "price": 60000,
-          "calibration": false,
-          "note": "جيل أقدم وعمر >10 سنوات — خارج نطاق المعايرة الدقيقة للإصدار الأول"
+      "models": {
+        "altima": {
+          "name_ar": "نيسان التيما",
+          "name_en": "Nissan Altima",
+          "body": "سيدان متوسط",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "S": 110500,
+            "SR": 126500,
+            "SV": 129500,
+            "SL": 143500,
+            "Platinum": 147000
+          },
+          "trim_labels_ar": {
+            "S": "S (الأساسية)",
+            "SR": "SR (سبورت)",
+            "SV": "SV",
+            "SL": "SL (فل)",
+            "Platinum": "Platinum / Turbo (الأعلى)"
+          },
+          "default_trim": "SV",
+          "retention_pct": {
+            "year1": 88.9,
+            "annual": 86.2
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 80.2,
+            "canadian": 80.2,
+            "european": 90.1,
+            "japanese": 88,
+            "other": 82.2
+          },
+          "condition_factors_pct": {
+            "excellent": 100,
+            "very_good": 92.1,
+            "good": 84.8,
+            "fair": 78.1,
+            "weak": 71.9
+          },
+          "floor": 14500,
+          "range_spread_pct": 8,
+          "calibration": {
+            "mdape_pct": 12.3,
+            "n": 272,
+            "source": "Automark export (288 listings)",
+            "sigma_log": 0.1651
+          },
+          "_anchors_doc": "وسيط GCC الحقيقي لكل سنة من الداتا (نقاط ممثِّلة، تُقارَن بشريحة 'جيدة').",
+          "anchors": [
+            {
+              "year": 2023,
+              "km": 8000,
+              "price": 75000,
+              "spec": "gcc",
+              "trim": "SV"
+            },
+            {
+              "year": 2021,
+              "km": 46000,
+              "price": 65000,
+              "spec": "gcc",
+              "trim": "unknown"
+            },
+            {
+              "year": 2020,
+              "km": 142000,
+              "price": 45000,
+              "spec": "gcc",
+              "trim": "S"
+            },
+            {
+              "year": 2018,
+              "km": 258000,
+              "price": 34000,
+              "spec": "gcc",
+              "trim": "SL"
+            },
+            {
+              "year": 2016,
+              "km": 164000,
+              "price": 25500,
+              "spec": "gcc",
+              "trim": "unknown"
+            }
+          ]
         }
-      ]
-    },
-    "altima": {
-      "name_ar": "نيسان التيما",
-      "name_en": "Nissan Altima",
-      "body": "سيدان متوسط",
-      "fuel": "بنزين",
-      "_calibration": "data-driven: انحدار log-linear على 272 إعلان حقيقي من Automark (MdAPE 11.6%)",
-      "msrp": 100000,
-      "year1_retention": 0.9427,
-      "annual_retention": 0.8624,
-      "floor": 14500,
-      "expected_km_per_year": 16000,
-      "pct_per_10k": 0.0095,
-      "default_trim": "SV",
-      "trims": {
-        "S": 0.916,
-        "SV": 1.0,
-        "SR": 1.06,
-        "SL": 1.105,
-        "Platinum": 1.25,
-        "unknown": 1.102
-      },
-      "spec_factors": {
-        "gcc": 1.0,
-        "american": 0.802,
-        "canadian": 0.802,
-        "european": 0.85,
-        "japanese": 0.88,
-        "other": 0.82
-      },
-      "anchors": [
-        {
-          "year": 2023,
-          "km": 8000,
-          "price": 75000,
-          "spec": "gcc",
-          "trim": "SV"
-        },
-        {
-          "year": 2021,
-          "km": 46000,
-          "price": 65000,
-          "spec": "gcc",
-          "trim": "unknown"
-        },
-        {
-          "year": 2020,
-          "km": 142000,
-          "price": 45000,
-          "spec": "gcc",
-          "trim": "S"
-        },
-        {
-          "year": 2018,
-          "km": 258000,
-          "price": 34000,
-          "spec": "gcc",
-          "trim": "SL"
-        },
-        {
-          "year": 2016,
-          "km": 164000,
-          "price": 25500,
-          "spec": "gcc",
-          "trim": "unknown"
-        }
-      ]
-    },
-    "sunny": {
-      "name_ar": "نيسان صني",
-      "name_en": "Nissan Sunny",
-      "body": "سيدان اقتصادي",
-      "fuel": "بنزين",
-      "msrp": 60000,
-      "year1_retention": 0.6,
-      "annual_retention": 0.88,
-      "floor": 13000,
-      "expected_km_per_year": 22000,
-      "default_trim": "SV",
-      "trims": {
-        "S": 0.92,
-        "SV": 1.0,
-        "SL": 1.08
-      },
-      "anchors": [
-        {
-          "year": 2023,
-          "km": 40000,
-          "price": 32000
-        },
-        {
-          "year": 2020,
-          "km": 90000,
-          "price": 20000
-        },
-        {
-          "year": 2019,
-          "km": 110000,
-          "price": 18500
-        },
-        {
-          "year": 2016,
-          "km": 160000,
-          "price": 16000
-        }
-      ]
-    },
-    "x-trail": {
-      "name_ar": "نيسان إكس-تريل",
-      "name_en": "Nissan X-Trail",
-      "body": "SUV متوسط",
-      "fuel": "بنزين",
-      "msrp": 105000,
-      "year1_retention": 0.85,
-      "annual_retention": 0.89,
-      "floor": 18000,
-      "expected_km_per_year": 18000,
-      "default_trim": "SV",
-      "trims": {
-        "S": 0.9,
-        "SV": 1.0,
-        "SL": 1.12,
-        "Platinum": 1.2
-      },
-      "anchors": [
-        {
-          "year": 2021,
-          "km": 70000,
-          "price": 65000
-        },
-        {
-          "year": 2017,
-          "km": 130000,
-          "price": 42000
-        }
-      ]
-    },
-    "kicks": {
-      "name_ar": "نيسان كيكس",
-      "name_en": "Nissan Kicks",
-      "body": "كروس أوفر صغير",
-      "fuel": "بنزين",
-      "msrp": 73000,
-      "year1_retention": 0.77,
-      "annual_retention": 0.93,
-      "floor": 25000,
-      "expected_km_per_year": 17000,
-      "default_trim": "SV",
-      "trims": {
-        "S": 0.9,
-        "SV": 1.0,
-        "SL": 1.1
-      },
-      "anchors": [
-        {
-          "year": 2023,
-          "km": 35000,
-          "price": 50000
-        },
-        {
-          "year": 2021,
-          "km": 60000,
-          "price": 50000
-        },
-        {
-          "year": 2020,
-          "km": 80000,
-          "price": 43000
-        }
-      ]
+      }
     }
   }
 };
 /* __MARKET_DATA_END__ */
 
-/* ============================================================
-   محرّك التسعير — يطابق src/pricing_engine.py
-   ============================================================ */
-function currentYear(){ return new Date().getFullYear(); }
-function clamp(v,lo,hi){ return Math.max(lo, Math.min(hi, v)); }
-function roundTo(x,base){ return Math.round(x/base)*base; }
+/* ===== محرّك التسعير — يطابق src/pricing_engine.py ===== */
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}
+function roundTo(x,b){return Math.round(x/b)*b;}
+function findModel(name){
+  const key=name.toLowerCase();
+  for(const bk in MARKET.brands){const br=MARKET.brands[bk];
+    if(key in br.models) return {brand:br, model:br.models[key]};}
+  return null;
+}
+function estimate(input){
+  const f=findModel(input.model); const m=f.model, brand=f.brand;
+  const newYear=m.new_year ?? MARKET.meta.base_year;
+  const age=Math.max(0,newYear-input.year);
+  const trim=input.trim||m.default_trim;
+  const newPrice=m.new_prices_gcc[trim] ?? m.new_prices_gcc[m.default_trim];
+  const ret=m.retention_pct||brand.default_retention_pct;
+  let excellent = age<=0 ? newPrice
+    : newPrice*(ret.year1/100)*Math.pow(ret.annual/100, age-1);
 
-function estimatePrice(input){
-  const m = MARKET.models[input.model];
-  const F = MARKET.factors;
-  const age = Math.max(0, currentYear() - input.year);
+  const km=m.km, expectedKm=km.expected_km_per_year*age;
+  let kmAdj=-(km.pct_per_10k/100)*((input.km-expectedKm)/10000);
+  kmAdj=clamp(kmAdj,-km.max_down_pct/100,km.max_up_pct/100);
+  const mileageMult=1+kmAdj;
 
-  let base = age <= 0
-    ? m.msrp
-    : m.msrp * m.year1_retention * Math.pow(m.annual_retention, age - 1);
+  const sf=m.spec_factors_pct;
+  const specMult=(sf[input.spec] ?? sf.other ?? 100)/100;
+  const cf=m.condition_factors_pct||MARKET.condition_factors_pct;
+  const condMult=(cf[input.condition] ?? cf.good)/100;
 
-  const trim = input.trim || m.default_trim;
-  const trimMult = (trim in m.trims) ? m.trims[trim] : 1.0;
-  base *= trimMult;
-
-  const expectedKm = m.expected_km_per_year * age;
-  const kmDelta = input.km - expectedKm;
-  const mlg = F.mileage;
-  const pctPer10k = ("pct_per_10k" in m) ? m.pct_per_10k : mlg.pct_per_10k_km;
-  let kmAdjust = -pctPer10k * (kmDelta / 10000);
-  kmAdjust = clamp(kmAdjust, -mlg.max_down, mlg.max_up);
-  const mileageMult = 1 + kmAdjust;
-
-  const specF = m.spec_factors || F.spec;
-  const specMult = (input.spec in specF) ? specF[input.spec] : (specF.other ?? 1);
-  const condMult = F.condition[input.condition] ?? 1;
-  const accMult  = F.accidents[input.accidents] ?? 1;
-  const svcMult  = F.service_history[input.service_history] ?? 1;
-  const ownersKey = input.owners >= 4 ? "4+" : String(Math.max(1, input.owners));
-  const ownMult  = F.owners[ownersKey] ?? 1;
-
-  let value = base * mileageMult * specMult * condMult * accMult * svcMult * ownMult;
-  value = Math.max(value, m.floor);
-
-  const spread = F.range_spread;
+  let value=excellent*mileageMult*specMult*condMult;
+  value=Math.max(value,m.floor);
+  const spread=(m.range_spread_pct ?? 8)/100;
   return {
-    price: roundTo(value, 500),
-    low:   roundTo(value * (1 - spread), 500),
-    high:  roundTo(value * (1 + spread), 500),
-    age, nameAr: m.name_ar,
-    parts: {
-      mileageMult, specMult, condMult, accMult, expectedKm,
-      floored: value <= m.floor + 1
-    }
+    price:roundTo(value,500), low:roundTo(value*(1-spread),500), high:roundTo(value*(1+spread),500),
+    age, newPrice, nameAr:m.name_ar,
+    parts:{mileageMult,specMult,condMult,trim}
   };
 }
 
-/* ============================================================
-   الواجهة
-   ============================================================ */
-const $ = id => document.getElementById(id);
-const fmt = n => n.toLocaleString('en-US');
+/* ===== الواجهة ===== */
+const $=id=>document.getElementById(id);
+const fmt=n=>n.toLocaleString('en-US');
+function currentModel(){return findModel($('model').value).model;}
 
 function fillModels(){
-  const sel = $('model');
-  for(const key in MARKET.models){
-    const m = MARKET.models[key];
-    const o = document.createElement('option');
-    o.value = key; o.textContent = m.name_ar + ' — ' + m.body;
-    sel.appendChild(o);
-  }
+  const sel=$('model');
+  for(const bk in MARKET.brands){const br=MARKET.brands[bk];
+    for(const mk in br.models){const m=br.models[mk];
+      const o=document.createElement('option');o.value=mk;
+      o.textContent=m.name_ar+' — '+m.body;sel.appendChild(o);}}
 }
 function fillYears(){
-  const sel = $('year');
-  const now = currentYear();
-  for(let y = now; y >= now - 18; y--){
-    const o = document.createElement('option');
-    o.value = y; o.textContent = y;
-    if(y === now - 4) o.selected = true;
-    sel.appendChild(o);
-  }
+  const m=currentModel(); const now=m.new_year ?? MARKET.meta.base_year;
+  const sel=$('year');sel.innerHTML='';
+  for(let y=now;y>=now-18;y--){const o=document.createElement('option');
+    o.value=y;o.textContent=y;if(y===now-5)o.selected=true;sel.appendChild(o);}
 }
 function fillTrims(){
-  const sel = $('trim');
-  sel.innerHTML = '';
-  const m = MARKET.models[$('model').value];
-  for(const t in m.trims){
-    const o = document.createElement('option');
-    o.value = t; o.textContent = t;
-    if(t === m.default_trim) o.selected = true;
-    sel.appendChild(o);
-  }
+  const m=currentModel();const sel=$('trim');sel.innerHTML='';
+  const labels=m.trim_labels_ar||{};
+  for(const t in m.new_prices_gcc){const o=document.createElement('option');o.value=t;
+    o.textContent=(labels[t]||t)+'  ·  '+fmt(m.new_prices_gcc[t])+' درهم';
+    if(t===m.default_trim)o.selected=true;sel.appendChild(o);}
 }
-
-function pct(mult){
-  const d = Math.round((mult - 1) * 100);
-  if(d === 0) return '—';
-  return (d > 0 ? '+' : '') + d + '%';
-}
+function pct(mult){const d=Math.round((mult-1)*100);return d===0?'—':(d>0?'+':'')+d+'%';}
 
 function calc(){
-  const input = {
-    model: $('model').value,
-    year: parseInt($('year').value, 10),
-    km: parseInt($('km').value || '0', 10),
-    trim: $('trim').value,
-    spec: $('spec').value,
-    condition: $('condition').value,
-    accidents: $('accidents').value,
-    service_history: $('service').value,
-    owners: parseInt($('owners').value, 10),
-  };
-  const r = estimatePrice(input);
-
-  $('rCar').textContent = r.nameAr + ' · موديل ' + input.year;
-  $('rAge').textContent = r.age + ' سنوات';
-  $('rPrice').textContent = fmt(r.price);
-  $('rRange').textContent = fmt(r.low) + ' – ' + fmt(r.high) + ' درهم';
-
-  // موضع النقطة على الشريط حسب موقع السعر داخل المدى
-  const ratio = (r.price - r.low) / (r.high - r.low || 1);
-  $('rDot').style.right = (ratio * 100) + '%';
-
-  const specNames = {gcc:'خليجي',american:'أمريكي',canadian:'كندي',european:'أوروبي',japanese:'ياباني',other:'أخرى'};
-  const rows = [
-    ['المواصفات (' + specNames[input.spec] + ')', pct(r.parts.specMult), r.parts.specMult],
-    ['الكيلومترات (' + fmt(input.km) + ' كم)', pct(r.parts.mileageMult), r.parts.mileageMult],
-    ['الحالة', pct(r.parts.condMult), r.parts.condMult],
-    ['الحوادث', pct(r.parts.accMult), r.parts.accMult],
+  const input={model:$('model').value,year:+$('year').value,km:+($('km').value||0),
+    trim:$('trim').value,spec:$('spec').value,condition:$('condition').value};
+  const r=estimate(input);
+  $('rCar').textContent=r.nameAr+' · موديل '+input.year;
+  $('rAge').textContent=r.age+' سنوات';
+  $('rDealer').textContent=fmt(r.newPrice)+' درهم ('+(currentModel().new_year)+' · '+r.parts.trim+')';
+  $('rPrice').textContent=fmt(r.price);
+  $('rRange').textContent=fmt(r.low)+' – '+fmt(r.high)+' درهم';
+  const ratio=(r.price-r.low)/((r.high-r.low)||1);
+  $('rDot').style.right=(ratio*100)+'%';
+  const specNames={gcc:'خليجي',american:'أمريكي/وارد',canadian:'كندي',european:'أوروبي',japanese:'ياباني',other:'أخرى'};
+  const condNames={excellent:'ممتازة',very_good:'جيدة جداً',good:'جيدة',fair:'مقبولة',weak:'ضعيفة'};
+  const rows=[
+    ['المواصفات ('+specNames[input.spec]+')',pct(r.parts.specMult),r.parts.specMult],
+    ['الكيلومترات ('+fmt(input.km)+' كم)',pct(r.parts.mileageMult),r.parts.mileageMult],
+    ['الحالة ('+condNames[input.condition]+')',pct(r.parts.condMult),r.parts.condMult],
   ];
-  $('rBreak').innerHTML = rows.map(([k,v,mult]) => {
-    const cls = mult > 1 ? 'up' : (mult < 1 ? 'down' : '');
-    return `<div class="brow"><span>${k}</span><b class="${cls}">${v}</b></div>`;
-  }).join('');
-
+  $('rBreak').innerHTML=rows.map(([k,v,mult])=>{
+    const cls=mult>1?'up':(mult<1?'down':'');
+    return `<div class="brow"><span>${k}</span><b class="${cls}">${v}</b></div>`;}).join('');
   $('result').classList.add('show');
-  $('result').scrollIntoView({behavior:'smooth', block:'nearest'});
+  $('result').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* init */
-fillModels();
-fillYears();
-fillTrims();
-$('model').addEventListener('change', fillTrims);
-$('calc').addEventListener('click', calc);
+fillModels();fillYears();fillTrims();
+$('model').addEventListener('change',()=>{fillYears();fillTrims();});
+$('calc').addEventListener('click',calc);
 </script>
 </body>
 </html>

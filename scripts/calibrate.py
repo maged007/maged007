@@ -22,12 +22,21 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Optional
 
-# إعدادات كل موديل (سعر الجديد التقريبي + حدود سعر منطقية للتنظيف)
+# إعدادات كل موديل: حدود تنظيف + سعر الوكيل لأحدث سنة بفئاته (خليجي)
 MODEL_CONFIG = {
-    "altima": {"msrp": 100000, "default_trim": "SV",
-               "price_min": 5000, "price_max": 130000,
-               "trim_tokens": ["Platinum", "SR", "SL", "SV", "S"]},
+    "altima": {
+        "brand": "nissan",
+        "default_trim": "SV",
+        "price_min": 5000, "price_max": 130000,
+        "trim_tokens": ["Platinum", "SR", "SL", "SV", "S"],
+        "new_year": 2026,
+        "new_prices_gcc": {"S": 110500, "SR": 126500, "SV": 129500, "SL": 143500, "Platinum": 147000},
+    },
 }
+
+# خطوة شرائح الحالة بوحدات الانحراف المعياري (قابلة للتعديل عند الضبط مع المستخدم)
+CONDITION_STEP_SIGMA = 0.5
+CONDITION_TIERS = ["excellent", "very_good", "good", "fair", "weak"]  # من الأعلى للأدنى
 
 CURRENT_YEAR = date.today().year
 
@@ -299,12 +308,115 @@ def evaluate(params: dict, data: list[Listing]) -> dict:
     return {"mape": mape, "mdape": mdape, "within15": within15, "n": len(errs)}
 
 
+# ===========================================================================
+# النسخة الثانية (v2): مرساة على سعر الوكيل + نسب مئوية + 5 حالات + نقطة وسط
+# ===========================================================================
+def _residual_sigma(cmap, used, trims):
+    X, y, cols = build_design(used, trims)
+    coefs = [cmap[c] for c in cols]
+    resid = [y[i] - sum(coefs[j] * X[i][j] for j in range(len(coefs))) for i in range(len(y))]
+    return statistics.pstdev(resid)
+
+
+def calibrate_v2(model_key: str, path: str, verbose: bool = True) -> dict:
+    """يبني بلوك بيانات الموديل بالنسب المئوية، مرساة على سعر الوكيل، بـ 5 حالات."""
+    cfg = MODEL_CONFIG[model_key]
+    rows = parse_export(path)
+    data, stats = clean(rows, cfg)
+    coefs, cols, used = robust_fit(data, cfg["trim_tokens"])
+    cmap = dict(zip(cols, coefs))
+
+    kms = [d.km / d.age for d in used if d.age >= 1 and d.km]
+    kpy = int(round(statistics.median(kms) / 1000) * 1000) if kms else 16000
+
+    sigma = _residual_sigma(cmap, used, cfg["trim_tokens"])
+    R = math.exp(cmap["age"] + cmap["km10k"] * (kpy / 10000.0))   # احتفاظ سنوي
+    pct_per_10k = round(-cmap["km10k"] * 100, 3)                  # % لكل 10 آلاف كم
+    import_pct = round(math.exp(cmap["import"]) * 100, 1)
+
+    # شرائح الحالة: الأعلى = 100%، تنزل بخطوة CONDITION_STEP_SIGMA*σ
+    step = CONDITION_STEP_SIGMA
+    cond = {t: round(math.exp(-i * step * sigma) * 100, 1)
+            for i, t in enumerate(CONDITION_TIERS)}
+    good_factor = math.exp(-CONDITION_TIERS.index("good") * step * sigma)
+
+    # السعر عند "ممتازة" = وسيط الداتا ÷ معامل "جيدة"  (فالوسيط = شريحة جيدة)
+    new_sv = cfg["new_prices_gcc"][cfg["default_trim"]]
+    data_excellent_age1 = (math.exp(cmap["const"]) * R) / good_factor   # excellent عند عمر 1
+    dealer_side = new_sv * 0.92                                          # جانب الوكيل (نزول بسيط)
+    year1_pct = round((dealer_side + data_excellent_age1) / 2 / new_sv * 100, 1)  # نقطة وسط
+
+    floor = int(round(sorted(d.price for d in used)[max(0, len(used) // 20)] / 500) * 500)
+
+    block = {
+        "new_year": cfg["new_year"],
+        "new_prices_gcc": cfg["new_prices_gcc"],
+        "retention_pct": {"year1": year1_pct, "annual": round(R * 100, 1)},
+        "km": {"pct_per_10k": pct_per_10k, "expected_km_per_year": kpy,
+               "max_down_pct": 30, "max_up_pct": 12},
+        "spec_factors_pct": {"gcc": 100, "american": import_pct, "canadian": import_pct,
+                             "european": round((import_pct + 100) / 2, 0),
+                             "japanese": 88, "other": round(import_pct + 2, 0)},
+        "condition_factors_pct": cond,
+        "floor": floor,
+        "default_trim": cfg["default_trim"],
+    }
+
+    # تقييم المحرّك المرسي على سعر الوكيل (عند شريحة "جيدة" مقابل الإعلانات مجهولة الحالة)
+    def pred(d):
+        age = cfg["new_year"] - d.year
+        np_ = cfg["new_prices_gcc"].get(d.trim, new_sv)
+        exc = np_ if age <= 0 else np_ * (year1_pct / 100) * R ** (age - 1)
+        if d.km is not None:
+            ek = kpy * age
+            adj = max(-0.30, min(0.12, -(pct_per_10k / 100) * ((d.km - ek) / 10000.0)))
+            exc *= (1 + adj)
+        if d.spec == "import":
+            exc *= import_pct / 100
+        return max(exc * cond["good"] / 100, floor)
+
+    errs = sorted(abs(pred(d) - d.price) / d.price for d in used)
+    metrics = {"mdape": statistics.median(errs), "mape": sum(errs) / len(errs),
+               "within15": sum(1 for e in errs if e <= 0.15) / len(errs), "n": len(errs)}
+    block["calibration"] = {"mdape_pct": round(metrics["mdape"] * 100, 1),
+                            "n": len(used), "source": "Automark export",
+                            "sigma_log": round(sigma, 4)}
+
+    if verbose:
+        _report_v2(model_key, cfg, stats, data, used, block, metrics)
+    return {"block": block, "brand": cfg["brand"], "used": used, "metrics": metrics}
+
+
+def _report_v2(model_key, cfg, stats, data, used, block, metrics):
+    print("=" * 66)
+    print(f"  معايرة v2: {model_key.upper()} — مرساة على سعر الوكيل {cfg['new_year']} (نِسب مئوية)")
+    print("=" * 66)
+    print(f"  إعلانات: خام {stats['raw']} | بعد التنظيف {stats['after_basic_clean']} | "
+          f"بعد حذف الشواذ {len(used)}")
+    print("-" * 66)
+    print("  سعر الوكيل بالفئات (خليجي):")
+    for t, p in block["new_prices_gcc"].items():
+        print(f"     {t:<10} {p:>8,} درهم")
+    print("-" * 66)
+    r = block["retention_pct"]
+    print(f"  • الإهلاك السنوي: احتفاظ {r['annual']}% (تفقد {round(100 - r['annual'],1)}%/سنة)")
+    print(f"  • أحدث سنة (نقطة وسط وكيل↔إعلانات): احتفاظ {r['year1']}% من سعر الوكيل")
+    print(f"  • الكيلومترات: {block['km']['pct_per_10k']}% لكل 10,000 كم (متوقع {block['km']['expected_km_per_year']:,}/سنة)")
+    print(f"  • وارد مقابل خليجي: {block['spec_factors_pct']['american']}%")
+    print("  • شرائح الحالة (الأعلى=الأساس):")
+    for t, v in block["condition_factors_pct"].items():
+        print(f"       {t:<11} {v}%")
+    print(f"  • أرضية السعر: {block['floor']:,} درهم")
+    print("-" * 66)
+    print(f"  الدقة (شريحة 'جيدة' مقابل {metrics['n']} إعلان):")
+    print(f"     MdAPE = {metrics['mdape']*100:.2f}%   |   ضمن ±15% = {metrics['within15']*100:.0f}%")
+    print("=" * 66)
+
+
 if __name__ == "__main__":
     model_key = sys.argv[1] if len(sys.argv) > 1 else "altima"
     path = sys.argv[2] if len(sys.argv) > 2 else "data/raw/export_nissan_altima.md"
-    res = calibrate(model_key, path)
-    m = evaluate(res["params"], res["used"])
-    print(f"\n  دقة المحرّك المعاير مقابل {m['n']} إعلان (المجموعة النظيفة):")
-    print(f"  MdAPE (الخطأ الوسيط) = {m['mdape']*100:.2f}%   ← الأدل على السيارة النموذجية")
-    print(f"  MAPE  (متوسط الخطأ)  = {m['mape']*100:.2f}%")
-    print(f"  نسبة التقديرات ضمن ±15% من السعر الحقيقي = {m['within15']*100:.0f}%")
+    res = calibrate_v2(model_key, path)
+    import json as _json
+    print("\nبلوك JSON للموديل (جاهز للّصق في data/market.json):")
+    print(_json.dumps(res["block"], ensure_ascii=False, indent=2))

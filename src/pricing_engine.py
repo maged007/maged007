@@ -1,13 +1,12 @@
 """
-محرّك تسعير السيارات المستعملة في السوق الإماراتي.
-Used-car pricing engine calibrated for the UAE market (Nissan, v1).
+محرّك تسعير السيارات المستعملة في السوق الإماراتي — النسخة 2.
 
-المنطق: قيمة أساسية مبنية على العمر (منحنى إهلاك معاير على إعلانات حقيقية)،
-ثم تُضرب فيها معاملات السوق الإماراتي: المواصفات (خليجي/أمريكي)، الكيلومترات،
-الحالة، الحوادث، تاريخ الصيانة، وعدد المُلّاك.
+الفلسفة: السعر مرساة على **سعر الوكيل (الجديد) لكل فئة**، ثم يُهلَك حسب العمر والكيلومترات،
+وتُطبَّق معاملات المواصفات (خليجي/وارد) والحالة. كل المعدلات **نِسب مئوية** في data/market.json.
+القيمة قبل معامل الحالة = سعر السيارة في حالة "ممتازة"؛ الحالات الأقل تخصم منها.
 
-The engine has zero third-party dependencies (Python standard library only),
-so the exact same logic can be ported 1:1 to the web front-end.
+كل المعايرة مشتقة من داتا حقيقية (Automark). بدون أي مكتبات خارجية، فينتقل نفس المنطق 1:1
+إلى واجهة الويب.
 """
 
 from __future__ import annotations
@@ -15,20 +14,19 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass, field
-from datetime import date
 from typing import Optional
 
-DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "nissan_market.json")
+DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "market.json")
 
+CONDITIONS = ["excellent", "very_good", "good", "fair", "weak"]  # من الأعلى للأدنى
 
-# ---------------------------------------------------------------------------
-# Data loading
-# ---------------------------------------------------------------------------
 _MARKET_CACHE: Optional[dict] = None
 
 
+# ---------------------------------------------------------------------------
+# تحميل البيانات
+# ---------------------------------------------------------------------------
 def load_market(path: str = DATA_PATH) -> dict:
-    """يحمّل ملف بيانات السوق (مع تخزين مؤقت)."""
     global _MARKET_CACHE
     if _MARKET_CACHE is None or path != DATA_PATH:
         with open(path, "r", encoding="utf-8") as f:
@@ -36,165 +34,142 @@ def load_market(path: str = DATA_PATH) -> dict:
     return _MARKET_CACHE
 
 
+def find_model(market: dict, model_name: str):
+    """يرجّع (مفتاح_البراند, بيانات_البراند, بيانات_الموديل) لأي موديل عبر كل البراندات."""
+    key = model_name.strip().lower()
+    for brand_key, brand in market["brands"].items():
+        if key in brand["models"]:
+            return brand_key, brand, brand["models"][key]
+    raise ValueError(f"الموديل '{model_name}' غير مدعوم. المتاح: {', '.join(list_models(market))}")
+
+
 def list_models(market: Optional[dict] = None) -> list[str]:
     market = market or load_market()
-    return list(market["models"].keys())
+    out = []
+    for brand in market["brands"].values():
+        out.extend(brand["models"].keys())
+    return out
 
 
 # ---------------------------------------------------------------------------
-# Helpers
+# مساعدات
 # ---------------------------------------------------------------------------
-def _clamp(value: float, low: float, high: float) -> float:
-    return max(low, min(high, value))
-
-
-def _current_year() -> int:
-    return date.today().year
-
-
-# ---------------------------------------------------------------------------
-# Input / output structures
-# ---------------------------------------------------------------------------
-@dataclass
-class CarInput:
-    """مدخلات السيارة المراد تقييمها."""
-    model: str
-    year: int
-    km: int
-    spec: str = "gcc"               # gcc | american | canadian | european | japanese | other
-    condition: str = "good"         # excellent | good | fair | poor
-    accidents: str = "none"         # none | minor | major
-    service_history: str = "partial"  # full | partial | none
-    owners: int = 2                 # 1, 2, 3, 4+
-    trim: Optional[str] = None      # خيار، يستخدم الافتراضي لو None
-
-
-@dataclass
-class PriceEstimate:
-    """نتيجة التقييم."""
-    price: int                      # أفضل تقدير (نقطة)
-    low: int                        # الحد الأدنى المعقول
-    high: int                       # الحد الأعلى المعقول
-    currency: str = "AED"
-    model: str = ""
-    age: int = 0
-    breakdown: dict = field(default_factory=dict)
-
-    def as_dict(self) -> dict:
-        return {
-            "price": self.price,
-            "low": self.low,
-            "high": self.high,
-            "currency": self.currency,
-            "model": self.model,
-            "age": self.age,
-            "breakdown": self.breakdown,
-        }
-
-
-# ---------------------------------------------------------------------------
-# Core calculation
-# ---------------------------------------------------------------------------
-def estimate_price(car: CarInput, market: Optional[dict] = None) -> PriceEstimate:
-    """يقدّر سعر سيارة مستعملة بناءً على بيانات السوق المعايرة."""
-    market = market or load_market()
-
-    key = car.model.strip().lower()
-    if key not in market["models"]:
-        raise ValueError(
-            f"الموديل '{car.model}' غير مدعوم. المتاح: {', '.join(market['models'])}"
-        )
-
-    spec = market["models"][key]
-    factors = market["factors"]
-
-    age = max(0, _current_year() - int(car.year))
-
-    # 1) القيمة الأساسية حسب العمر (منحنى الإهلاك)
-    msrp = spec["msrp"]
-    if age <= 0:
-        base = msrp                      # موديل السنة الحالية ~ شبه جديد
-    else:
-        base = msrp * spec["year1_retention"] * (spec["annual_retention"] ** (age - 1))
-
-    # 2) معامل الفئة (Trim)
-    trim = car.trim or spec["default_trim"]
-    trim_mult = spec["trims"].get(trim, 1.0)
-    base *= trim_mult
-
-    # 3) تعديل الكيلومترات مقابل المتوقع لهذا العمر
-    # (pct_per_10k قد يكون معايراً لكل موديل من داتا حقيقية، وإلا يُستخدم الافتراضي العام)
-    expected_km = spec["expected_km_per_year"] * age
-    km_delta = car.km - expected_km
-    mlg = factors["mileage"]
-    pct_per_10k = spec.get("pct_per_10k", mlg["pct_per_10k_km"])
-    km_adjust = -pct_per_10k * (km_delta / 10_000.0)
-    km_adjust = _clamp(km_adjust, -mlg["max_down"], mlg["max_up"])
-    mileage_mult = 1.0 + km_adjust
-
-    # 4) معاملات الحالة / المواصفات / الحوادث / الصيانة / المُلّاك
-    # (spec_factors قد تكون معايرة لكل موديل، وإلا الافتراضي العام)
-    spec_factors = spec.get("spec_factors", factors["spec"])
-    spec_mult = spec_factors.get(car.spec, spec_factors.get("other", 1.0))
-    cond_mult = factors["condition"].get(car.condition, 1.0)
-    acc_mult = factors["accidents"].get(car.accidents, 1.0)
-    svc_mult = factors["service_history"].get(car.service_history, 1.0)
-    owners_key = "4+" if car.owners >= 4 else str(max(1, int(car.owners)))
-    own_mult = factors["owners"].get(owners_key, 1.0)
-
-    value = (
-        base
-        * mileage_mult
-        * spec_mult
-        * cond_mult
-        * acc_mult
-        * svc_mult
-        * own_mult
-    )
-
-    # 5) أرضية السعر — لا ينزل عن حد معقول للسوق
-    value = max(value, spec["floor"])
-
-    # 6) المدى السعري
-    spread = factors["range_spread"]
-    low = value * (1.0 - spread)
-    high = value * (1.0 + spread)
-
-    # تقريب لأقرب 500 درهم
-    price_r = _round_to(value, 500)
-    low_r = _round_to(low, 500)
-    high_r = _round_to(high, 500)
-
-    return PriceEstimate(
-        price=price_r,
-        low=low_r,
-        high=high_r,
-        currency=market["meta"]["currency"],
-        model=spec["name_ar"],
-        age=age,
-        breakdown={
-            "msrp": msrp,
-            "base_after_age": round(msrp * spec["year1_retention"] * (spec["annual_retention"] ** max(0, age - 1))) if age > 0 else msrp,
-            "trim": trim,
-            "trim_mult": trim_mult,
-            "expected_km": expected_km,
-            "mileage_mult": round(mileage_mult, 4),
-            "spec_mult": spec_mult,
-            "condition_mult": cond_mult,
-            "accidents_mult": acc_mult,
-            "service_mult": svc_mult,
-            "owners_mult": own_mult,
-            "raw_value": round(value),
-            "floored": value <= spec["floor"] + 1,
-        },
-    )
+def _clamp(v: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, v))
 
 
 def _round_to(x: float, base: int) -> int:
     return int(base * round(x / base))
 
 
+# ---------------------------------------------------------------------------
+# المدخلات / المخرجات
+# ---------------------------------------------------------------------------
+@dataclass
+class CarInput:
+    model: str
+    year: int
+    km: int
+    spec: str = "gcc"           # gcc | american | canadian | european | japanese | other
+    condition: str = "good"     # excellent | very_good | good | fair | weak
+    trim: Optional[str] = None  # يستخدم الافتراضي لو None
+
+
+@dataclass
+class PriceEstimate:
+    price: int
+    low: int
+    high: int
+    currency: str = "AED"
+    model: str = ""
+    age: int = 0
+    new_price: int = 0
+    breakdown: dict = field(default_factory=dict)
+
+    def as_dict(self) -> dict:
+        return {
+            "price": self.price, "low": self.low, "high": self.high,
+            "currency": self.currency, "model": self.model, "age": self.age,
+            "new_price": self.new_price, "breakdown": self.breakdown,
+        }
+
+
+# ---------------------------------------------------------------------------
+# الحساب الأساسي
+# ---------------------------------------------------------------------------
+def estimate_price(car: CarInput, market: Optional[dict] = None) -> PriceEstimate:
+    market = market or load_market()
+    _, brand, m = find_model(market, car.model)
+
+    new_year = m.get("new_year", market["meta"].get("base_year"))
+    age = max(0, int(new_year) - int(car.year))
+
+    # 1) مرساة سعر الوكيل حسب الفئة
+    trim = car.trim or m["default_trim"]
+    new_prices = m["new_prices_gcc"]
+    new_price = new_prices.get(trim, new_prices[m["default_trim"]])
+
+    # 2) الإهلاك حسب العمر (الاحتفاظ من الموديل وإلا الافتراضي للبراند)
+    ret = m.get("retention_pct", brand["default_retention_pct"])
+    if age <= 0:
+        excellent = float(new_price)                       # موديل جديد = سعر الوكيل (حالة ممتازة)
+    else:
+        excellent = new_price * (ret["year1"] / 100.0) * (ret["annual"] / 100.0) ** (age - 1)
+
+    # 3) الكيلومترات مقابل المتوقع للعمر (زيادة تنزّل / نقص يرفع، بحدود غير متماثلة)
+    km_cfg = m["km"]
+    expected_km = km_cfg["expected_km_per_year"] * age
+    km_delta = car.km - expected_km
+    km_adjust = -(km_cfg["pct_per_10k"] / 100.0) * (km_delta / 10_000.0)
+    km_adjust = _clamp(km_adjust, -km_cfg["max_down_pct"] / 100.0, km_cfg["max_up_pct"] / 100.0)
+    mileage_mult = 1.0 + km_adjust
+
+    # 4) المواصفات (خليجي/وارد)
+    spec_f = m["spec_factors_pct"]
+    spec_mult = spec_f.get(car.spec, spec_f.get("other", 100)) / 100.0
+
+    # 5) الحالة (5 شرائح، الأعلى = الأساس). الموديل يتجاوز العام لو موجود.
+    cond_f = m.get("condition_factors_pct", market["condition_factors_pct"])
+    cond_mult = cond_f.get(car.condition, cond_f["good"]) / 100.0
+
+    value = excellent * mileage_mult * spec_mult * cond_mult
+
+    # 6) أرضية السعر
+    floor = m["floor"]
+    floored = value <= floor
+    value = max(value, floor)
+
+    # 7) المدى السعري
+    spread = m.get("range_spread_pct", 8) / 100.0
+    price_r = _round_to(value, 500)
+    low_r = _round_to(value * (1 - spread), 500)
+    high_r = _round_to(value * (1 + spread), 500)
+
+    return PriceEstimate(
+        price=price_r, low=low_r, high=high_r,
+        currency=market["meta"]["currency"], model=m["name_ar"],
+        age=age, new_price=int(new_price),
+        breakdown={
+            "new_price": int(new_price),
+            "trim": trim,
+            "age_retention_pct": round((ret["year1"] / 100.0) * (ret["annual"] / 100.0) ** max(0, age - 1) * 100, 1) if age > 0 else 100.0,
+            "excellent_value": round(excellent),
+            "expected_km": expected_km,
+            "mileage_mult": round(mileage_mult, 4),
+            "spec_mult": spec_mult,
+            "condition": car.condition,
+            "condition_mult": cond_mult,
+            "floored": floored,
+        },
+    )
+
+
 if __name__ == "__main__":
-    car = CarInput(model="patrol", year=2019, km=90000, spec="gcc", condition="good")
-    est = estimate_price(car)
-    print(json.dumps(est.as_dict(), ensure_ascii=False, indent=2))
+    for c in [
+        CarInput("altima", 2026, 0, "gcc", "excellent", "SV"),
+        CarInput("altima", 2021, 70000, "gcc", "good"),
+        CarInput("altima", 2018, 200000, "american", "fair", "S"),
+    ]:
+        e = estimate_price(c)
+        print(f"{c.model} {c.year} {c.condition} {c.spec}: {e.price:,} AED "
+              f"(مدى {e.low:,}–{e.high:,}, جديد {e.new_price:,})")

@@ -11,7 +11,7 @@ import os
 import re
 
 ROOT = os.path.join(os.path.dirname(__file__), "..")
-DATA = os.path.join(ROOT, "data", "nissan_market.json")
+DATA = os.path.join(ROOT, "data", "market.json")
 WEB = os.path.join(ROOT, "web", "index.html")
 
 START = "/* __MARKET_DATA_START__ */"
@@ -34,7 +34,8 @@ def main() -> int:
 
     with open(WEB, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"تم حقن بيانات {len(data['models'])} موديلات في {os.path.relpath(WEB, ROOT)}")
+    n_models = sum(len(b.get("models", {})) for b in data.get("brands", {}).values())
+    print(f"تم حقن بيانات {n_models} موديل في {os.path.relpath(WEB, ROOT)}")
     return 0
 
 
