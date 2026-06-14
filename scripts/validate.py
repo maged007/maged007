@@ -17,7 +17,8 @@ def main() -> int:
     print("-" * 70)
     for key, spec in market["models"].items():
         for a in spec.get("anchors", []):
-            car = CarInput(model=key, year=a["year"], km=a["km"], spec="gcc",
+            car = CarInput(model=key, year=a["year"], km=a["km"],
+                           spec=a.get("spec", "gcc"), trim=a.get("trim"),
                            condition="good", service_history="partial", owners=2)
             est = estimate_price(car, market)
             actual = a["price"]

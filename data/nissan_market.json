@@ -92,22 +92,36 @@
       "name_en": "Nissan Altima",
       "body": "سيدان متوسط",
       "fuel": "بنزين",
+      "_calibration": "data-driven: انحدار log-linear على 272 إعلان حقيقي من Automark (MdAPE 11.6%)",
       "msrp": 100000,
-      "year1_retention": 0.77,
-      "annual_retention": 0.88,
-      "floor": 13000,
-      "expected_km_per_year": 20000,
+      "year1_retention": 0.9427,
+      "annual_retention": 0.8624,
+      "floor": 14500,
+      "expected_km_per_year": 16000,
+      "pct_per_10k": 0.0095,
       "default_trim": "SV",
       "trims": {
-        "S": 0.90,
+        "S": 0.916,
         "SV": 1.00,
-        "SL": 1.10,
-        "SR": 1.14
+        "SR": 1.06,
+        "SL": 1.105,
+        "Platinum": 1.25,
+        "unknown": 1.102
+      },
+      "spec_factors": {
+        "gcc": 1.00,
+        "american": 0.802,
+        "canadian": 0.802,
+        "european": 0.85,
+        "japanese": 0.88,
+        "other": 0.82
       },
       "anchors": [
-        { "year": 2023, "km": 35000,  "price": 72000 },
-        { "year": 2019, "km": 95000,  "price": 42000 },
-        { "year": 2016, "km": 150000, "price": 22000 }
+        { "year": 2023, "km": 8000,   "price": 75000, "spec": "gcc", "trim": "SV" },
+        { "year": 2021, "km": 46000,  "price": 65000, "spec": "gcc", "trim": "unknown" },
+        { "year": 2020, "km": 142000, "price": 45000, "spec": "gcc", "trim": "S" },
+        { "year": 2018, "km": 258000, "price": 34000, "spec": "gcc", "trim": "SL" },
+        { "year": 2016, "km": 164000, "price": 25500, "spec": "gcc", "trim": "unknown" }
       ]
     },
 

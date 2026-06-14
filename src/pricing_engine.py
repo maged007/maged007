@@ -123,15 +123,19 @@ def estimate_price(car: CarInput, market: Optional[dict] = None) -> PriceEstimat
     base *= trim_mult
 
     # 3) تعديل الكيلومترات مقابل المتوقع لهذا العمر
+    # (pct_per_10k قد يكون معايراً لكل موديل من داتا حقيقية، وإلا يُستخدم الافتراضي العام)
     expected_km = spec["expected_km_per_year"] * age
     km_delta = car.km - expected_km
     mlg = factors["mileage"]
-    km_adjust = -mlg["pct_per_10k_km"] * (km_delta / 10_000.0)
+    pct_per_10k = spec.get("pct_per_10k", mlg["pct_per_10k_km"])
+    km_adjust = -pct_per_10k * (km_delta / 10_000.0)
     km_adjust = _clamp(km_adjust, -mlg["max_down"], mlg["max_up"])
     mileage_mult = 1.0 + km_adjust
 
     # 4) معاملات الحالة / المواصفات / الحوادث / الصيانة / المُلّاك
-    spec_mult = factors["spec"].get(car.spec, factors["spec"]["other"])
+    # (spec_factors قد تكون معايرة لكل موديل، وإلا الافتراضي العام)
+    spec_factors = spec.get("spec_factors", factors["spec"])
+    spec_mult = spec_factors.get(car.spec, spec_factors.get("other", 1.0))
     cond_mult = factors["condition"].get(car.condition, 1.0)
     acc_mult = factors["accidents"].get(car.accidents, 1.0)
     svc_mult = factors["service_history"].get(car.service_history, 1.0)

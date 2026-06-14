@@ -331,33 +331,65 @@ const MARKET = {
       "name_en": "Nissan Altima",
       "body": "سيدان متوسط",
       "fuel": "بنزين",
+      "_calibration": "data-driven: انحدار log-linear على 272 إعلان حقيقي من Automark (MdAPE 11.6%)",
       "msrp": 100000,
-      "year1_retention": 0.77,
-      "annual_retention": 0.88,
-      "floor": 13000,
-      "expected_km_per_year": 20000,
+      "year1_retention": 0.9427,
+      "annual_retention": 0.8624,
+      "floor": 14500,
+      "expected_km_per_year": 16000,
+      "pct_per_10k": 0.0095,
       "default_trim": "SV",
       "trims": {
-        "S": 0.9,
+        "S": 0.916,
         "SV": 1.0,
-        "SL": 1.1,
-        "SR": 1.14
+        "SR": 1.06,
+        "SL": 1.105,
+        "Platinum": 1.25,
+        "unknown": 1.102
+      },
+      "spec_factors": {
+        "gcc": 1.0,
+        "american": 0.802,
+        "canadian": 0.802,
+        "european": 0.85,
+        "japanese": 0.88,
+        "other": 0.82
       },
       "anchors": [
         {
           "year": 2023,
-          "km": 35000,
-          "price": 72000
+          "km": 8000,
+          "price": 75000,
+          "spec": "gcc",
+          "trim": "SV"
         },
         {
-          "year": 2019,
-          "km": 95000,
-          "price": 42000
+          "year": 2021,
+          "km": 46000,
+          "price": 65000,
+          "spec": "gcc",
+          "trim": "unknown"
+        },
+        {
+          "year": 2020,
+          "km": 142000,
+          "price": 45000,
+          "spec": "gcc",
+          "trim": "S"
+        },
+        {
+          "year": 2018,
+          "km": 258000,
+          "price": 34000,
+          "spec": "gcc",
+          "trim": "SL"
         },
         {
           "year": 2016,
-          "km": 150000,
-          "price": 22000
+          "km": 164000,
+          "price": 25500,
+          "spec": "gcc",
+          "trim": "unknown"
         }
       ]
     },
@@ -491,11 +523,13 @@ function estimatePrice(input){
   const expectedKm = m.expected_km_per_year * age;
   const kmDelta = input.km - expectedKm;
   const mlg = F.mileage;
-  let kmAdjust = -mlg.pct_per_10k_km * (kmDelta / 10000);
+  const pctPer10k = ("pct_per_10k" in m) ? m.pct_per_10k : mlg.pct_per_10k_km;
+  let kmAdjust = -pctPer10k * (kmDelta / 10000);
   kmAdjust = clamp(kmAdjust, -mlg.max_down, mlg.max_up);
   const mileageMult = 1 + kmAdjust;
 
-  const specMult = (input.spec in F.spec) ? F.spec[input.spec] : F.spec.other;
+  const specF = m.spec_factors || F.spec;
+  const specMult = (input.spec in specF) ? specF[input.spec] : (specF.other ?? 1);
   const condMult = F.condition[input.condition] ?? 1;
   const accMult  = F.accidents[input.accidents] ?? 1;
   const svcMult  = F.service_history[input.service_history] ?? 1;

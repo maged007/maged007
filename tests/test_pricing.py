@@ -77,7 +77,8 @@ class TestPricingEngine(unittest.TestCase):
                 if not a.get("calibration", True):
                     continue
                 est = estimate_price(
-                    CarInput(model=key, year=a["year"], km=a["km"], spec="gcc",
+                    CarInput(model=key, year=a["year"], km=a["km"],
+                             spec=a.get("spec", "gcc"), trim=a.get("trim"),
                              condition="good", service_history="partial", owners=2),
                     self.market,
                 )
