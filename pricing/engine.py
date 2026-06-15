@@ -28,14 +28,29 @@ def load_data(path=DATA_PATH):
         return json.load(f)
 
 
-def brand_retention(data, brand, age):
-    """منحنى احتفاظ البراند حسب العمر بالسنوات."""
-    tier_name = data["brand_tier"][brand]
+def tier_retention(data, tier_name, age):
+    """منحنى احتفاظ لطبقة معيّنة حسب العمر."""
     tier = data["retention_tiers"][tier_name]
     if age <= 0:
         return 1.0
     r = (1.0 - tier["first_year_drop"]) * (1.0 - tier["annual_drop"]) ** (age - 1)
     return max(r, tier["floor"])
+
+
+def model_tier(data, brand, model):
+    """طبقة الاحتفاظ الفعلية للموديل: تجاوز على مستوى الموديل إن وُجد، وإلا طبقة البراند."""
+    m = data["brands"][brand]["models"][model]
+    return m.get("retention_tier") or data["brand_tier"][brand]
+
+
+def brand_retention(data, brand, age):
+    """احتفاظ على مستوى البراند (للتقارير العامة)."""
+    return tier_retention(data, data["brand_tier"][brand], age)
+
+
+def model_retention(data, brand, model, age):
+    """احتفاظ الموديل (يحترم تجاوز الطبقة لكل موديل)."""
+    return tier_retention(data, model_tier(data, brand, model), age)
 
 
 def km_factor(data, age, km):
@@ -47,7 +62,11 @@ def km_factor(data, age, km):
     return max(cfg["min"], min(cfg["max"], factor))
 
 
-def spec_factor(data, spec):
+def spec_factor(data, spec, brand=None):
+    """معامل المواصفات. يدعم تجاوزاً لكل براند (spec_factor_by_brand) وإلا القيمة العامة."""
+    by_brand = data.get("spec_factor_by_brand", {})
+    if brand and spec in by_brand.get(brand, {}):
+        return by_brand[brand][spec]
     return data["spec_factor"][spec]
 
 
@@ -62,16 +81,28 @@ def _resolve_model(data, brand, model):
         raise KeyError(f"غير موجود: brand={brand} model={model}")
 
 
+def base_without_demand(data, brand, model, age, km, spec, condition):
+    """ناتج كل المعاملات ما عدا عامل الطلب — تُستخدم في المعايرة لاشتقاق الطلب."""
+    m = _resolve_model(data, brand, model)
+    return (
+        m["dealer_price"]
+        * model_retention(data, brand, model, age)
+        * km_factor(data, age, km)
+        * spec_factor(data, spec, brand)
+        * condition_factor(data, condition)
+    )
+
+
 def estimate(data, brand, model, age, km,
              spec="gcc", condition="excellent", return_breakdown=False):
     """يرجّع سعر إعادة البيع المقدّر (AED). اختيارياً مع تفصيل كل معامل."""
     m = _resolve_model(data, brand, model)
 
     f_dealer = m["dealer_price"]
-    f_ret = brand_retention(data, brand, age)
+    f_ret = model_retention(data, brand, model, age)
     f_dem = m["demand_factor"]
     f_km = km_factor(data, age, km)
-    f_spec = spec_factor(data, spec)
+    f_spec = spec_factor(data, spec, brand)
     f_cond = condition_factor(data, condition)
 
     price = f_dealer * f_ret * f_dem * f_km * f_spec * f_cond

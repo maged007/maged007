@@ -110,11 +110,19 @@ const CUR_YEAR = 2026;
 const $ = id => document.getElementById(id);
 
 // ——— نفس معادلة المحرّك (engine.py) بالـJS ———
-function brandRetention(brand, age){
-  const tier = D.retention_tiers[D.brand_tier[brand]];
+function modelRetention(brand, model, age){
+  // تجاوز طبقة الاحتفاظ لكل موديل إن وُجد، وإلا طبقة البراند
+  const tierName = D.brands[brand].models[model].retention_tier || D.brand_tier[brand];
+  const tier = D.retention_tiers[tierName];
   if(age <= 0) return 1.0;
   const r = (1 - tier.first_year_drop) * Math.pow(1 - tier.annual_drop, age - 1);
   return Math.max(r, tier.floor);
+}
+function specFactor(brand, spec){
+  // تجاوز معامل الوارد لكل براند إن وُجد، وإلا القيمة العامة
+  const bb = (D.spec_factor_by_brand || {})[brand];
+  if(bb && bb[spec] !== undefined) return bb[spec];
+  return D.spec_factor[spec];
 }
 function kmFactor(age, km){
   const c = D.km_factor;
@@ -126,10 +134,10 @@ function estimate(brand, model, age, km, spec, condition){
   const m = D.brands[brand].models[model];
   const f = {
     dealer_price:    m.dealer_price,
-    brand_retention: brandRetention(brand, age),
+    brand_retention: modelRetention(brand, model, age),
     demand_factor:   m.demand_factor,
     km_factor:       kmFactor(age, km),
-    spec_factor:     D.spec_factor[spec],
+    spec_factor:     specFactor(brand, spec),
     condition_factor:D.condition_factor[condition],
   };
   const price = f.dealer_price * f.brand_retention * f.demand_factor *

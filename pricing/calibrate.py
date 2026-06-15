@@ -20,18 +20,15 @@ import json
 import os
 import statistics
 
-from engine import (
-    load_data, estimate, brand_retention, km_factor,
-    spec_factor, condition_factor, DATA_PATH,
-)
+from engine import load_data, estimate, base_without_demand, DATA_PATH
 
 SAMPLES = os.path.join(os.path.dirname(__file__), "samples", "market_samples.json")
 
 
-def load_samples(path=SAMPLES):
+def load_samples(path=SAMPLES, key="samples"):
     with open(path, encoding="utf-8") as f:
         blob = json.load(f)
-    return blob["current_year"], blob["samples"]
+    return blob["current_year"], blob[key]
 
 
 def mdape(estimates, targets):
@@ -46,15 +43,9 @@ def target_price(data, sample):
 
 def expected_without_demand(data, sample, cur_year):
     """المتوقّع من كل المعاملات ما عدا عامل الطلب (= القاعدة لاشتقاق الطلب)."""
-    m = data["brands"][sample["brand"]]["models"][sample["model"]]
     age = cur_year - sample["year"]
-    return (
-        m["dealer_price"]
-        * brand_retention(data, sample["brand"], age)
-        * km_factor(data, age, sample["km"])
-        * spec_factor(data, sample["spec"])
-        * condition_factor(data, sample["condition"])
-    )
+    return base_without_demand(data, sample["brand"], sample["model"],
+                               age, sample["km"], sample["spec"], sample["condition"])
 
 
 def suggest_demand(data, samples, cur_year):
@@ -79,12 +70,8 @@ def suggest_retention(data, samples, cur_year):
         brand = s["brand"]
         age = cur_year - s["year"]
         m = data["brands"][brand]["models"][s["model"]]
-        denom = (
-            m["dealer_price"] * m["demand_factor"]
-            * km_factor(data, age, s["km"])
-            * spec_factor(data, s["spec"])
-            * condition_factor(data, s["condition"])
-        )
+        denom = m["demand_factor"] * base_without_demand(
+            data, brand, s["model"], age, s["km"], s["spec"], s["condition"])
         if denom > 0:
             out.setdefault(brand, {}).setdefault(age, []).append(
                 target_price(data, s) / denom)
@@ -111,10 +98,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--write", action="store_true",
                     help="اكتب عامل الطلب المقترح إلى ملف البيانات")
+    ap.add_argument("--samples", default=SAMPLES,
+                    help="مسار ملف العيّنات/الإعلانات")
+    ap.add_argument("--key", default="samples",
+                    help="مفتاح القائمة داخل الملف (samples أو ads)")
     args = ap.parse_args()
 
     data = load_data()
-    cur_year, samples = load_samples()
+    cur_year, samples = load_samples(args.samples, args.key)
     print(f"عدد العيّنات: {len(samples)}\n")
 
     before, _, _ = evaluate(load_data(), samples, cur_year)
