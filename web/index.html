@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Automark – مقدّر سعر التيما المستعملة</title>
+<title>Automark – مقدّر سعر السيارات المستعملة</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -61,12 +61,18 @@ select:focus,input:focus{border-color:var(--orange);background:var(--orange-ligh
 <body>
 <div class="app">
   <div class="brand"><div class="logo">A</div><h1>Automark</h1></div>
-  <p class="subtitle">مقدّر سعر نيسان التيما المستعملة — السوق الإماراتي 🇦🇪</p>
+  <p class="subtitle">مقدّر سعر السيارة المستعملة — السوق الإماراتي 🇦🇪</p>
 
   <div class="card">
-    <div class="field">
-      <label>الموديل</label>
-      <select id="model"></select>
+    <div class="row">
+      <div class="field">
+        <label>الماركة</label>
+        <select id="brand"></select>
+      </div>
+      <div class="field">
+        <label>الموديل</label>
+        <select id="model"></select>
+      </div>
     </div>
     <div class="row">
       <div class="field"><label>سنة الصنع</label><select id="year"></select></div>
@@ -791,14 +797,24 @@ function estimate(input){
 /* ===== الواجهة ===== */
 const $=id=>document.getElementById(id);
 const fmt=n=>n.toLocaleString('en-US');
+const BRAND_NAMES={nissan:'نيسان',honda:'هوندا',toyota:'تويوتا'};
 function currentModel(){return findModel($('model').value).model;}
 
+function fillBrands(){
+  const sel=$('brand');sel.innerHTML='';
+  for(const bk in MARKET.brands){
+    const o=document.createElement('option');o.value=bk;
+    o.textContent=BRAND_NAMES[bk]||bk;sel.appendChild(o);}
+}
 function fillModels(){
-  const sel=$('model');
-  for(const bk in MARKET.brands){const br=MARKET.brands[bk];
-    for(const mk in br.models){const m=br.models[mk];
-      const o=document.createElement('option');o.value=mk;
-      o.textContent=m.name_ar+' — '+m.body;sel.appendChild(o);}}
+  const bk=$('brand').value;
+  const br=MARKET.brands[bk];
+  const sel=$('model');sel.innerHTML='';
+  if(!br)return;
+  for(const mk in br.models){const m=br.models[mk];
+    const o=document.createElement('option');o.value=mk;
+    o.textContent=m.name_ar.replace(/^(نيسان|هوندا|تويوتا)\s*/,'')+' — '+m.body;
+    sel.appendChild(o);}
 }
 function fillYears(){
   const m=currentModel(); const now=m.new_year ?? MARKET.meta.base_year;
@@ -840,7 +856,8 @@ function calc(){
   $('result').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-fillModels();fillYears();fillTrims();
+fillBrands();fillModels();fillYears();fillTrims();
+$('brand').addEventListener('change',()=>{fillModels();fillYears();fillTrims();});
 $('model').addEventListener('change',()=>{fillYears();fillTrims();});
 $('calc').addEventListener('click',calc);
 </script>
