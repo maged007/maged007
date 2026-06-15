@@ -147,9 +147,9 @@ const MARKET = {
   "brands": {
     "nissan": {
       "default_retention_pct": {
-        "_doc": "معدّل الاحتفاظ القياسي للبراند (إعادة البيع). يُستخدم لأي موديل ليس له retention خاص — وسيلة عزل كل براند على حدة مستقبلاً.",
-        "year1": 84.5,
-        "annual": 86.2
+        "_doc": "معدّل الاحتفاظ القياسي للبراند (إعادة البيع). يُستخدم لأي موديل ليس له retention خاص — وسيلة عزل كل براند على حدة. نيسان أقل من هوندا أقل من تويوتا في الاحتفاظ بالقيمة بالسوق الإماراتي.",
+        "year1": 76,
+        "annual": 87
       },
       "models": {
         "altima": {
@@ -173,10 +173,10 @@ const MARKET = {
             "Platinum": "Platinum / Turbo (الأعلى)"
           },
           "default_trim": "SV",
-          "_tuning": "خفض الخليجي ~5% (year1 88.9→84.5) والوارد إجمالي −40% (american 80.2→60) بناءً على تغذية المستخدم — 2026-06",
+          "_tuning": "خفض الخليجي ~10% خصوصاً الموديلات الجديدة (year1 84.5→76, annual 86.2→87) مع تعويض الوارد ليفضل ثابت (american 60→65 …) — 2026-06",
           "retention_pct": {
-            "year1": 84.5,
-            "annual": 86.2
+            "year1": 76,
+            "annual": 87
           },
           "km": {
             "pct_per_10k": 0.946,
@@ -186,11 +186,11 @@ const MARKET = {
           },
           "spec_factors_pct": {
             "gcc": 100,
-            "american": 60,
-            "canadian": 60,
-            "european": 80,
-            "japanese": 82,
-            "other": 62
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
           },
           "condition_factors_pct": {
             "excellent": 100,
@@ -207,40 +207,40 @@ const MARKET = {
             "source": "Automark export (288 listings)",
             "sigma_log": 0.1651
           },
-          "_anchors_doc": "وسيط GCC الحقيقي لكل سنة من الداتا (نقاط ممثِّلة، تُقارَن بشريحة 'جيدة').",
+          "_anchors_doc": "وسيط GCC لكل سنة، معدَّل من سعر الطلب في الإعلانات إلى القيمة السوقية الفعلية (خصم طلب←بيع ~10% بناءً على تغذية المستخدم إن الخليجي كان أعلى من السوق). يُقارَن بشريحة 'جيدة'.",
           "anchors": [
             {
               "year": 2023,
               "km": 8000,
-              "price": 75000,
+              "price": 68000,
               "spec": "gcc",
               "trim": "SV"
             },
             {
               "year": 2021,
               "km": 46000,
-              "price": 65000,
+              "price": 58000,
               "spec": "gcc",
               "trim": "unknown"
             },
             {
               "year": 2020,
               "km": 142000,
-              "price": 45000,
+              "price": 40000,
               "spec": "gcc",
               "trim": "S"
             },
             {
               "year": 2018,
               "km": 258000,
-              "price": 34000,
+              "price": 31000,
               "spec": "gcc",
               "trim": "SL"
             },
             {
               "year": 2016,
               "km": 164000,
-              "price": 25500,
+              "price": 23000,
               "spec": "gcc",
               "trim": "unknown"
             }
