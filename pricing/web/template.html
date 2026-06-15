@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>محرّك تسعير السيارات المستعملة — الإمارات 🇦🇪</title>
+<style>
+  :root{
+    --bg:#0e1726; --card:#16213a; --line:#26324d; --txt:#e8edf7;
+    --muted:#93a1bf; --accent:#3da9fc; --accent2:#23c486; --warn:#f4a261;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif;
+    background:linear-gradient(160deg,#0b1220,#101b30); color:var(--txt);
+    min-height:100vh; padding:18px;
+  }
+  .wrap{max-width:560px; margin:0 auto}
+  h1{font-size:20px; margin:6px 0 2px; text-align:center}
+  .sub{color:var(--muted); text-align:center; font-size:13px; margin-bottom:18px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px}
+  label{display:block; font-size:13px; color:var(--muted); margin:12px 0 5px}
+  select,input{
+    width:100%; padding:11px 12px; border-radius:10px; border:1px solid var(--line);
+    background:#0f1830; color:var(--txt); font-size:15px; font-family:inherit;
+  }
+  .row{display:flex; gap:12px}
+  .row>div{flex:1}
+  button{
+    width:100%; margin-top:18px; padding:13px; border:0; border-radius:12px;
+    background:linear-gradient(90deg,var(--accent),#2f7fd4); color:#fff;
+    font-size:16px; font-weight:700; cursor:pointer;
+  }
+  button:active{transform:translateY(1px)}
+  .price{font-size:34px; font-weight:800; color:var(--accent2); text-align:center; margin:4px 0}
+  .price small{font-size:16px; color:var(--muted); font-weight:500}
+  .ttl{text-align:center; color:var(--muted); font-size:13px}
+  table{width:100%; border-collapse:collapse; margin-top:14px; font-size:13.5px}
+  td{padding:7px 4px; border-bottom:1px solid var(--line)}
+  td:last-child{text-align:left; color:var(--txt); font-variant-numeric:tabular-nums}
+  td:first-child{color:var(--muted)}
+  .hide{display:none}
+  .note{color:var(--warn); font-size:12px; text-align:center; margin-top:14px; line-height:1.6}
+  .err{color:#ff7a7a; text-align:center; margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>محرّك تسعير السيارات المستعملة 🇦🇪</h1>
+  <div class="sub">تقدير سعر إعادة البيع — مرساة على سعر الوكيل (السوق الإماراتي)</div>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>البراند</label>
+        <select id="brand"></select>
+      </div>
+      <div>
+        <label>الموديل</label>
+        <select id="model"></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>سنة الصنع</label>
+        <select id="year"></select>
+      </div>
+      <div>
+        <label>الكيلومترات</label>
+        <input id="km" type="number" min="0" step="1000" value="80000" inputmode="numeric">
+      </div>
+    </div>
+
+    <label>المواصفات</label>
+    <select id="spec">
+      <option value="gcc">خليجي (GCC)</option>
+      <option value="imported">وارد (أمريكي/كندي)</option>
+    </select>
+
+    <label>الحالة</label>
+    <select id="condition">
+      <option value="excellent">ممتازة</option>
+      <option value="very_good" selected>جيدة جداً</option>
+      <option value="good">جيدة</option>
+      <option value="fair">مقبولة</option>
+      <option value="needs_work">تحتاج صيانة</option>
+    </select>
+
+    <button id="calc">احسب السعر التقديري</button>
+    <div id="err" class="err"></div>
+  </div>
+
+  <div id="result" class="card hide">
+    <div class="ttl">السعر التقديري لإعادة البيع</div>
+    <div class="price"><span id="priceVal">—</span> <small>درهم</small></div>
+    <table id="breakdown"></table>
+  </div>
+
+  <div class="note">
+    ⚠️ القيم مبنية على معاملات قابلة للتعديل في ملف البيانات. للحصول على دقة سوقية حقيقية،
+    عايِر المحرّك بإعلانات يدوية فعلية عبر <code>calibrate.py</code>.
+  </div>
+</div>
+
+<script>/*__PRICING_DATA__*/</script>
+<script>
+const D = window.PRICING_DATA;
+const CUR_YEAR = 2026;
+const $ = id => document.getElementById(id);
+
+// ——— نفس معادلة المحرّك (engine.py) بالـJS ———
+function brandRetention(brand, age){
+  const tier = D.retention_tiers[D.brand_tier[brand]];
+  if(age <= 0) return 1.0;
+  const r = (1 - tier.first_year_drop) * Math.pow(1 - tier.annual_drop, age - 1);
+  return Math.max(r, tier.floor);
+}
+function kmFactor(age, km){
+  const c = D.km_factor;
+  const expected = Math.max(age,0) * c.baseline_km_per_year;
+  const factor = 1 - ((km - expected)/10000) * c.step_per_10k;
+  return Math.max(c.min, Math.min(c.max, factor));
+}
+function estimate(brand, model, age, km, spec, condition){
+  const m = D.brands[brand].models[model];
+  const f = {
+    dealer_price:    m.dealer_price,
+    brand_retention: brandRetention(brand, age),
+    demand_factor:   m.demand_factor,
+    km_factor:       kmFactor(age, km),
+    spec_factor:     D.spec_factor[spec],
+    condition_factor:D.condition_factor[condition],
+  };
+  const price = f.dealer_price * f.brand_retention * f.demand_factor *
+                f.km_factor * f.spec_factor * f.condition_factor;
+  return {price: Math.round(price), f};
+}
+
+// ——— تعبئة القوائم ———
+function fillBrands(){
+  const b = $('brand');
+  Object.entries(D.brands).forEach(([k,v]) =>
+    b.add(new Option(v.label, k)));
+  fillModels();
+}
+function fillModels(){
+  const b = $('brand').value, m = $('model');
+  m.innerHTML = '';
+  Object.entries(D.brands[b].models).forEach(([k,v]) =>
+    m.add(new Option(v.label, k)));
+}
+function fillYears(){
+  const y = $('year');
+  for(let yr = CUR_YEAR; yr >= CUR_YEAR-15; yr--)
+    y.add(new Option(yr, yr));
+  y.value = CUR_YEAR - 4;
+}
+
+const fmt = n => n.toLocaleString('en-US');
+const pct = n => (n*100).toFixed(1) + '%';
+
+function calc(){
+  $('err').textContent = '';
+  const brand = $('brand').value, model = $('model').value;
+  const age = CUR_YEAR - parseInt($('year').value, 10);
+  const km = parseInt($('km').value, 10);
+  if(isNaN(km) || km < 0){ $('err').textContent = 'أدخل كيلومترات صحيحة'; return; }
+
+  const {price, f} = estimate(brand, model, age, km,
+                              $('spec').value, $('condition').value);
+  $('priceVal').textContent = fmt(price);
+  $('breakdown').innerHTML = `
+    <tr><td>سعر الوكيل (جديد)</td><td>${fmt(f.dealer_price)} د</td></tr>
+    <tr><td>احتفاظ البراند (${age} سنة)</td><td>${pct(f.brand_retention)}</td></tr>
+    <tr><td>عامل الطلب للموديل</td><td>${pct(f.demand_factor)}</td></tr>
+    <tr><td>معامل الكيلومترات</td><td>${pct(f.km_factor)}</td></tr>
+    <tr><td>معامل المواصفات</td><td>${pct(f.spec_factor)}</td></tr>
+    <tr><td>معامل الحالة</td><td>${pct(f.condition_factor)}</td></tr>`;
+  $('result').classList.remove('hide');
+}
+
+$('brand').addEventListener('change', fillModels);
+$('calc').addEventListener('click', calc);
+fillBrands(); fillYears(); calc();
+</script>
+</body>
+</html>
