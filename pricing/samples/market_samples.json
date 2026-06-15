@@ -1,0 +1,1860 @@
+{
+  "_note": "عيّنات توضيحية مُولّدة — استبدلها بأرقام يدوية حقيقية.",
+  "current_year": 2026,
+  "samples": [
+    {
+      "brand": "toyota",
+      "model": "corolla",
+      "year": 2019,
+      "km": 133000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 55000
+    },
+    {
+      "brand": "toyota",
+      "model": "corolla",
+      "year": 2023,
+      "km": 70000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 55000
+    },
+    {
+      "brand": "toyota",
+      "model": "corolla",
+      "year": 2021,
+      "km": 93000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 39000
+    },
+    {
+      "brand": "toyota",
+      "model": "corolla",
+      "year": 2024,
+      "km": 29000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 56000
+    },
+    {
+      "brand": "toyota",
+      "model": "camry",
+      "year": 2020,
+      "km": 91000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 58000
+    },
+    {
+      "brand": "toyota",
+      "model": "camry",
+      "year": 2022,
+      "km": 75000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 112000
+    },
+    {
+      "brand": "toyota",
+      "model": "camry",
+      "year": 2020,
+      "km": 153000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 79500
+    },
+    {
+      "brand": "toyota",
+      "model": "camry",
+      "year": 2023,
+      "km": 49000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 90000
+    },
+    {
+      "brand": "toyota",
+      "model": "camry",
+      "year": 2017,
+      "km": 182000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 54500
+    },
+    {
+      "brand": "toyota",
+      "model": "land_cruiser",
+      "year": 2018,
+      "km": 124000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 210500
+    },
+    {
+      "brand": "toyota",
+      "model": "land_cruiser",
+      "year": 2020,
+      "km": 123000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 132500
+    },
+    {
+      "brand": "toyota",
+      "model": "land_cruiser",
+      "year": 2024,
+      "km": 46000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 332500
+    },
+    {
+      "brand": "toyota",
+      "model": "prado",
+      "year": 2022,
+      "km": 76000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 180000
+    },
+    {
+      "brand": "toyota",
+      "model": "prado",
+      "year": 2017,
+      "km": 186000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 126000
+    },
+    {
+      "brand": "toyota",
+      "model": "prado",
+      "year": 2024,
+      "km": 41000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 168500
+    },
+    {
+      "brand": "toyota",
+      "model": "prado",
+      "year": 2018,
+      "km": 129000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 172500
+    },
+    {
+      "brand": "toyota",
+      "model": "prado",
+      "year": 2020,
+      "km": 116000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 197500
+    },
+    {
+      "brand": "toyota",
+      "model": "rav4",
+      "year": 2019,
+      "km": 98000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 54000
+    },
+    {
+      "brand": "toyota",
+      "model": "rav4",
+      "year": 2025,
+      "km": 19000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 120000
+    },
+    {
+      "brand": "toyota",
+      "model": "rav4",
+      "year": 2025,
+      "km": 23000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 132500
+    },
+    {
+      "brand": "toyota",
+      "model": "rav4",
+      "year": 2024,
+      "km": 34000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 79000
+    },
+    {
+      "brand": "nissan",
+      "model": "altima",
+      "year": 2024,
+      "km": 51000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 44500
+    },
+    {
+      "brand": "nissan",
+      "model": "altima",
+      "year": 2021,
+      "km": 117000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 27500
+    },
+    {
+      "brand": "nissan",
+      "model": "altima",
+      "year": 2020,
+      "km": 104000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 30500
+    },
+    {
+      "brand": "nissan",
+      "model": "altima",
+      "year": 2024,
+      "km": 29000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 85000
+    },
+    {
+      "brand": "nissan",
+      "model": "altima",
+      "year": 2021,
+      "km": 78000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 41000
+    },
+    {
+      "brand": "nissan",
+      "model": "sunny",
+      "year": 2021,
+      "km": 99000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 26000
+    },
+    {
+      "brand": "nissan",
+      "model": "sunny",
+      "year": 2022,
+      "km": 96000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 28500
+    },
+    {
+      "brand": "nissan",
+      "model": "sunny",
+      "year": 2025,
+      "km": 17000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 57000
+    },
+    {
+      "brand": "nissan",
+      "model": "patrol",
+      "year": 2022,
+      "km": 60000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 104000
+    },
+    {
+      "brand": "nissan",
+      "model": "patrol",
+      "year": 2025,
+      "km": 18000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 177500
+    },
+    {
+      "brand": "nissan",
+      "model": "patrol",
+      "year": 2019,
+      "km": 179000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 116500
+    },
+    {
+      "brand": "nissan",
+      "model": "patrol",
+      "year": 2022,
+      "km": 69000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 169500
+    },
+    {
+      "brand": "nissan",
+      "model": "x_trail",
+      "year": 2019,
+      "km": 118000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 38000
+    },
+    {
+      "brand": "nissan",
+      "model": "x_trail",
+      "year": 2023,
+      "km": 63000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 38500
+    },
+    {
+      "brand": "nissan",
+      "model": "x_trail",
+      "year": 2017,
+      "km": 148000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 35000
+    },
+    {
+      "brand": "nissan",
+      "model": "kicks",
+      "year": 2024,
+      "km": 34000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 32500
+    },
+    {
+      "brand": "nissan",
+      "model": "kicks",
+      "year": 2022,
+      "km": 67000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 25000
+    },
+    {
+      "brand": "nissan",
+      "model": "kicks",
+      "year": 2023,
+      "km": 62000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 48500
+    },
+    {
+      "brand": "nissan",
+      "model": "kicks",
+      "year": 2018,
+      "km": 162000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 16500
+    },
+    {
+      "brand": "nissan",
+      "model": "kicks",
+      "year": 2025,
+      "km": 16000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 56500
+    },
+    {
+      "brand": "honda",
+      "model": "civic",
+      "year": 2023,
+      "km": 70000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 62000
+    },
+    {
+      "brand": "honda",
+      "model": "civic",
+      "year": 2018,
+      "km": 137000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 40500
+    },
+    {
+      "brand": "honda",
+      "model": "civic",
+      "year": 2021,
+      "km": 79000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 59000
+    },
+    {
+      "brand": "honda",
+      "model": "civic",
+      "year": 2018,
+      "km": 168000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 35500
+    },
+    {
+      "brand": "honda",
+      "model": "civic",
+      "year": 2017,
+      "km": 222000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 28500
+    },
+    {
+      "brand": "honda",
+      "model": "accord",
+      "year": 2017,
+      "km": 154000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 40000
+    },
+    {
+      "brand": "honda",
+      "model": "accord",
+      "year": 2018,
+      "km": 191000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 51000
+    },
+    {
+      "brand": "honda",
+      "model": "accord",
+      "year": 2025,
+      "km": 15000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 109500
+    },
+    {
+      "brand": "honda",
+      "model": "crv",
+      "year": 2020,
+      "km": 93000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 75000
+    },
+    {
+      "brand": "honda",
+      "model": "crv",
+      "year": 2024,
+      "km": 50000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 62500
+    },
+    {
+      "brand": "honda",
+      "model": "crv",
+      "year": 2019,
+      "km": 99000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 54500
+    },
+    {
+      "brand": "honda",
+      "model": "crv",
+      "year": 2021,
+      "km": 86000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 50500
+    },
+    {
+      "brand": "honda",
+      "model": "crv",
+      "year": 2022,
+      "km": 72000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 81500
+    },
+    {
+      "brand": "honda",
+      "model": "pilot",
+      "year": 2025,
+      "km": 19000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 146500
+    },
+    {
+      "brand": "honda",
+      "model": "pilot",
+      "year": 2018,
+      "km": 177000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 60500
+    },
+    {
+      "brand": "honda",
+      "model": "pilot",
+      "year": 2017,
+      "km": 156000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 73500
+    },
+    {
+      "brand": "honda",
+      "model": "pilot",
+      "year": 2021,
+      "km": 126000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 106000
+    },
+    {
+      "brand": "honda",
+      "model": "city",
+      "year": 2022,
+      "km": 93000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 50500
+    },
+    {
+      "brand": "honda",
+      "model": "city",
+      "year": 2023,
+      "km": 44000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 56000
+    },
+    {
+      "brand": "honda",
+      "model": "city",
+      "year": 2018,
+      "km": 196000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 21000
+    },
+    {
+      "brand": "honda",
+      "model": "city",
+      "year": 2018,
+      "km": 130000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 23000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "pajero",
+      "year": 2020,
+      "km": 105000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 52500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "pajero",
+      "year": 2017,
+      "km": 174000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 55000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "pajero",
+      "year": 2017,
+      "km": 146000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 41500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "pajero",
+      "year": 2022,
+      "km": 73000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 77000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "lancer",
+      "year": 2023,
+      "km": 52000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 46000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "lancer",
+      "year": 2017,
+      "km": 147000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 21500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "lancer",
+      "year": 2019,
+      "km": 180000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 23500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "lancer",
+      "year": 2022,
+      "km": 56000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 44000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "lancer",
+      "year": 2020,
+      "km": 140000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 17500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "attrage",
+      "year": 2020,
+      "km": 134000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 29500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "attrage",
+      "year": 2024,
+      "km": 44000,
+      "spec": "imported",
+      "condition": "needs_work",
+      "ad_price": 19000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "attrage",
+      "year": 2023,
+      "km": 73000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 28500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "attrage",
+      "year": 2020,
+      "km": 143000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 19000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "attrage",
+      "year": 2019,
+      "km": 140000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 24000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "montero_sport",
+      "year": 2019,
+      "km": 130000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 33000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "montero_sport",
+      "year": 2021,
+      "km": 97000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 66000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "montero_sport",
+      "year": 2022,
+      "km": 87000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 49500
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "l200",
+      "year": 2019,
+      "km": 138000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 35000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "l200",
+      "year": 2018,
+      "km": 203000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 39000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "l200",
+      "year": 2019,
+      "km": 170000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 42000
+    },
+    {
+      "brand": "mitsubishi",
+      "model": "l200",
+      "year": 2022,
+      "km": 62000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 74000
+    },
+    {
+      "brand": "hyundai",
+      "model": "elantra",
+      "year": 2022,
+      "km": 100000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 49500
+    },
+    {
+      "brand": "hyundai",
+      "model": "elantra",
+      "year": 2017,
+      "km": 216000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 28000
+    },
+    {
+      "brand": "hyundai",
+      "model": "elantra",
+      "year": 2019,
+      "km": 162000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 33000
+    },
+    {
+      "brand": "hyundai",
+      "model": "elantra",
+      "year": 2018,
+      "km": 141000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 31500
+    },
+    {
+      "brand": "hyundai",
+      "model": "tucson",
+      "year": 2023,
+      "km": 47000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 82500
+    },
+    {
+      "brand": "hyundai",
+      "model": "tucson",
+      "year": 2021,
+      "km": 107000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 71500
+    },
+    {
+      "brand": "hyundai",
+      "model": "tucson",
+      "year": 2019,
+      "km": 163000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 33500
+    },
+    {
+      "brand": "hyundai",
+      "model": "tucson",
+      "year": 2018,
+      "km": 142000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 44000
+    },
+    {
+      "brand": "hyundai",
+      "model": "tucson",
+      "year": 2021,
+      "km": 97000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 60500
+    },
+    {
+      "brand": "hyundai",
+      "model": "sonata",
+      "year": 2021,
+      "km": 111000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 61000
+    },
+    {
+      "brand": "hyundai",
+      "model": "sonata",
+      "year": 2023,
+      "km": 42000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 72500
+    },
+    {
+      "brand": "hyundai",
+      "model": "sonata",
+      "year": 2024,
+      "km": 40000,
+      "spec": "imported",
+      "condition": "needs_work",
+      "ad_price": 38500
+    },
+    {
+      "brand": "hyundai",
+      "model": "sonata",
+      "year": 2023,
+      "km": 61000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 69000
+    },
+    {
+      "brand": "hyundai",
+      "model": "sonata",
+      "year": 2025,
+      "km": 20000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 98000
+    },
+    {
+      "brand": "hyundai",
+      "model": "santafe",
+      "year": 2025,
+      "km": 21000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 146000
+    },
+    {
+      "brand": "hyundai",
+      "model": "santafe",
+      "year": 2023,
+      "km": 53000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 109500
+    },
+    {
+      "brand": "hyundai",
+      "model": "santafe",
+      "year": 2017,
+      "km": 228000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 28500
+    },
+    {
+      "brand": "hyundai",
+      "model": "santafe",
+      "year": 2018,
+      "km": 184000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 52000
+    },
+    {
+      "brand": "hyundai",
+      "model": "creta",
+      "year": 2022,
+      "km": 73000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 43000
+    },
+    {
+      "brand": "hyundai",
+      "model": "creta",
+      "year": 2020,
+      "km": 152000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 21000
+    },
+    {
+      "brand": "hyundai",
+      "model": "creta",
+      "year": 2017,
+      "km": 214000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 17000
+    },
+    {
+      "brand": "hyundai",
+      "model": "creta",
+      "year": 2024,
+      "km": 44000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 62500
+    },
+    {
+      "brand": "kia",
+      "model": "sportage",
+      "year": 2024,
+      "km": 29000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 79000
+    },
+    {
+      "brand": "kia",
+      "model": "sportage",
+      "year": 2021,
+      "km": 81000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 69500
+    },
+    {
+      "brand": "kia",
+      "model": "sportage",
+      "year": 2023,
+      "km": 74000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 46500
+    },
+    {
+      "brand": "kia",
+      "model": "sportage",
+      "year": 2019,
+      "km": 151000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 29000
+    },
+    {
+      "brand": "kia",
+      "model": "k5",
+      "year": 2019,
+      "km": 134000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 40500
+    },
+    {
+      "brand": "kia",
+      "model": "k5",
+      "year": 2023,
+      "km": 44000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 37500
+    },
+    {
+      "brand": "kia",
+      "model": "k5",
+      "year": 2021,
+      "km": 104000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 50500
+    },
+    {
+      "brand": "kia",
+      "model": "k5",
+      "year": 2023,
+      "km": 67000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 62500
+    },
+    {
+      "brand": "kia",
+      "model": "cerato",
+      "year": 2019,
+      "km": 118000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 35500
+    },
+    {
+      "brand": "kia",
+      "model": "cerato",
+      "year": 2022,
+      "km": 74000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 33500
+    },
+    {
+      "brand": "kia",
+      "model": "cerato",
+      "year": 2019,
+      "km": 177000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 27500
+    },
+    {
+      "brand": "kia",
+      "model": "sorento",
+      "year": 2019,
+      "km": 161000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 37500
+    },
+    {
+      "brand": "kia",
+      "model": "sorento",
+      "year": 2024,
+      "km": 44000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 110000
+    },
+    {
+      "brand": "kia",
+      "model": "sorento",
+      "year": 2020,
+      "km": 134000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 67500
+    },
+    {
+      "brand": "kia",
+      "model": "sorento",
+      "year": 2022,
+      "km": 56000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 76000
+    },
+    {
+      "brand": "kia",
+      "model": "picanto",
+      "year": 2017,
+      "km": 184000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 10500
+    },
+    {
+      "brand": "kia",
+      "model": "picanto",
+      "year": 2018,
+      "km": 129000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 18500
+    },
+    {
+      "brand": "kia",
+      "model": "picanto",
+      "year": 2017,
+      "km": 223000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 17000
+    },
+    {
+      "brand": "kia",
+      "model": "picanto",
+      "year": 2017,
+      "km": 233000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 17500
+    },
+    {
+      "brand": "kia",
+      "model": "picanto",
+      "year": 2021,
+      "km": 79000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 33000
+    },
+    {
+      "brand": "lexus",
+      "model": "es",
+      "year": 2020,
+      "km": 144000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 77500
+    },
+    {
+      "brand": "lexus",
+      "model": "es",
+      "year": 2022,
+      "km": 75000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 125500
+    },
+    {
+      "brand": "lexus",
+      "model": "es",
+      "year": 2019,
+      "km": 114000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 103000
+    },
+    {
+      "brand": "lexus",
+      "model": "rx",
+      "year": 2019,
+      "km": 99000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 199500
+    },
+    {
+      "brand": "lexus",
+      "model": "rx",
+      "year": 2022,
+      "km": 75000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 115500
+    },
+    {
+      "brand": "lexus",
+      "model": "rx",
+      "year": 2022,
+      "km": 78000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 133500
+    },
+    {
+      "brand": "lexus",
+      "model": "lx",
+      "year": 2018,
+      "km": 180000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 188000
+    },
+    {
+      "brand": "lexus",
+      "model": "lx",
+      "year": 2019,
+      "km": 152000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 379500
+    },
+    {
+      "brand": "lexus",
+      "model": "lx",
+      "year": 2021,
+      "km": 88000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 410000
+    },
+    {
+      "brand": "lexus",
+      "model": "lx",
+      "year": 2021,
+      "km": 118000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 346500
+    },
+    {
+      "brand": "lexus",
+      "model": "lx",
+      "year": 2025,
+      "km": 14000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 570000
+    },
+    {
+      "brand": "lexus",
+      "model": "gx",
+      "year": 2021,
+      "km": 114000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 261500
+    },
+    {
+      "brand": "lexus",
+      "model": "gx",
+      "year": 2019,
+      "km": 178000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 134500
+    },
+    {
+      "brand": "lexus",
+      "model": "gx",
+      "year": 2018,
+      "km": 129000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 202500
+    },
+    {
+      "brand": "lexus",
+      "model": "gx",
+      "year": 2025,
+      "km": 20000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 342000
+    },
+    {
+      "brand": "lexus",
+      "model": "nx",
+      "year": 2023,
+      "km": 74000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 119000
+    },
+    {
+      "brand": "lexus",
+      "model": "nx",
+      "year": 2021,
+      "km": 93000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 152500
+    },
+    {
+      "brand": "lexus",
+      "model": "nx",
+      "year": 2021,
+      "km": 106000,
+      "spec": "imported",
+      "condition": "needs_work",
+      "ad_price": 61500
+    },
+    {
+      "brand": "mercedes",
+      "model": "c_class",
+      "year": 2020,
+      "km": 107000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 80500
+    },
+    {
+      "brand": "mercedes",
+      "model": "c_class",
+      "year": 2019,
+      "km": 167000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 56500
+    },
+    {
+      "brand": "mercedes",
+      "model": "c_class",
+      "year": 2019,
+      "km": 129000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 68000
+    },
+    {
+      "brand": "mercedes",
+      "model": "c_class",
+      "year": 2021,
+      "km": 127000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 58000
+    },
+    {
+      "brand": "mercedes",
+      "model": "c_class",
+      "year": 2023,
+      "km": 68000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 83500
+    },
+    {
+      "brand": "mercedes",
+      "model": "e_class",
+      "year": 2024,
+      "km": 48000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 200500
+    },
+    {
+      "brand": "mercedes",
+      "model": "e_class",
+      "year": 2019,
+      "km": 141000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 76000
+    },
+    {
+      "brand": "mercedes",
+      "model": "e_class",
+      "year": 2021,
+      "km": 124000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 89000
+    },
+    {
+      "brand": "mercedes",
+      "model": "e_class",
+      "year": 2019,
+      "km": 120000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 90000
+    },
+    {
+      "brand": "mercedes",
+      "model": "s_class",
+      "year": 2018,
+      "km": 199000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 73500
+    },
+    {
+      "brand": "mercedes",
+      "model": "s_class",
+      "year": 2023,
+      "km": 59000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 291000
+    },
+    {
+      "brand": "mercedes",
+      "model": "s_class",
+      "year": 2019,
+      "km": 103000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 137000
+    },
+    {
+      "brand": "mercedes",
+      "model": "s_class",
+      "year": 2017,
+      "km": 153000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 103500
+    },
+    {
+      "brand": "mercedes",
+      "model": "glc",
+      "year": 2022,
+      "km": 61000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 83000
+    },
+    {
+      "brand": "mercedes",
+      "model": "glc",
+      "year": 2023,
+      "km": 44000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 150000
+    },
+    {
+      "brand": "mercedes",
+      "model": "glc",
+      "year": 2024,
+      "km": 28000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 191000
+    },
+    {
+      "brand": "mercedes",
+      "model": "glc",
+      "year": 2020,
+      "km": 155000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 85000
+    },
+    {
+      "brand": "mercedes",
+      "model": "glc",
+      "year": 2021,
+      "km": 118000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 88000
+    },
+    {
+      "brand": "mercedes",
+      "model": "g_class",
+      "year": 2021,
+      "km": 104000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 205000
+    },
+    {
+      "brand": "mercedes",
+      "model": "g_class",
+      "year": 2018,
+      "km": 148000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 218500
+    },
+    {
+      "brand": "mercedes",
+      "model": "g_class",
+      "year": 2017,
+      "km": 148000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 142500
+    },
+    {
+      "brand": "mercedes",
+      "model": "g_class",
+      "year": 2018,
+      "km": 173000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 164000
+    },
+    {
+      "brand": "bmw",
+      "model": "series3",
+      "year": 2025,
+      "km": 24000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 173000
+    },
+    {
+      "brand": "bmw",
+      "model": "series3",
+      "year": 2022,
+      "km": 72000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 84500
+    },
+    {
+      "brand": "bmw",
+      "model": "series3",
+      "year": 2021,
+      "km": 92000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 88500
+    },
+    {
+      "brand": "bmw",
+      "model": "series5",
+      "year": 2022,
+      "km": 58000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 135500
+    },
+    {
+      "brand": "bmw",
+      "model": "series5",
+      "year": 2021,
+      "km": 77000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 101500
+    },
+    {
+      "brand": "bmw",
+      "model": "series5",
+      "year": 2024,
+      "km": 42000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 210000
+    },
+    {
+      "brand": "bmw",
+      "model": "series5",
+      "year": 2017,
+      "km": 215000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 58000
+    },
+    {
+      "brand": "bmw",
+      "model": "x5",
+      "year": 2017,
+      "km": 206000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 74000
+    },
+    {
+      "brand": "bmw",
+      "model": "x5",
+      "year": 2022,
+      "km": 73000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 133000
+    },
+    {
+      "brand": "bmw",
+      "model": "x5",
+      "year": 2019,
+      "km": 132000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 69000
+    },
+    {
+      "brand": "bmw",
+      "model": "series7",
+      "year": 2024,
+      "km": 45000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 268000
+    },
+    {
+      "brand": "bmw",
+      "model": "series7",
+      "year": 2020,
+      "km": 118000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 188000
+    },
+    {
+      "brand": "bmw",
+      "model": "series7",
+      "year": 2017,
+      "km": 162000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 65000
+    },
+    {
+      "brand": "bmw",
+      "model": "series7",
+      "year": 2023,
+      "km": 65000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 258500
+    },
+    {
+      "brand": "bmw",
+      "model": "x6",
+      "year": 2021,
+      "km": 87000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 103500
+    },
+    {
+      "brand": "bmw",
+      "model": "x6",
+      "year": 2017,
+      "km": 144000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 61000
+    },
+    {
+      "brand": "bmw",
+      "model": "x6",
+      "year": 2018,
+      "km": 121000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 67000
+    },
+    {
+      "brand": "bmw",
+      "model": "x6",
+      "year": 2024,
+      "km": 34000,
+      "spec": "imported",
+      "condition": "good",
+      "ad_price": 176000
+    },
+    {
+      "brand": "bmw",
+      "model": "x6",
+      "year": 2020,
+      "km": 135000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 103500
+    },
+    {
+      "brand": "ford",
+      "model": "explorer",
+      "year": 2017,
+      "km": 196000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 39500
+    },
+    {
+      "brand": "ford",
+      "model": "explorer",
+      "year": 2017,
+      "km": 224000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 39500
+    },
+    {
+      "brand": "ford",
+      "model": "explorer",
+      "year": 2020,
+      "km": 119000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 70000
+    },
+    {
+      "brand": "ford",
+      "model": "explorer",
+      "year": 2024,
+      "km": 38000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 134000
+    },
+    {
+      "brand": "ford",
+      "model": "explorer",
+      "year": 2021,
+      "km": 73000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 44500
+    },
+    {
+      "brand": "ford",
+      "model": "mustang",
+      "year": 2024,
+      "km": 44000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 136000
+    },
+    {
+      "brand": "ford",
+      "model": "mustang",
+      "year": 2022,
+      "km": 98000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 91500
+    },
+    {
+      "brand": "ford",
+      "model": "mustang",
+      "year": 2025,
+      "km": 22000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 78000
+    },
+    {
+      "brand": "ford",
+      "model": "mustang",
+      "year": 2021,
+      "km": 105000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 77000
+    },
+    {
+      "brand": "ford",
+      "model": "mustang",
+      "year": 2017,
+      "km": 151000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 47000
+    },
+    {
+      "brand": "ford",
+      "model": "edge",
+      "year": 2021,
+      "km": 92000,
+      "spec": "gcc",
+      "condition": "needs_work",
+      "ad_price": 37500
+    },
+    {
+      "brand": "ford",
+      "model": "edge",
+      "year": 2021,
+      "km": 112000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 55000
+    },
+    {
+      "brand": "ford",
+      "model": "edge",
+      "year": 2019,
+      "km": 128000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 46500
+    },
+    {
+      "brand": "ford",
+      "model": "edge",
+      "year": 2025,
+      "km": 25000,
+      "spec": "gcc",
+      "condition": "excellent",
+      "ad_price": 126500
+    },
+    {
+      "brand": "ford",
+      "model": "edge",
+      "year": 2022,
+      "km": 103000,
+      "spec": "imported",
+      "condition": "excellent",
+      "ad_price": 43500
+    },
+    {
+      "brand": "ford",
+      "model": "f150",
+      "year": 2021,
+      "km": 78000,
+      "spec": "imported",
+      "condition": "very_good",
+      "ad_price": 62500
+    },
+    {
+      "brand": "ford",
+      "model": "f150",
+      "year": 2025,
+      "km": 25000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 186500
+    },
+    {
+      "brand": "ford",
+      "model": "f150",
+      "year": 2022,
+      "km": 93000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 105500
+    },
+    {
+      "brand": "ford",
+      "model": "expedition",
+      "year": 2023,
+      "km": 76000,
+      "spec": "gcc",
+      "condition": "fair",
+      "ad_price": 141500
+    },
+    {
+      "brand": "ford",
+      "model": "expedition",
+      "year": 2024,
+      "km": 38000,
+      "spec": "gcc",
+      "condition": "very_good",
+      "ad_price": 201000
+    },
+    {
+      "brand": "ford",
+      "model": "expedition",
+      "year": 2019,
+      "km": 112000,
+      "spec": "gcc",
+      "condition": "good",
+      "ad_price": 87000
+    },
+    {
+      "brand": "ford",
+      "model": "expedition",
+      "year": 2021,
+      "km": 110000,
+      "spec": "imported",
+      "condition": "fair",
+      "ad_price": 63000
+    }
+  ]
+}
