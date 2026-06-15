@@ -245,6 +245,503 @@ const MARKET = {
               "trim": "unknown"
             }
           ]
+        },
+        "sunny": {
+          "name_ar": "نيسان صني",
+          "name_en": "Nissan Sunny",
+          "body": "سيدان صغير",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "S": 61000,
+            "SV": 68000,
+            "SL": 73500
+          },
+          "default_trim": "SV",
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 4000,
+          "range_spread_pct": 8
+        },
+        "sentra": {
+          "name_ar": "نيسان سنترا",
+          "name_en": "Nissan Sentra",
+          "body": "سيدان مدمج",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "S": 79300,
+            "SV": 90000,
+            "SR": 99000
+          },
+          "default_trim": "SV",
+          "trim_labels_ar": {
+            "SR": "SR (سبورت)"
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 5000,
+          "range_spread_pct": 8
+        },
+        "maxima": {
+          "name_ar": "نيسان مكسيما",
+          "name_en": "Nissan Maxima",
+          "body": "سيدان فل-سايز",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "SV": 129500,
+            "SL": 148000,
+            "Platinum": 166000
+          },
+          "default_trim": "SV",
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 7000,
+          "range_spread_pct": 8
+        },
+        "patrol": {
+          "name_ar": "نيسان باترول",
+          "name_en": "Nissan Patrol",
+          "body": "SUV كبير",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "XE": 239900,
+            "SE": 280000,
+            "LE": 360000,
+            "LE Platinum": 390000
+          },
+          "default_trim": "SE",
+          "trim_labels_ar": {
+            "LE Platinum": "LE Platinum City (الأعلى)"
+          },
+          "retention_pct": {
+            "year1": 83,
+            "annual": 90
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 25000,
+          "range_spread_pct": 8
+        },
+        "x-trail": {
+          "name_ar": "نيسان إكس-تريل",
+          "name_en": "Nissan X-Trail",
+          "body": "SUV متوسط",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "S": 101900,
+            "SV": 125000,
+            "SV+": 138000,
+            "SL": 153000
+          },
+          "default_trim": "SV",
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 7000,
+          "range_spread_pct": 8
+        },
+        "kicks": {
+          "name_ar": "نيسان كيكس",
+          "name_en": "Nissan Kicks",
+          "body": "كروس-أوفر صغير",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "S": 79900,
+            "SV": 86900,
+            "SV+": 94900,
+            "SL": 109900
+          },
+          "default_trim": "SV",
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 5000,
+          "range_spread_pct": 8
+        }
+      }
+    },
+    "honda": {
+      "default_retention_pct": {
+        "_doc": "هوندا احتفاظ أعلى من نيسان وأقل من تويوتا في السوق الإماراتي.",
+        "year1": 80,
+        "annual": 88
+      },
+      "models": {
+        "civic": {
+          "name_ar": "هوندا سيفيك",
+          "name_en": "Honda Civic",
+          "body": "سيدان مدمج",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "LX": 99900,
+            "EX": 118000,
+            "Sport": 129900
+          },
+          "default_trim": "EX",
+          "trim_labels_ar": {
+            "Sport": "Sport 1.5T (الأعلى)"
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 6000,
+          "range_spread_pct": 8
+        },
+        "accord": {
+          "name_ar": "هوندا أكورد",
+          "name_en": "Honda Accord",
+          "body": "سيدان متوسط",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "LX": 114900,
+            "EX": 127000,
+            "EX-L": 139900,
+            "Sport Hybrid": 154000
+          },
+          "default_trim": "EX",
+          "trim_labels_ar": {
+            "Sport Hybrid": "Sport Hybrid (هايبرد)"
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 7000,
+          "range_spread_pct": 8
+        },
+        "cr-v": {
+          "name_ar": "هوندا CR-V",
+          "name_en": "Honda CR-V",
+          "body": "SUV مدمج",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "LX": 124900,
+            "EX": 145000,
+            "Touring": 157900
+          },
+          "default_trim": "EX",
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 8000,
+          "range_spread_pct": 8
+        },
+        "pilot": {
+          "name_ar": "هوندا بايلوت",
+          "name_en": "Honda Pilot",
+          "body": "SUV متوسط 3 صفوف",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "EX": 176000,
+            "Sport": 195000,
+            "EX-L": 215000
+          },
+          "default_trim": "Sport",
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 12000,
+          "range_spread_pct": 8
+        }
+      }
+    },
+    "toyota": {
+      "default_retention_pct": {
+        "_doc": "تويوتا الأعلى احتفاظاً بالقيمة في السوق الإماراتي (إعادة بيع ممتازة).",
+        "year1": 84,
+        "annual": 90
+      },
+      "models": {
+        "corolla": {
+          "name_ar": "تويوتا كورولا",
+          "name_en": "Toyota Corolla",
+          "body": "سيدان مدمج",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "XLI": 76900,
+            "GLI": 82900,
+            "Hybrid": 95000
+          },
+          "default_trim": "GLI",
+          "trim_labels_ar": {
+            "Hybrid": "1.8 هايبرد"
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 5000,
+          "range_spread_pct": 8
+        },
+        "camry": {
+          "name_ar": "تويوتا كامري",
+          "name_en": "Toyota Camry",
+          "body": "سيدان متوسط",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "XLE": 122900,
+            "GLE": 133000,
+            "Sport Hybrid": 143000,
+            "Limited Hybrid": 152000
+          },
+          "default_trim": "GLE",
+          "trim_labels_ar": {
+            "Sport Hybrid": "Sport هايبرد",
+            "Limited Hybrid": "Limited هايبرد (الأعلى)"
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 7000,
+          "range_spread_pct": 8
+        },
+        "land-cruiser": {
+          "name_ar": "تويوتا لاندكروزر",
+          "name_en": "Toyota Land Cruiser",
+          "body": "SUV كبير",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "EXR": 239900,
+            "GXR": 276900,
+            "VXR": 316900,
+            "GR-Sport": 399900
+          },
+          "default_trim": "GXR",
+          "trim_labels_ar": {
+            "GR-Sport": "GR-Sport 3.5TC (الأعلى)"
+          },
+          "retention_pct": {
+            "year1": 90,
+            "annual": 93
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 30000,
+          "range_spread_pct": 8
+        },
+        "prado": {
+          "name_ar": "تويوتا برادو",
+          "name_en": "Toyota Land Cruiser Prado",
+          "body": "SUV متوسط",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "TXR": 199900,
+            "GXR": 219900,
+            "Adventure": 254900,
+            "VXR": 264900
+          },
+          "default_trim": "GXR",
+          "retention_pct": {
+            "year1": 90,
+            "annual": 93
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 25000,
+          "range_spread_pct": 8
+        },
+        "rav4": {
+          "name_ar": "تويوتا RAV4",
+          "name_en": "Toyota RAV4",
+          "body": "SUV مدمج",
+          "fuel": "بنزين",
+          "new_year": 2026,
+          "new_prices_gcc": {
+            "EX": 105900,
+            "EXR": 118000,
+            "Hybrid VXR": 152900
+          },
+          "default_trim": "EXR",
+          "trim_labels_ar": {
+            "Hybrid VXR": "VXR هايبرد (الأعلى)"
+          },
+          "km": {
+            "pct_per_10k": 0.946,
+            "expected_km_per_year": 16000,
+            "max_down_pct": 30,
+            "max_up_pct": 12
+          },
+          "spec_factors_pct": {
+            "gcc": 100,
+            "american": 65,
+            "canadian": 65,
+            "european": 86,
+            "japanese": 89,
+            "other": 67
+          },
+          "floor": 8000,
+          "range_spread_pct": 8
         }
       }
     }
