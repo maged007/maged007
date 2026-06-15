@@ -316,7 +316,7 @@
     "honda": {
       "default_retention_pct": {
         "_doc": "هوندا احتفاظ أعلى من نيسان وأقل من تويوتا في السوق الإماراتي.",
-        "year1": 82,
+        "year1": 78,
         "annual": 89
       },
       "models": {
@@ -350,7 +350,8 @@
             "other": 67
           },
           "floor": 6000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 106
         },
         "accord": {
           "name_ar": "هوندا أكورد",
@@ -384,10 +385,7 @@
           },
           "floor": 7000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 86,
-            "annual": 90
-          }
+          "demand_factor_pct": 108
         },
         "cr-v": {
           "name_ar": "هوندا CR-V",
@@ -417,10 +415,7 @@
           },
           "floor": 8000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 86,
-            "annual": 90
-          }
+          "demand_factor_pct": 107
         },
         "pilot": {
           "name_ar": "هوندا بايلوت",
@@ -456,7 +451,7 @@
     "toyota": {
       "default_retention_pct": {
         "_doc": "تويوتا الأعلى احتفاظاً بالقيمة في السوق الإماراتي (إعادة بيع ممتازة).",
-        "year1": 84,
+        "year1": 82,
         "annual": 91
       },
       "models": {
@@ -490,7 +485,8 @@
             "other": 67
           },
           "floor": 5000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 95
         },
         "camry": {
           "name_ar": "تويوتا كامري",
@@ -525,10 +521,7 @@
           },
           "floor": 7000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 88,
-            "annual": 91
-          }
+          "demand_factor_pct": 106
         },
         "land-cruiser": {
           "name_ar": "تويوتا لاندكروزر",
@@ -546,10 +539,6 @@
           "trim_labels_ar": {
             "GR-Sport": "GR-Sport 3.5TC (الأعلى)"
           },
-          "retention_pct": {
-            "year1": 95,
-            "annual": 93
-          },
           "km": {
             "pct_per_10k": 0.946,
             "expected_km_per_year": 16000,
@@ -565,7 +554,8 @@
             "other": 67
           },
           "floor": 30000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 112
         },
         "prado": {
           "name_ar": "تويوتا برادو",
@@ -580,10 +570,6 @@
             "VXR": 264900
           },
           "default_trim": "GXR",
-          "retention_pct": {
-            "year1": 96,
-            "annual": 93
-          },
           "km": {
             "pct_per_10k": 0.946,
             "expected_km_per_year": 16000,
@@ -599,7 +585,8 @@
             "other": 67
           },
           "floor": 25000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 115
         },
         "rav4": {
           "name_ar": "تويوتا RAV4",
@@ -632,10 +619,7 @@
           },
           "floor": 8000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 100,
-            "annual": 92
-          }
+          "demand_factor_pct": 118
         }
       }
     }

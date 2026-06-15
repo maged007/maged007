@@ -105,6 +105,28 @@ class TestPricingEngine(unittest.TestCase):
         finally:
             m["retention_pct"] = saved
 
+    # --- عامل العرض/الطلب ----------------------------------------------------
+    def test_demand_factor_scales_price(self):
+        """عامل الطلب يضرب السعر؛ موديل >100% أغلى من نفس المنحنى بـ100%."""
+        market = load_market()
+        _, _, m = find_model(market, "rav4")
+        base = estimate_price(CarInput("rav4", 2024, 20000, "gcc", "excellent", "EXR"), market).price
+        saved = m.pop("demand_factor_pct")  # شيله مؤقتاً = 100% (افتراضي)
+        try:
+            neutral = estimate_price(CarInput("rav4", 2024, 20000, "gcc", "excellent", "EXR"), market).price
+            self.assertGreater(base, neutral)  # طلب RAV4 >100% فالسعر أعلى
+            self.assertAlmostEqual(base / neutral, saved / 100.0, delta=0.02)
+        finally:
+            m["demand_factor_pct"] = saved
+
+    def test_demand_factor_defaults_to_100(self):
+        """غياب demand_factor_pct = 100% (لا تغيير) — يضمن ثبات الموديلات بدون العامل."""
+        market = load_market()
+        _, _, m = find_model(market, "sunny")  # نيسان صني — ملوش عامل طلب
+        self.assertNotIn("demand_factor_pct", m)
+        e = estimate_price(CarInput("sunny", 2022, 60000), market)
+        self.assertGreater(e.price, 0)
+
     # --- الدقة مقابل السوق الحقيقي -------------------------------------------
     def test_accuracy_against_anchors(self):
         errs = []

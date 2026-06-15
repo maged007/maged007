@@ -444,7 +444,7 @@ const MARKET = {
     "honda": {
       "default_retention_pct": {
         "_doc": "هوندا احتفاظ أعلى من نيسان وأقل من تويوتا في السوق الإماراتي.",
-        "year1": 82,
+        "year1": 78,
         "annual": 89
       },
       "models": {
@@ -478,7 +478,8 @@ const MARKET = {
             "other": 67
           },
           "floor": 6000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 106
         },
         "accord": {
           "name_ar": "هوندا أكورد",
@@ -512,10 +513,7 @@ const MARKET = {
           },
           "floor": 7000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 86,
-            "annual": 90
-          }
+          "demand_factor_pct": 108
         },
         "cr-v": {
           "name_ar": "هوندا CR-V",
@@ -545,10 +543,7 @@ const MARKET = {
           },
           "floor": 8000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 86,
-            "annual": 90
-          }
+          "demand_factor_pct": 107
         },
         "pilot": {
           "name_ar": "هوندا بايلوت",
@@ -584,7 +579,7 @@ const MARKET = {
     "toyota": {
       "default_retention_pct": {
         "_doc": "تويوتا الأعلى احتفاظاً بالقيمة في السوق الإماراتي (إعادة بيع ممتازة).",
-        "year1": 84,
+        "year1": 82,
         "annual": 91
       },
       "models": {
@@ -618,7 +613,8 @@ const MARKET = {
             "other": 67
           },
           "floor": 5000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 95
         },
         "camry": {
           "name_ar": "تويوتا كامري",
@@ -653,10 +649,7 @@ const MARKET = {
           },
           "floor": 7000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 88,
-            "annual": 91
-          }
+          "demand_factor_pct": 106
         },
         "land-cruiser": {
           "name_ar": "تويوتا لاندكروزر",
@@ -674,10 +667,6 @@ const MARKET = {
           "trim_labels_ar": {
             "GR-Sport": "GR-Sport 3.5TC (الأعلى)"
           },
-          "retention_pct": {
-            "year1": 95,
-            "annual": 93
-          },
           "km": {
             "pct_per_10k": 0.946,
             "expected_km_per_year": 16000,
@@ -693,7 +682,8 @@ const MARKET = {
             "other": 67
           },
           "floor": 30000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 112
         },
         "prado": {
           "name_ar": "تويوتا برادو",
@@ -708,10 +698,6 @@ const MARKET = {
             "VXR": 264900
           },
           "default_trim": "GXR",
-          "retention_pct": {
-            "year1": 96,
-            "annual": 93
-          },
           "km": {
             "pct_per_10k": 0.946,
             "expected_km_per_year": 16000,
@@ -727,7 +713,8 @@ const MARKET = {
             "other": 67
           },
           "floor": 25000,
-          "range_spread_pct": 8
+          "range_spread_pct": 8,
+          "demand_factor_pct": 115
         },
         "rav4": {
           "name_ar": "تويوتا RAV4",
@@ -760,10 +747,7 @@ const MARKET = {
           },
           "floor": 8000,
           "range_spread_pct": 8,
-          "retention_pct": {
-            "year1": 100,
-            "annual": 92
-          }
+          "demand_factor_pct": 118
         }
       }
     }
@@ -799,8 +783,9 @@ function estimate(input){
   const specMult=(sf[input.spec] ?? sf.other ?? 100)/100;
   const cf=m.condition_factors_pct||MARKET.condition_factors_pct;
   const condMult=(cf[input.condition] ?? cf.good)/100;
+  const demandMult=(m.demand_factor_pct ?? 100)/100;
 
-  let value=excellent*mileageMult*specMult*condMult;
+  let value=excellent*demandMult*mileageMult*specMult*condMult;
   value=Math.max(value,m.floor);
   const spread=(m.range_spread_pct ?? 8)/100;
   return {

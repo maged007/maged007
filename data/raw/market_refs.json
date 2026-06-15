@@ -1,0 +1,16 @@
+{
+  "_doc": "إعلانات حقيقية (سعر طلب) من دوبيزل/دوبيكارز/كارسويتش — تُستخدم في scripts/calibrate_brand.py لاشتقاق عامل الطلب لكل موديل على أساس موحّد (ناتج 'ممتازة' ≈ سعر الإعلان × 0.88). كلها خليجي، حالة جيدة-ممتازة، سنة 2024 (عمر سنتين من 2026).",
+  "haircut_asking_to_excellent": 0.88,
+  "source": "dubizzle.com/ae, dubicars.com, carswitch.com — جمعها 2026-06",
+  "listings": [
+    { "brand": "nissan", "model": "altima",       "trim": "SV",  "year": 2024, "km": 20000, "asking": 98500 },
+    { "brand": "honda",  "model": "civic",        "trim": "EX",  "year": 2024, "km": 15000, "asking": 100000 },
+    { "brand": "honda",  "model": "accord",       "trim": "EX",  "year": 2024, "km": 15000, "asking": 110000 },
+    { "brand": "honda",  "model": "cr-v",         "trim": "EX",  "year": 2024, "km": 10000, "asking": 125000 },
+    { "brand": "toyota", "model": "corolla",      "trim": "GLI", "year": 2024, "km": 18000, "asking": 68000 },
+    { "brand": "toyota", "model": "camry",        "trim": "GLE", "year": 2024, "km": 12000, "asking": 122000 },
+    { "brand": "toyota", "model": "land-cruiser", "trim": "GXR", "year": 2024, "km": 20000, "asking": 265000 },
+    { "brand": "toyota", "model": "rav4",         "trim": "EXR", "year": 2024, "km": 20000, "asking": 119000 },
+    { "brand": "toyota", "model": "prado",        "trim": "GXR", "year": 2024, "km": 18000, "asking": 218000 }
+  ]
+}

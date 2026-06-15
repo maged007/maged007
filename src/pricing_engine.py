@@ -132,14 +132,17 @@ def estimate_price(car: CarInput, market: Optional[dict] = None) -> PriceEstimat
     cond_f = m.get("condition_factors_pct", market["condition_factors_pct"])
     cond_mult = cond_f.get(car.condition, cond_f["good"]) / 100.0
 
-    value = excellent * mileage_mult * spec_mult * cond_mult
+    # 6) عامل العرض/الطلب على الموديل (منفصل عن احتفاظ البراند). افتراضي 100% = لا تغيير.
+    demand_mult = m.get("demand_factor_pct", 100) / 100.0
 
-    # 6) أرضية السعر
+    value = excellent * demand_mult * mileage_mult * spec_mult * cond_mult
+
+    # 7) أرضية السعر
     floor = m["floor"]
     floored = value <= floor
     value = max(value, floor)
 
-    # 7) المدى السعري
+    # 8) المدى السعري
     spread = m.get("range_spread_pct", 8) / 100.0
     price_r = _round_to(value, 500)
     low_r = _round_to(value * (1 - spread), 500)
@@ -156,6 +159,7 @@ def estimate_price(car: CarInput, market: Optional[dict] = None) -> PriceEstimat
             "excellent_value": round(excellent),
             "expected_km": expected_km,
             "mileage_mult": round(mileage_mult, 4),
+            "demand_mult": demand_mult,
             "spec_mult": spec_mult,
             "condition": car.condition,
             "condition_mult": cond_mult,
