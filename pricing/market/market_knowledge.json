@@ -1,0 +1,102 @@
+{
+  "_meta": {
+    "currency": "AED",
+    "what": "مرجع سوق مستقل مبني على معرفة تقريبية بأسعار الإمارات (2026).",
+    "independence": "هذه الأرقام منفصلة تماماً عن data/pricing_data.json — لا تشتق من معاملات المحرّك. الغرض قياس دقة حقيقية لا دائرية.",
+    "honesty": "أرقام تقديرية معرفية بديلة عن إعلانات حيّة. استبدلها بإعلانات يدوية فعلية لقياس أدق.",
+    "gcc_base_means": "سعر طلب تقريبي لنسخة خليجي موديل base_year (~عمر سنة)."
+  },
+  "current_year": 2026,
+  "base_year": 2025,
+  "ad_to_sale_ratio": 0.88,
+
+  "km": { "baseline_per_year": 20000, "step_per_10k": 0.022, "min": 0.78, "max": 1.13 },
+
+  "condition_delta": {
+    "excellent": 1.00,
+    "very_good": 0.94,
+    "good": 0.87,
+    "fair": 0.77,
+    "needs_work": 0.63
+  },
+
+  "_imported_gap_doc": "وارد = gcc_base × gap (يختلف بالبراند؛ المحرّك يستخدم 0.65 ثابت).",
+  "imported_gap": {
+    "toyota": 0.66, "nissan": 0.64, "honda": 0.66, "mitsubishi": 0.65,
+    "hyundai": 0.63, "kia": 0.63, "lexus": 0.68, "mercedes": 0.60,
+    "bmw": 0.60, "ford": 0.70
+  },
+
+  "trims": {
+    "toyota": {
+      "corolla":      { "gcc_base": 80000,  "annual_drop": 0.085, "type": "sedan" },
+      "camry":        { "gcc_base": 112000, "annual_drop": 0.090, "type": "sedan" },
+      "land_cruiser": { "gcc_base": 300000, "annual_drop": 0.070, "type": "suv" },
+      "prado":        { "gcc_base": 220000, "annual_drop": 0.070, "type": "suv" },
+      "rav4":         { "gcc_base": 115000, "annual_drop": 0.085, "type": "suv" }
+    },
+    "nissan": {
+      "altima":  { "gcc_base": 82000,  "annual_drop": 0.140, "type": "sedan" },
+      "sunny":   { "gcc_base": 55000,  "annual_drop": 0.135, "type": "sedan" },
+      "patrol":  { "gcc_base": 265000, "annual_drop": 0.105, "type": "suv" },
+      "x_trail": { "gcc_base": 92000,  "annual_drop": 0.140, "type": "suv" },
+      "kicks":   { "gcc_base": 62000,  "annual_drop": 0.150, "type": "suv" }
+    },
+    "honda": {
+      "civic":  { "gcc_base": 85000,  "annual_drop": 0.110, "type": "sedan" },
+      "accord": { "gcc_base": 110000, "annual_drop": 0.115, "type": "sedan" },
+      "crv":    { "gcc_base": 112000, "annual_drop": 0.105, "type": "suv" },
+      "pilot":  { "gcc_base": 165000, "annual_drop": 0.120, "type": "suv" },
+      "city":   { "gcc_base": 66000,  "annual_drop": 0.115, "type": "sedan" }
+    },
+    "mitsubishi": {
+      "pajero":        { "gcc_base": 150000, "annual_drop": 0.110, "type": "suv" },
+      "lancer":        { "gcc_base": 58000,  "annual_drop": 0.115, "type": "sedan" },
+      "attrage":       { "gcc_base": 50000,  "annual_drop": 0.120, "type": "sedan" },
+      "montero_sport": { "gcc_base": 128000, "annual_drop": 0.110, "type": "suv" },
+      "l200":          { "gcc_base": 95000,  "annual_drop": 0.105, "type": "pickup" }
+    },
+    "hyundai": {
+      "elantra": { "gcc_base": 73000,  "annual_drop": 0.115, "type": "sedan" },
+      "tucson":  { "gcc_base": 100000, "annual_drop": 0.110, "type": "suv" },
+      "sonata":  { "gcc_base": 92000,  "annual_drop": 0.125, "type": "sedan" },
+      "santafe": { "gcc_base": 125000, "annual_drop": 0.115, "type": "suv" },
+      "creta":   { "gcc_base": 72000,  "annual_drop": 0.110, "type": "suv" }
+    },
+    "kia": {
+      "sportage": { "gcc_base": 96000,  "annual_drop": 0.110, "type": "suv" },
+      "k5":       { "gcc_base": 90000,  "annual_drop": 0.125, "type": "sedan" },
+      "cerato":   { "gcc_base": 70000,  "annual_drop": 0.115, "type": "sedan" },
+      "sorento":  { "gcc_base": 125000, "annual_drop": 0.115, "type": "suv" },
+      "picanto":  { "gcc_base": 50000,  "annual_drop": 0.115, "type": "sedan" }
+    },
+    "lexus": {
+      "es": { "gcc_base": 175000, "annual_drop": 0.085, "type": "sedan" },
+      "rx": { "gcc_base": 255000, "annual_drop": 0.080, "type": "suv" },
+      "lx": { "gcc_base": 540000, "annual_drop": 0.070, "type": "suv" },
+      "gx": { "gcc_base": 330000, "annual_drop": 0.075, "type": "suv" },
+      "nx": { "gcc_base": 200000, "annual_drop": 0.090, "type": "suv" }
+    },
+    "mercedes": {
+      "c_class": { "gcc_base": 185000, "annual_drop": 0.160, "type": "sedan" },
+      "e_class": { "gcc_base": 260000, "annual_drop": 0.165, "type": "sedan" },
+      "s_class": { "gcc_base": 470000, "annual_drop": 0.180, "type": "sedan" },
+      "glc":     { "gcc_base": 235000, "annual_drop": 0.150, "type": "suv" },
+      "g_class": { "gcc_base": 900000, "annual_drop": 0.040, "type": "suv" }
+    },
+    "bmw": {
+      "series3": { "gcc_base": 185000, "annual_drop": 0.160, "type": "sedan" },
+      "series5": { "gcc_base": 255000, "annual_drop": 0.170, "type": "sedan" },
+      "x5":      { "gcc_base": 340000, "annual_drop": 0.155, "type": "suv" },
+      "series7": { "gcc_base": 450000, "annual_drop": 0.185, "type": "sedan" },
+      "x6":      { "gcc_base": 380000, "annual_drop": 0.160, "type": "suv" }
+    },
+    "ford": {
+      "explorer":   { "gcc_base": 150000, "annual_drop": 0.140, "type": "suv" },
+      "mustang":    { "gcc_base": 165000, "annual_drop": 0.130, "type": "coupe" },
+      "edge":       { "gcc_base": 120000, "annual_drop": 0.145, "type": "suv" },
+      "f150":       { "gcc_base": 185000, "annual_drop": 0.125, "type": "pickup" },
+      "expedition": { "gcc_base": 235000, "annual_drop": 0.135, "type": "suv" }
+    }
+  }
+}
