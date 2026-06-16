@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام تقدير أسعار سيارات هوندا</title>
+<style>
+  :root {
+    --primary: #1a1f5e;
+    --accent: #e31837;
+    --accent2: #3b5bdb;
+    --glass: rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.14);
+    --text: #f0f2ff;
+    --text-muted: #a0a8d0;
+    --card: rgba(20,25,80,0.85);
+    --input-bg: rgba(255,255,255,0.06);
+    --success: #51cf66;
+    --gold: #fcc419;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', 'Tajawal', Arial, sans-serif;
+    background: linear-gradient(135deg, #0b0f3b 0%, #1a1f6e 40%, #0d2b6b 70%, #1a0a3b 100%);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 20px;
+  }
+
+  /* ── Stars bg ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.35) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.3) 0%, transparent 100%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ── Header ── */
+  header {
+    text-align: center; padding: 40px 20px 30px;
+  }
+  .logo-wrap {
+    display: inline-flex; align-items: center; gap: 14px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 50px; padding: 10px 28px; margin-bottom: 22px;
+    backdrop-filter: blur(10px);
+  }
+  .honda-logo {
+    width: 44px; height: 44px;
+    background: var(--accent); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 22px; color: #fff; font-style: italic;
+    box-shadow: 0 0 20px rgba(227,24,55,0.5);
+  }
+  .logo-text { font-size: 15px; color: var(--text-muted); letter-spacing: 1px; }
+
+  h1 {
+    font-size: clamp(22px, 5vw, 38px); font-weight: 800;
+    background: linear-gradient(90deg, #fff 0%, #c5ceff 60%, #e31837 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 8px; line-height: 1.3;
+  }
+  header p { color: var(--text-muted); font-size: 15px; }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    margin: 24px 0;
+  }
+  .stat-pill {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 30px; padding: 8px 20px;
+    font-size: 13px; display: flex; align-items: center; gap: 8px;
+    backdrop-filter: blur(6px);
+  }
+  .stat-pill .val { color: var(--gold); font-weight: 700; font-size: 15px; }
+  .stat-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
+
+  /* ── Form card ── */
+  .form-card {
+    background: var(--card); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    margin-bottom: 24px;
+  }
+  .form-card h2 { font-size: 18px; margin-bottom: 24px; color: #c5ceff; display: flex; align-items: center; gap: 8px; }
+  .form-card h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--accent); border-radius: 2px; }
+
+  .form-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  .form-group label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+
+  select, input[type=number] {
+    background: var(--input-bg); border: 1px solid var(--glass-border);
+    color: var(--text); border-radius: 10px; padding: 11px 14px;
+    font-size: 14px; font-family: inherit; width: 100%;
+    outline: none; transition: border-color .2s, box-shadow .2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23a0a8d0' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: left 12px center;
+    padding-left: 32px;
+  }
+  input[type=number] { background-image: none; padding-left: 14px; }
+  select:focus, input:focus { border-color: var(--accent2); box-shadow: 0 0 0 3px rgba(59,91,219,0.25); }
+  select option { background: #1a1f6e; }
+
+  .mileage-group { grid-column: span 2; }
+  @media (max-width: 500px) { .mileage-group { grid-column: span 1; } }
+
+  .btn-predict {
+    width: 100%; margin-top: 24px;
+    background: linear-gradient(135deg, var(--accent) 0%, #b5102a 100%);
+    color: #fff; border: none; border-radius: 12px;
+    padding: 16px 32px; font-size: 17px; font-weight: 700;
+    cursor: pointer; transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 6px 30px rgba(227,24,55,0.4);
+    font-family: inherit; letter-spacing: .5px;
+  }
+  .btn-predict:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(227,24,55,0.55); }
+  .btn-predict:active { transform: translateY(0); }
+  .btn-predict:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+  /* ── Spinner ── */
+  .spinner { display: none; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Result card ── */
+  .result-card {
+    display: none;
+    background: var(--card); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    animation: fadeUp .4s ease;
+    margin-bottom: 24px;
+  }
+  @keyframes fadeUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+
+  .result-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+  .result-header h2 { font-size: 17px; color: #c5ceff; display: flex; align-items: center; gap: 8px; }
+  .result-header h2::before { content: ''; display: inline-block; width: 4px; height: 20px; background: var(--success); border-radius: 2px; }
+  .confidence-badge { background: rgba(81,207,102,0.15); border: 1px solid rgba(81,207,102,0.3); color: var(--success); border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 600; }
+
+  .prices-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .price-box {
+    flex: 1; min-width: 160px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 14px; padding: 20px; text-align: center;
+  }
+  .price-box.main { background: linear-gradient(135deg, rgba(227,24,55,0.15) 0%, rgba(59,91,219,0.15) 100%); border-color: rgba(227,24,55,0.35); }
+  .price-box .label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .price-box .amount { font-size: 28px; font-weight: 800; }
+  .price-box.main .amount { color: var(--gold); }
+  .price-box .currency { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  /* Price range bar */
+  .range-section { margin-bottom: 20px; }
+  .range-section label { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; display: block; }
+  .range-bar-wrap { position: relative; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: visible; }
+  .range-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #3b5bdb, #e31837); transition: width .6s ease; }
+  .range-bar-dot { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 16px; height: 16px; background: var(--gold); border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 10px rgba(252,196,25,0.7); }
+  .range-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--text-muted); }
+
+  /* Error */
+  .error-box { background: rgba(255,50,50,0.12); border: 1px solid rgba(255,50,50,0.3); border-radius: 12px; padding: 14px 18px; color: #ff8080; font-size: 14px; display: none; margin-top: 16px; }
+
+  /* ── Model info footer ── */
+  .model-info {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+    margin-top: 8px;
+  }
+  .info-chip {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    border-radius: 20px; padding: 6px 16px; font-size: 12px;
+    color: var(--text-muted); backdrop-filter: blur(6px);
+  }
+  .info-chip span { color: var(--text); font-weight: 600; }
+
+  footer { text-align: center; padding: 30px 0; color: var(--text-muted); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="logo-wrap">
+      <div class="honda-logo">H</div>
+      <div class="logo-text">HONDA PRICE AI</div>
+    </div>
+    <h1>نظام تقدير أسعار سيارات هوندا</h1>
+    <p>أدخل مواصفات السيارة واحصل على السعر المتوقع بدقة عالية</p>
+  </header>
+
+  <!-- Stats bar -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-pill"><div class="stat-dot"></div> النموذج: <span class="val" id="statModel">XGBoost</span></div>
+    <div class="stat-pill">دقة التنبؤ (R²): <span class="val" id="statR2">—</span></div>
+    <div class="stat-pill">متوسط الخطأ: <span class="val" id="statMAE">—</span> AED</div>
+    <div class="stat-pill">عدد السيارات: <span class="val" id="statCount">1,000</span></div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-card">
+    <h2>بيانات السيارة</h2>
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>الموديل</label>
+        <select id="selModel" onchange="onModelChange()"><option value="">— اختر الموديل —</option></select>
+      </div>
+
+      <div class="form-group">
+        <label>سنة الصنع</label>
+        <select id="selYear"><option value="">— اختر السنة —</option></select>
+      </div>
+
+      <div class="form-group">
+        <label>الدرجة / الفئة</label>
+        <select id="selTrim"><option value="">— اختر الدرجة —</option></select>
+      </div>
+
+      <div class="form-group">
+        <label>المحرك</label>
+        <select id="selEngine"><option value="">— اختر المحرك —</option></select>
+      </div>
+
+      <div class="form-group">
+        <label>ناقل الحركة</label>
+        <select id="selTransmission"><option value="">— اختر ناقل الحركة —</option></select>
+      </div>
+
+      <div class="form-group">
+        <label>نوع الوقود</label>
+        <select id="selFuel"><option value="">— اختر نوع الوقود —</option></select>
+      </div>
+
+      <div class="form-group">
+        <label>المواصفات الإقليمية</label>
+        <select id="selRegion"><option value="">— اختر المواصفات —</option></select>
+      </div>
+
+      <div class="form-group mileage-group">
+        <label>الممشي (بالكيلومتر)</label>
+        <input type="number" id="inputMileage" placeholder="مثال: 85000" min="0" max="500000" step="1000">
+      </div>
+
+    </div>
+
+    <button class="btn-predict" id="btnPredict" onclick="predict()">
+      <span id="btnText">احسب السعر المتوقع</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <div class="error-box" id="errorBox"></div>
+  </div>
+
+  <!-- Result -->
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <h2>نتيجة التقدير</h2>
+      <div class="confidence-badge" id="confidenceBadge">دقة: —%</div>
+    </div>
+
+    <div class="prices-row">
+      <div class="price-box main">
+        <div class="label">السعر المتوقع</div>
+        <div class="amount" id="priceAED">—</div>
+        <div class="currency">درهم إماراتي (AED)</div>
+      </div>
+      <div class="price-box">
+        <div class="label">ما يعادله</div>
+        <div class="amount" id="priceSAR">—</div>
+        <div class="currency">ريال سعودي (SAR)</div>
+      </div>
+    </div>
+
+    <div class="range-section">
+      <label>نطاق السعر المتوقع في السوق</label>
+      <div class="range-bar-wrap">
+        <div class="range-bar-fill" id="rangeBarFill" style="width:60%"></div>
+        <div class="range-bar-dot" id="rangeBarDot" style="right:50%"></div>
+      </div>
+      <div class="range-labels">
+        <span id="rangeMax">— AED</span>
+        <span style="color: var(--gold); font-weight:600;" id="rangeMid">— AED</span>
+        <span id="rangeMin">— AED</span>
+      </div>
+    </div>
+
+    <div class="model-info" id="modelInfo"></div>
+  </div>
+
+  <footer>نظام مدعوم بالذكاء الاصطناعي · XGBoost Price Prediction · Honda GCC Market 2018–2026</footer>
+</div>
+
+<script>
+const API = '';
+
+function fmt(n) { return Number(n).toLocaleString('ar-EG'); }
+
+async function loadOptions(modelFilter = null) {
+  const url = modelFilter ? `${API}/api/options?model=${encodeURIComponent(modelFilter)}` : `${API}/api/options`;
+  const res = await fetch(url);
+  return res.json();
+}
+
+async function loadStats() {
+  try {
+    const res = await fetch(`${API}/api/stats`);
+    const d = await res.json();
+    document.getElementById('statR2').textContent = d.r2_percent?.toFixed(1) + '%';
+    document.getElementById('statMAE').textContent = Math.round(d.mae).toLocaleString();
+    document.getElementById('statCount').textContent = d.total_samples?.toLocaleString();
+  } catch(e) {}
+}
+
+function fillSelect(id, values, selectedVal = null) {
+  const sel = document.getElementById(id);
+  const prev = selectedVal ?? sel.value;
+  sel.innerHTML = '<option value="">— اختر —</option>';
+  values.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v;
+    opt.textContent = v;
+    if (String(v) === String(prev)) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+async function onModelChange() {
+  const model = document.getElementById('selModel').value;
+  if (!model) return;
+  const opts = await loadOptions(model);
+  fillSelect('selYear', [...opts.year].reverse());
+  fillSelect('selTrim', opts.trim);
+  fillSelect('selEngine', opts.engine);
+}
+
+async function initForm() {
+  const opts = await loadOptions();
+
+  // Models
+  const modelSel = document.getElementById('selModel');
+  modelSel.innerHTML = '<option value="">— اختر الموديل —</option>';
+  opts.model.forEach(m => {
+    const o = document.createElement('option'); o.value = m; o.textContent = m;
+    modelSel.appendChild(o);
+  });
+
+  fillSelect('selYear', [...opts.year].reverse());
+  fillSelect('selTrim', opts.trim);
+  fillSelect('selEngine', opts.engine);
+  fillSelect('selTransmission', opts.transmission);
+  fillSelect('selFuel', opts.fuel_type);
+  fillSelect('selRegion', opts.region_specs);
+
+  await loadStats();
+}
+
+async function predict() {
+  const model       = document.getElementById('selModel').value;
+  const year        = document.getElementById('selYear').value;
+  const trim        = document.getElementById('selTrim').value;
+  const engine      = document.getElementById('selEngine').value;
+  const transmission= document.getElementById('selTransmission').value;
+  const fuel_type   = document.getElementById('selFuel').value;
+  const region_specs= document.getElementById('selRegion').value;
+  const mileage_km  = document.getElementById('inputMileage').value;
+
+  const errBox = document.getElementById('errorBox');
+  errBox.style.display = 'none';
+
+  if (!model || !year || !trim || !mileage_km) {
+    errBox.textContent = 'يرجى تعبئة الموديل وسنة الصنع والدرجة والممشي على الأقل.';
+    errBox.style.display = 'block'; return;
+  }
+
+  // UI: loading state
+  const btn = document.getElementById('btnPredict');
+  document.getElementById('btnText').style.display = 'none';
+  document.getElementById('spinner').style.display = 'block';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/api/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, year: parseInt(year), trim, engine, transmission, fuel_type, region_specs, mileage_km: parseInt(mileage_km) })
+    });
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error);
+
+    // Show result
+    document.getElementById('priceAED').textContent = fmt(data.price_aed);
+    document.getElementById('priceSAR').textContent = fmt(data.price_sar);
+    document.getElementById('confidenceBadge').textContent = `دقة النموذج: ${data.confidence}%`;
+
+    // Range bar (display reversed for RTL: max on right, min on left)
+    document.getElementById('rangeMin').textContent = fmt(data.price_range_max) + ' AED';
+    document.getElementById('rangeMid').textContent = fmt(data.price_aed) + ' AED';
+    document.getElementById('rangeMax').textContent = fmt(data.price_range_min) + ' AED';
+    document.getElementById('rangeBarFill').style.width = '70%';
+    document.getElementById('rangeBarDot').style.right = '50%';
+
+    // Model info chips
+    document.getElementById('modelInfo').innerHTML = `
+      <div class="info-chip">الموديل: <span>${model}</span></div>
+      <div class="info-chip">السنة: <span>${year}</span></div>
+      <div class="info-chip">الدرجة: <span>${trim}</span></div>
+      <div class="info-chip">الممشي: <span>${fmt(mileage_km)} كم</span></div>
+    `;
+
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch(e) {
+    errBox.textContent = 'حدث خطأ: ' + e.message;
+    errBox.style.display = 'block';
+  } finally {
+    document.getElementById('btnText').style.display = 'inline';
+    document.getElementById('spinner').style.display = 'none';
+    btn.disabled = false;
+  }
+}
+
+initForm();
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+{
+  "model": [
+    "Honda Accord",
+    "Honda CR-V",
+    "Honda City",
+    "Honda Civic Hatchback",
+    "Honda Civic Sedan",
+    "Honda Civic Si",
+    "Honda Civic Type R",
+    "Honda HR-V",
+    "Honda Jazz",
+    "Honda Odyssey",
+    "Honda Passport",
+    "Honda Pilot"
+  ],
+  "trim": [
+    "Black Edition",
+    "E",
+    "EX",
+    "EX-L",
+    "Elite",
+    "LX",
+    "S",
+    "Si",
+    "Si Special Edition",
+    "Sport",
+    "Sport Hybrid",
+    "Touring",
+    "Touring Hybrid",
+    "TrailSport",
+    "Type R",
+    "Type R Limited Edition",
+    "V/Top"
+  ],
+  "category": [
+    "SUV صغيرة",
+    "SUV كبيرة 3 صفوف",
+    "SUV متوسطة",
+    "SUV متوسطة 5 مقاعد",
+    "سيدان اقتصادية",
+    "سيدان رياضية",
+    "سيدان صغيرة",
+    "سيدان متوسطة",
+    "ميني فان",
+    "هاتشباك رياضية عالية الأداء",
+    "هاتشباك صغيرة",
+    "هاتشباك صغيرة اقتصادية"
+  ],
+  "engine": [
+    "1.5L",
+    "1.5L توربو",
+    "2.0L",
+    "2.0L توربو",
+    "2.0L هجين",
+    "3.5L V6"
+  ],
+  "transmission": [
+    "10-Speed AT",
+    "6-Speed MT",
+    "9-Speed AT",
+    "CVT"
+  ],
+  "fuel_type": [
+    "بنزين"
+  ],
+  "region_specs": [
+    "مواصفات أمريكية",
+    "مواصفات أوروبية",
+    "مواصفات خليجية (GCC)",
+    "مواصفات يابانية"
+  ],
+  "year": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "model_options": {
+    "Honda Accord": {
+      "trim": [
+        "EX",
+        "EX-L",
+        "LX",
+        "Sport",
+        "Sport Hybrid",
+        "Touring",
+        "Touring Hybrid"
+      ],
+      "engine": [
+        "1.5L توربو",
+        "2.0L توربو",
+        "2.0L هجين"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "سيدان متوسطة"
+      ]
+    },
+    "Honda Civic Sedan": {
+      "trim": [
+        "EX",
+        "EX-L",
+        "LX",
+        "Sport",
+        "Touring"
+      ],
+      "engine": [
+        "1.5L توربو",
+        "2.0L"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "سيدان صغيرة"
+      ]
+    },
+    "Honda Civic Hatchback": {
+      "trim": [
+        "EX",
+        "EX-L",
+        "Sport",
+        "Touring"
+      ],
+      "engine": [
+        "1.5L توربو"
+      ],
+      "year": [
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "هاتشباك صغيرة"
+      ]
+    },
+    "Honda Civic Si": {
+      "trim": [
+        "Si",
+        "Si Special Edition"
+      ],
+      "engine": [
+        "1.5L توربو"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "category": [
+        "سيدان رياضية"
+      ]
+    },
+    "Honda Civic Type R": {
+      "trim": [
+        "Type R",
+        "Type R Limited Edition"
+      ],
+      "engine": [
+        "2.0L توربو"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "category": [
+        "هاتشباك رياضية عالية الأداء"
+      ]
+    },
+    "Honda CR-V": {
+      "trim": [
+        "EX",
+        "EX-L",
+        "LX",
+        "Sport Hybrid",
+        "Touring",
+        "Touring Hybrid"
+      ],
+      "engine": [
+        "1.5L توربو",
+        "2.0L هجين"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "SUV متوسطة"
+      ]
+    },
+    "Honda HR-V": {
+      "trim": [
+        "EX",
+        "EX-L",
+        "LX",
+        "Sport"
+      ],
+      "engine": [
+        "1.5L توربو",
+        "2.0L"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "SUV صغيرة"
+      ]
+    },
+    "Honda Pilot": {
+      "trim": [
+        "Black Edition",
+        "EX-L",
+        "Elite",
+        "Sport",
+        "Touring",
+        "TrailSport"
+      ],
+      "engine": [
+        "3.5L V6"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "SUV كبيرة 3 صفوف"
+      ]
+    },
+    "Honda Odyssey": {
+      "trim": [
+        "EX",
+        "EX-L",
+        "Elite",
+        "LX",
+        "Touring"
+      ],
+      "engine": [
+        "3.5L V6"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "category": [
+        "ميني فان"
+      ]
+    },
+    "Honda City": {
+      "trim": [
+        "E",
+        "EX",
+        "S",
+        "V/Top"
+      ],
+      "engine": [
+        "1.5L"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "سيدان اقتصادية"
+      ]
+    },
+    "Honda Passport": {
+      "trim": [
+        "EX-L",
+        "Sport",
+        "Touring",
+        "TrailSport"
+      ],
+      "engine": [
+        "3.5L V6"
+      ],
+      "year": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "category": [
+        "SUV متوسطة 5 مقاعد"
+      ]
+    },
+    "Honda Jazz": {
+      "trim": [
+        "EX",
+        "S",
+        "Sport"
+      ],
+      "engine": [
+        "1.5L"
+      ],
+      "year": [
+        2018,
+        2019,
+        2020
+      ],
+      "category": [
+        "هاتشباك صغيرة اقتصادية"
+      ]
+    }
+  }
+}
