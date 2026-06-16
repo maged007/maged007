@@ -23,13 +23,13 @@ from PIL import features as _pil_features
 
 # When PIL is built with libraqm (HarfBuzz + FriBidi), it shapes Arabic
 # correctly from raw Unicode using the font's own GSUB tables — this is the
-# preferred path and lets us use Cairo for Arabic. Pillow's binary wheels
-# bundle raqm on macOS/Windows/Linux, so this is the common case.
+# preferred path. Pillow's binary wheels bundle raqm on macOS/Windows/Linux,
+# so this is the common case.
 _RAQM = _pil_features.check("raqm")
 
 # Fallback only used when raqm is unavailable: arabic_reshaper converts base
 # letters into deprecated presentation forms, which require a font that ships
-# them (NotoSansArabic) — Cairo does not.
+# them (IBM Plex Sans Arabic / NotoSansArabic do).
 try:
     import arabic_reshaper
     from bidi.algorithm import get_display
@@ -64,10 +64,11 @@ SALE_KEYWORDS = {
 class TextOverlayEngine:
 
     def __init__(self) -> None:
-        # Cairo handles both scripts (Arabic via raqm). The Noto font is only
-        # used for Arabic when raqm is unavailable (presentation-form fallback).
-        self._font_cairo = self._load_font(RENDER_FONT_SIZE, arabic=False)
-        self._font_noto  = self._load_font(RENDER_FONT_SIZE, arabic=True)
+        # IBM Plex Sans Arabic shapes Arabic correctly via raqm (proper GSUB/GPOS
+        # tables); Inter handles Latin text. Each font is only asked to render
+        # the script it was designed for, so no glyph-coverage gaps.
+        self._font_latin  = self._load_font(RENDER_FONT_SIZE, arabic=False)
+        self._font_arabic = self._load_font(RENDER_FONT_SIZE, arabic=True)
 
     # ── Public ─────────────────────────────────────────────────
 
@@ -167,21 +168,18 @@ class TextOverlayEngine:
     # ── Private ────────────────────────────────────────────────
 
     def _load_font(self, size: int, arabic: bool) -> ImageFont.FreeTypeFont:
-        # Alexandria covers both Arabic and Latin and is the primary choice.
-        # Cairo is kept as fallback; Noto only when raqm is unavailable.
-        candidates = [
-            os.path.join(FONTS_DIR, "Alexandria-Bold.ttf"),
-            os.path.join(FONTS_DIR, "Cairo-Bold.ttf"),
-            os.path.join(FONTS_DIR, "Cairo-SemiBold.ttf"),
-        ]
         if arabic:
-            candidates += [
+            candidates = [
+                os.path.join(FONTS_DIR, "IBMPlexSansArabic-Bold.ttf"),
                 os.path.join(FONTS_DIR, "NotoSansArabic-Bold.ttf"),
+                os.path.join(FONTS_DIR, "Alexandria-Bold.ttf"),
+                os.path.join(FONTS_DIR, "Cairo-Bold.ttf"),
                 "/Library/Fonts/Arial Unicode.ttf",
                 "/System/Library/Fonts/Supplemental/Arial.ttf",
             ]
         else:
-            candidates += [
+            candidates = [
+                os.path.join(FONTS_DIR, "Inter-Bold.ttf"),
                 os.path.join(FONTS_DIR, "DejaVuSans-Bold.ttf"),
                 "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
                 "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
@@ -195,11 +193,9 @@ class TextOverlayEngine:
         return ImageFont.load_default(size=size)
 
     def _font_for(self, text: str) -> ImageFont.FreeTypeFont:
-        # Cairo for everything, except Arabic without raqm (needs Noto's
-        # presentation-form glyphs produced by the reshaper fallback).
-        if self._contains_arabic(text) and not _RAQM:
-            return self._font_noto
-        return self._font_cairo
+        # IBM Plex Sans Arabic for Arabic script, Inter for Latin — each font
+        # only renders the script it ships full glyph coverage for.
+        return self._font_arabic if self._contains_arabic(text) else self._font_latin
 
     def _direction(self, text: str) -> str:
         return "rtl" if self._contains_arabic(text) else "ltr"
